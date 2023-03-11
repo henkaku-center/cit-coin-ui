@@ -1,0 +1,12 @@
+{
+  "layout": {
+    "nav": {
+      "HEADING": "Learn To Earn",
+      "HOME": "Home",
+      "QUESTS": "Quests",
+      "ADMIN": "Admin",
+      "WALLET__NOT_CONNECTED": "Wallet Not Connected",
+      "WALLET__SETTINGS": "Settings"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "layout": {
+    "nav": {
+      "HEADING": "稼ぐことを学ぶ",
+      "HOME": "ホーム",
+      "QUESTS": "クエスト",
+      "ADMIN": "管理者",
+      "WALLET__NOT_CONNECTED": "ウォレットが接続されていない",
+      "WALLET__SETTINGS": "設定"
+    }
+  }
+}
