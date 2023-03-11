@@ -50,7 +50,7 @@ const Quests = () => {
             rightIcon={<ArrowRightIcon />}
             width={'10em'}
             colorScheme={'cyan'}
-            isDisabled={tabIndex >= 2}
+            isDisabled={tabIndex === questions.length-1}
             onClick={() => {
               setTabIndex(tabIndex + 1);
             }}>Next</Button>
