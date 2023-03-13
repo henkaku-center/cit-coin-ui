@@ -28,7 +28,7 @@ export default function handler(
       },
       {
         question: 'What can you do earn through Pitpa Learn to Earn?',
-        selection: 'single',
+        selection: 'multiple',
         options: ['Japanese Yen', 'United States Dollars', 'Crypto Currency', 'Nothing'],
       },
     ],

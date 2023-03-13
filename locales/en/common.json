@@ -1,12 +1,16 @@
 {
-  "layout": {
-    "nav": {
-      "HEADING": "Learn To Earn",
-      "HOME": "Home",
-      "QUESTS": "Quests",
-      "ADMIN": "Admin",
-      "WALLET__NOT_CONNECTED": "Wallet Not Connected",
-      "WALLET__SETTINGS": "Settings"
-    }
-  }
+  "nav": {
+    "HEADING": "Learn To Earn",
+    "HOME": "Home",
+    "QUESTS": "Quests",
+    "ADMIN": "Admin",
+    "WALLET__NOT_CONNECTED": "Wallet Not Connected",
+    "WALLET__SETTINGS": "Settings"
+  },
+  "QUESTION": "Question",
+  "PREVIOUS": "Previous",
+  "NEXT": "Next",
+  "SUBMIT": "Submit",
+  "SINGLE_SELECT": "Select single answer",
+  "MULTI_SELECT": "Select all correct answers"
 }

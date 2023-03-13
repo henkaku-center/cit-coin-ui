@@ -1,12 +1,16 @@
 {
-  "layout": {
-    "nav": {
-      "HEADING": "稼ぐことを学ぶ",
-      "HOME": "ホーム",
-      "QUESTS": "クエスト",
-      "ADMIN": "管理者",
-      "WALLET__NOT_CONNECTED": "ウォレットが接続されていない",
-      "WALLET__SETTINGS": "設定"
-    }
-  }
+  "nav": {
+    "HEADING": "稼ぐことを学ぶ",
+    "HOME": "ホーム",
+    "QUESTS": "クエスト",
+    "ADMIN": "管理者",
+    "WALLET__NOT_CONNECTED": "ウォレットが接続されていない",
+    "WALLET__SETTINGS": "設定"
+  },
+  "QUESTION": "問題",
+  "PREVIOUS": "前",
+  "NEXT": "次",
+  "SUBMIT": "提出",
+  "SINGLE_SELECT": "単一の回答を選択",
+  "MULTI_SELECT": "すべての正解を選択"
 }
