@@ -38,7 +38,6 @@ export const RadioCard = (props: CheckboxProps) => {
 
 interface SelectProps {
   options: string[];
-  selection?: 'single' | 'multiple';
 }
 
 export const MultipleChoiceSingleSelect = (props: SelectProps) => {
