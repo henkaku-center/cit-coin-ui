@@ -12,18 +12,17 @@ export const RadioCard = (props: RadioProps) => {
   const input = getInputProps();
   const checkbox = getCheckboxProps();
   return (
-    <Box as={'label'}>
-      <input {...input} />
+    <Box as={'label'} userSelect={'none'}>
+      <input {...input}  />
       <Box
         {...checkbox}
         cursor={'pointer'}
         p={5}
-        borderWidth={1}
+        borderWidth={2}
         borderRadius={'lg'}
         _checked={{
-          bg: 'teal.600',
-          color: 'white',
-          borderColor: 'teal.600',
+          bg: '#027ce511',
+          borderColor: 'blue.500',
         }}
         _focus={{
           boxShadow: 'outline',
