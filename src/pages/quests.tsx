@@ -72,6 +72,7 @@ const Quests = () => {
                   {selection==='single'?t('SINGLE_SELECT'):t('MULTI_SELECT')}
                 </Alert>
                 <Box p={5}>
+                  {/*<MultipleChoiceMultipleSelect options={options} selection={selection}/>*/}
                   {selection==='single'&&<MultipleChoiceSingleSelect options={options}/>}
                   {selection==='multiple'&&<MultipleChoiceMultipleSelect options={options}/>}
                 </Box>

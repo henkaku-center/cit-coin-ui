@@ -1,33 +1,35 @@
 import {
-  Box,
-  RadioProps,
-  Stack,
-  useRadio,
+  Box, CheckboxProps,
+  Stack, Text, useCheckbox, useCheckboxGroup,
   useRadioGroup,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { CheckCircleIcon } from '@chakra-ui/icons';
 
-export const RadioCard = (props: RadioProps) => {
-  const { getInputProps, getCheckboxProps } = useRadio(props);
+export const RadioCard = (props: CheckboxProps) => {
+  const { state, getCheckboxProps, getInputProps } =
+    useCheckbox(props);
   const input = getInputProps();
-  const checkbox = getCheckboxProps();
   return (
     <Box as={'label'} userSelect={'none'}>
-      <input {...input}  />
+      <input {...input} />
       <Box
-        {...checkbox}
+        {...getCheckboxProps()}
         cursor={'pointer'}
         p={5}
+        pl={3}
         borderWidth={2}
         borderRadius={'lg'}
         _checked={{
           bg: '#027ce511',
           borderColor: 'blue.500',
         }}
-        _focus={{
-          boxShadow: 'outline',
-        }}
+        // _focus={{
+        //   boxShadow: 'outline',
+        // }}
       >
+        <Box width={'20px'} mr={2} display={'inline-flex'}>
+          {state.isChecked && <CheckCircleIcon color={'blue.500'} />}
+        </Box>
         {props.children}
       </Box>
     </Box>
@@ -36,21 +38,20 @@ export const RadioCard = (props: RadioProps) => {
 
 interface SelectProps {
   options: string[];
+  selection?: 'single' | 'multiple';
 }
 
 export const MultipleChoiceSingleSelect = (props: SelectProps) => {
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name: 'mcq_single',
-    defaultValue: '0',
-    onChange: console.log,
-  });
-  const group = getRootProps();
+  const {value, getRadioProps} = useRadioGroup({defaultValue: '0'})
   return (
-    <Stack {...group}>
+    <Stack>
+      <Text>
+        HEX Value: { parseInt(value as string).toString(2).padStart(4, '0')}
+      </Text>
       {props.options.map((content, idx) => {
-        const radio = getRadioProps({ value: `${2 ** idx}` });
         return (
-          <RadioCard key={idx} {...radio}>
+          // @ts-ignore # here radio props is used for checkbox item
+          <RadioCard key={idx} {...getRadioProps({ value: `${2 ** idx}` })}>
             {content}
           </RadioCard>
         );
@@ -60,11 +61,19 @@ export const MultipleChoiceSingleSelect = (props: SelectProps) => {
 };
 
 export const MultipleChoiceMultipleSelect = (props: SelectProps) => {
+  const { value, getCheckboxProps } = useCheckboxGroup({ defaultValue: [] });
   return (
     <Stack>
+      <Text>
+        HEX Value: {
+        value.map(v => parseInt(v as string))
+          .reduce((x, y) => x + y, 0)
+          .toString(2).padStart(4, '0')
+      }
+      </Text>
       {props.options.map((content, idx) => {
         return (
-          <RadioCard key={idx} value={`${2 ** idx}`}>
+          <RadioCard key={idx} {...getCheckboxProps({ value: 2 ** idx })}>
             {content}
           </RadioCard>
         );
