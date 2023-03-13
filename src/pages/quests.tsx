@@ -37,7 +37,7 @@ const Quests = () => {
   return (
     <>
       <Box>
-        <Progress hasStripe={true} colorScheme='cyan' min={0} max={2} size='sm' value={tabIndex} mb={5} />
+        <Progress hasStripe={true} colorScheme='cyan' min={0} max={questions.length-1} size='sm' value={tabIndex} mb={5} />
         <Stack direction={'row'} mb={5}>
           <Spacer />
           <Button
