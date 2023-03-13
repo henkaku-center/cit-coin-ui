@@ -1,5 +1,5 @@
 import {
-  Alert,
+  Alert, AlertIcon,
   Box,
   Button,
   Container,
@@ -67,12 +67,12 @@ const Quests = () => {
           <TabPanels>
             {questions.map(({ question, selection, options }, questionIndex) => (
               <TabPanel key={`t_panel_${questionIndex}`}>
-                <Heading>{question}</Heading>
-                <Alert variant={'left-accent'}>
+                <Heading mb={3}>{question}</Heading>
+                <Alert variant={'left-accent'} status={'info'}>
+                  <AlertIcon/>
                   {selection==='single'?t('SINGLE_SELECT'):t('MULTI_SELECT')}
                 </Alert>
                 <Box p={5}>
-                  {/*<MultipleChoiceMultipleSelect options={options} selection={selection}/>*/}
                   {selection==='single'&&<MultipleChoiceSingleSelect options={options}/>}
                   {selection==='multiple'&&<MultipleChoiceMultipleSelect options={options}/>}
                 </Box>

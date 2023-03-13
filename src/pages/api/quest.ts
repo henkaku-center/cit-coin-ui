@@ -27,9 +27,19 @@ export default function handler(
         options: ['A Web hosting platform', 'An internet service provider', 'A learning platform', 'An Automated Teller Machine'],
       },
       {
-        question: 'What can you do earn through Pitpa Learn to Earn?',
+        question: 'What can you earn through Pitpa Learn to Earn?',
         selection: 'multiple',
-        options: ['Japanese Yen', 'United States Dollars', 'Crypto Currency', 'Nothing'],
+        options: ['NFTs', 'Certifications', 'Cryptocurrency', 'Real Cash'],
+      },
+      {
+        question: 'What is Cryptocurrency?',
+        selection: 'multiple',
+        options: [
+          'A digital currency in which transactions are verified and records maintained by a decentralized system using cryptography, rather than by a centralized authority.',
+          'An internet-based medium of exchange which uses cryptographical functions to conduct financial transactions',
+          'A form of money that is centralized, backed, and managed by a recognized government entity',
+          'There is no word such as cryptocurrency'
+        ],
       },
     ],
   });

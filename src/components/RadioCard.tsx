@@ -13,6 +13,8 @@ export const RadioCard = (props: CheckboxProps) => {
     <Box as={'label'} userSelect={'none'}>
       <input {...input} />
       <Box
+        display={'flex'}
+        flexDirection={'row'}
         {...getCheckboxProps()}
         cursor={'pointer'}
         p={5}
@@ -23,14 +25,16 @@ export const RadioCard = (props: CheckboxProps) => {
           bg: '#027ce511',
           borderColor: 'blue.500',
         }}
-        // _focus={{
-        //   boxShadow: 'outline',
-        // }}
+        _hover={{
+          borderColor: 'blue.500',
+        }}
       >
-        <Box width={'20px'} mr={2} display={'inline-flex'}>
-          {state.isChecked && <CheckCircleIcon color={'blue.500'} />}
+        <Box width={'20px'} mr={2} display={'flex'} alignItems={'center'}>
+          <CheckCircleIcon color={state.isChecked ? 'blue.500' : '#aaa3'} />
         </Box>
-        {props.children}
+        <Box>
+          {props.children}
+        </Box>
       </Box>
     </Box>
   );
@@ -41,11 +45,11 @@ interface SelectProps {
 }
 
 export const MultipleChoiceSingleSelect = (props: SelectProps) => {
-  const {value, getRadioProps} = useRadioGroup({defaultValue: '0'})
+  const { value, getRadioProps } = useRadioGroup({ defaultValue: '0' });
   return (
     <Stack>
       <Text>
-        Binary Value: { parseInt(value as string).toString(2).padStart(4, '0')}
+        Binary Value: {parseInt(value as string).toString(2).padStart(4, '0')}
       </Text>
       {props.options.map((content, idx) => {
         return (
