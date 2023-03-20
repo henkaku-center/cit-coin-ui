@@ -1,6 +1,6 @@
 import { polygon, polygonMumbai } from 'wagmi/chains';
 
-interface ContractAddress {
+export interface ContractAddress {
   [name: string]: {
     [chainId: number]: `0x${string}`
   };

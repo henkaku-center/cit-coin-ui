@@ -1,1 +1,1 @@
-export {ContractAddress} from './ContractAddress';
+export {contractAddress, defaultChainID, getContractAddress} from './ContractAddress';
