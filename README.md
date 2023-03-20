@@ -17,3 +17,9 @@ We can simply run the `dev` command to run the Next.js app in the development mo
 yarn dev # development server
 yarn build
 ```
+
+
+## External Links:
+
+1. Spreadsheets API: https://developers.google.com/sheets/api/quickstart/js
+2. 
