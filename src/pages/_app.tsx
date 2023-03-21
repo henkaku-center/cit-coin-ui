@@ -5,11 +5,10 @@ import { theme } from '@/layouts/theme'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import Layout from '@/layouts/Layout'
 import { publicProvider } from '@wagmi/core/providers/public'
-// import connector from '@/components/metaMask/WagmiMetamask'
-import { avalancheFuji } from 'wagmi/chains'
+import { defaultChain } from '@/utils/contract';
 
 const { chains, provider } = configureChains(
-  [avalancheFuji],
+  [defaultChain],
   [publicProvider()],
 )
 

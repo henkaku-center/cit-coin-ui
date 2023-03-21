@@ -8,16 +8,17 @@ import {
   Text,
   useColorModeValue,
   VisuallyHidden,
-  Icon
+  Icon, Link,
 } from '@chakra-ui/react';
 import { FaGithubAlt, FaGlobeAsia, FaMap } from 'react-icons/fa';
 import { AiFillTwitterCircle } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
+import { default as NextLink } from 'next/link';
 
 const SocialButton = ({
                         children,
                         label,
-                        href
+                        href,
                       }: {
   children: React.ReactNode
   label: string
@@ -37,7 +38,7 @@ const SocialButton = ({
       justifyContent={'center'}
       transition={'background 0.3s ease'}
       _hover={{
-        bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
+        bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
       }}
     >
       <VisuallyHidden>{label}</VisuallyHidden>
@@ -47,7 +48,7 @@ const SocialButton = ({
 };
 
 const Footer = () => {
-  // const { t } = useTranslation('common');
+    const { t, lang } = useTranslation('common');
 
   return (
     <Box
@@ -88,4 +89,4 @@ const Footer = () => {
   );
 };
 
-export  default Footer;
+export default Footer;

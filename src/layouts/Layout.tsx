@@ -10,7 +10,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Stack,
+  Stack, Alert, AlertIcon,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
@@ -19,10 +19,10 @@ import { MoonIcon, SunIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import setLanguage from 'next-translate/setLanguage';
 import Footer from '@/components/Footer';
 import Head from 'next/head';
-import styles from '@/styles/Home.module.css';
-// import {Profile} from '@/components/wallet/profile';
+// import styles from '@/styles/Home.module.css';
 import { useAccount, useNetwork } from 'wagmi';
-import { avalancheFuji } from 'wagmi/chains';
+import { NavLink } from '@/components';
+import { defaultChain } from '@/utils/contract';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -34,6 +34,7 @@ const Layout = ({ children }: LayoutProps) => {
   const router = useRouter();
   const { t, lang } = useTranslation('common');
   const { colorMode, toggleColorMode } = useColorMode();
+
   return (
     <>
       <Head>
@@ -44,7 +45,7 @@ const Layout = ({ children }: LayoutProps) => {
       </Head>
       {/*<SwitchNetworkAlert />*/}
       {/*<MetaMaskLeadBanner />*/}
-      <Box p='4' bg={isConnected ? '#88ff8811' : '#ff888811'}>
+      <Box px={8} bg={isConnected ? '#88ff8811' : '#ff888811'} position={'static'}>
         <Flex>
           <Box p={2}>
             <Link as={NextLink} href='/' locale={router.locale}>
@@ -55,19 +56,22 @@ const Layout = ({ children }: LayoutProps) => {
           </Box>
           <Spacer />
           <Stack alignItems={'center'} direction='row' spacing={4}>
-            <Link as={NextLink} _focus={{ boxShadow: 'none' }} href='/' p={4}>
+            <NavLink href='/'>
               {t('nav.HOME')}
-            </Link>
-            <Link as={NextLink} href={'/quests'} _focus={{ boxShadow: 'none' }} p={4}>
+            </NavLink>
+            <NavLink href={'/quests'}>
               {t('nav.QUESTS')}
-            </Link>
-            <Link as={NextLink} href={'/admin'} _focus={{ boxShadow: 'none' }} p={4}>
-              {t('nav.ADMIN')}
-            </Link>
+            </NavLink>
+            <NavLink href='/faucet'>
+              {t('nav.FAUCET')}
+            </NavLink>
+          </Stack>
+          <Spacer />
+          <Stack alignItems={'center'} direction='row' spacing={4}>
             <Menu>
               <MenuButton
                 colorScheme={
-                  isConnected && chain?.id == avalancheFuji.id
+                  isConnected && chain?.id == defaultChain.id
                     ? 'green'
                     : isConnected
                       ? 'orange'
@@ -80,17 +84,20 @@ const Layout = ({ children }: LayoutProps) => {
                 {/*{t('TOOL_LINK')}*/}
               </MenuButton>
               <MenuList>
-                <MenuItem>
-                  <NextLink href='/wallet'>{t('nav.WALLET__SETTINGS')}</NextLink>
+                <MenuItem
+                  onClick={(event)=>{
+                    event.preventDefault();
+                    router.push('/wallet')
+                    event.stopPropagation();
+                  }}
+                >
+                  <Link>{t('nav.WALLET__SETTINGS')}</Link>
                 </MenuItem>
-                {/*<Profile />*/}
-                {/*<MenuItem>*/}
-                {/*  /!*<Link href="/koukan">*!/*/}
-                {/*  {t('EXCHANGE_LINK')}*/}
-                {/*  /!*</Link>*!/*/}
-                {/*</MenuItem>*/}
               </MenuList>
             </Menu>
+            <NavLink href='/admin'>
+              {t('nav.ADMIN')}
+            </NavLink>
             <Button size='md' onClick={toggleColorMode} p={4}>
               {colorMode == 'dark' ? <SunIcon /> : <MoonIcon />}
             </Button>
@@ -100,7 +107,17 @@ const Layout = ({ children }: LayoutProps) => {
           </Stack>
         </Flex>
       </Box>
-      <Box p={5}>{children}</Box>
+      <Box p={5} minH={'80vh'}>
+        {!isConnected && <Alert status={'error'}>
+          <AlertIcon />
+          {t('wallet.CONNECT_TO_CONTINUE')}
+        </Alert>}
+        {isConnected && chain?.id !== defaultChain.id && <Alert status={'warning'}>
+          <AlertIcon />
+          {t('wallet.CONNECTED_TO_DIFFERENT_CHAIN')}
+        </Alert>}
+        {children}
+      </Box>
       <Footer />
     </>
   );

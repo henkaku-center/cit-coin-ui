@@ -1,10 +1,12 @@
 import { polygon, polygonMumbai } from 'wagmi/chains';
 
-export interface ContractAddress {
-  [name: string]: {
-    [chainId: number]: `0x${string}`
-  };
+interface ContractAddress {
+  [name: string]: `0x${string}`
 }
+
+export const defaultChain = process.env.production ? polygon : polygonMumbai;
+
+// export const defaultChainID = polygonMumbai;
 
 interface getContractAddressArg {
   name: keyof ContractAddress;
@@ -12,19 +14,15 @@ interface getContractAddressArg {
 }
 
 const contractAddress: ContractAddress = {
-  CitCoin: {
-    [polygonMumbai.id]: process.env['CIT_COIN_ADDRESS '] as `0x${string}`,
-  },
-  LearnToEarn: {
-    [polygonMumbai.id]: process.env['LEARN_TO_EARN_ADDRESS '] as `0x${string}`,
-  },
+  CitCoin: process.env['CIT_COIN_ADDRESS'] as `0x${string}`,
+  LearnToEarn: process.env['LEARN_TO_EARN_ADDRESS'] as `0x${string}`,
 };
 
-// const defaultChainID = process.env.production ? avalanche.id : avalancheFuji.id
-const defaultChainID = polygonMumbai.id;
+// export enum DeployedContracts{
+//   CitCoin= 'CitCoin',
+//   LearnToEarn= 'LearnToEarn'
+// }
 
-const getContractAddress = ({ name, chainId }: getContractAddressArg) => {
-  return contractAddress[name][chainId || defaultChainID];
+export const getContractAddress = (name: keyof ContractAddress) => {
+  return contractAddress[name];
 };
-
-export { contractAddress, defaultChainID, getContractAddress };

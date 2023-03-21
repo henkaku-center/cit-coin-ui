@@ -4,13 +4,30 @@
     "HOME": "Home",
     "QUESTS": "Quests",
     "ADMIN": "Admin",
+    "FAUCET": "Faucet",
     "WALLET__NOT_CONNECTED": "Wallet Not Connected",
     "WALLET__SETTINGS": "Settings"
+  },
+  "wallet": {
+    "ACCOUNT_DETAIL": "Account Detail",
+    "CONNECT_TO_CONTINUE": "Please Connect your wallet first to continue",
+    "CONNECTED_TO_DIFFERENT_CHAIN": "It looks like you are connected to the different chain.",
+    "CONTRACT_ADDRESS": "Contract Address",
+    "ADDRESS": "Wallet Address",
+    "BALANCE": "Account Balance",
+    "SWITCH_NETWORK": "Switch Network",
+    "CONNECTION_SUCCESSFUL": "Metamask successfully connected",
+    "CONNECTION_FAILURE": "Metamask Connection Failure",
+    "COULD_NOT_GET_BALANCE": "Could not get the balance",
+    "CONNECT": "Connect",
+    "DISCONNECT": "Disconnect"
   },
   "QUESTION": "Question",
   "PREVIOUS": "Previous",
   "NEXT": "Next",
   "SUBMIT": "Submit",
   "SINGLE_SELECT": "Select single answer",
-  "MULTI_SELECT": "Select all correct answers"
+  "MULTI_SELECT": "Select all correct answers",
+  "ERROR_LOADING_CONTENT": "Error Loading Resources",
+  "ERROR_LOADING_CONTENT_DESCRIPTION": "There was an error loading resources from the chain, please try again later"
 }

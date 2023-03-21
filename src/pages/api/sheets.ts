@@ -14,7 +14,7 @@ export default async function handler(
     spreadsheetId: process.env.GOOGLE_SHEETS_ID,
     fields: 'sheets.properties.title',
   }).then(response => {
-    res.status(200).json(
+    return res.status(200).json(
       {
         //@ts-ignore
         sheets: response.data.sheets?.map(({ properties }) => properties?.title) ?? [],
