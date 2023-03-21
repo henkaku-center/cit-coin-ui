@@ -5,7 +5,7 @@ import {
   Grid,
   GridItem, Heading,
   Progress,
-  Spacer,
+  Spacer, Spinner,
   Stack,
   Tab,
   TabList, TabPanel,
@@ -48,7 +48,12 @@ const Admin = () => {
   const adminComponents = [
     {
       title: t('SETQUESTIONS'),
-      component: <AnswerSheet quests={questions} />,
+      component: <>
+        {sheetsLoading && <Box display={'flex'} alignItems={'center'} justifyContent={'center'} minH={'50vh'}>
+          <Spinner size={'xl'} thickness={'3px'} color={'blue.500'} />
+        </Box>}
+        {!sheetsLoading && !sheetsError && <AnswerSheet quests={questions} />}
+      </>,
     },
     {
       title: t('Manage Students'),
