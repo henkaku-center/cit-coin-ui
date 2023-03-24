@@ -22,11 +22,9 @@ export const AnswerSheet = (props: { quests: Quest[] }) => {
   };
   return (
     <Box>
-      <Progress hasStripe={true} colorScheme='cyan' min={0} max={props.quests.length - 1} size='sm' value={tabIndex}
-                mb={5} />
       <Stack direction={'row'} mb={5}>
         <Spacer />
-        <Button>Answers: {JSON.stringify(ans.map(a => a.answer))}</Button>
+        {/*<Button>Answers: {ans.map(a => a.answer?.toString(2).padStart(4, '0'))}</Button>*/}
         <Button
           leftIcon={<ArrowLeftIcon />}
           width={'10em'}
@@ -45,6 +43,8 @@ export const AnswerSheet = (props: { quests: Quest[] }) => {
           }}>{t('NEXT')}</Button>
         <Button colorScheme={'red'}>{t('SUBMIT')}</Button>
       </Stack>
+      <Progress hasStripe={true} colorScheme='cyan' min={0} max={props.quests.length - 1} size='sm' value={tabIndex}
+                mb={5} />
       <Tabs orientation={'vertical'} index={tabIndex} onChange={handleTabsChange}>
         <TabList width={300}>
           {props.quests.map((_, idx) => (

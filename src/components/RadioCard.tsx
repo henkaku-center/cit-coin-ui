@@ -69,7 +69,6 @@ export const MultipleChoiceSingleSelect = (props: SelectProps) => {
             value: `${2 ** idx}`,
           })}
           >
-            {value}
             {content}
           </RadioCard>
         );
