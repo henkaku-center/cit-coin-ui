@@ -9,7 +9,8 @@ import axios from 'axios';
 import { QuestInterface } from '@/types';
 import useTranslation from 'next-translate/useTranslation';
 import { AnswerSheet } from '@/components/Answersheet';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
+import { defaultChain } from '@/utils/contract';
 
 const Quests = () => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -18,9 +19,10 @@ const Quests = () => {
   const [sheetsLoading, setSheetsLoading] = useState(false);
   const [sheetsError, setSheetsError] = useState(false);
   const { address, connector, isConnected } = useAccount();
+  const { chain } = useNetwork();
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && chain?.id==defaultChain.id) {
       setSheetsLoading(true);
       setSheetsError(false);
       axios.get('/api/quest/').then(response => {
@@ -33,18 +35,14 @@ const Quests = () => {
       });
     }
 
-  }, [isConnected]);
-
-  const handleTabsChange = (index: number) => {
-    setTabIndex(index);
-  };
+  }, [isConnected, chain]);
 
   return (
     <>
       {sheetsLoading && <Box display={'flex'} alignItems={'center'} justifyContent={'center'} minH={'50vh'}>
         <Spinner size={'xl'} thickness={'3px'} color={'blue.500'} />
       </Box>}
-      {!(sheetsLoading || sheetsError) && isConnected && <AnswerSheet quests={questions} />}
+      {!(sheetsLoading || sheetsError) && isConnected &&chain?.id==defaultChain.id && <AnswerSheet quests={questions} />}
       {sheetsError && <Alert status={'error'}>
         <AlertIcon />
         <AlertTitle>{t('ERROR_LOADING_CONTENT')}</AlertTitle>

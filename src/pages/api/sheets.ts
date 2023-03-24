@@ -16,9 +16,10 @@ export default async function handler(
   }).then(response => {
     return res.status(200).json(
       {
-        //@ts-ignore
-        sheets: response.data.sheets?.map(({ properties }) => properties?.title) ?? [],
+        sheets: response.data.sheets?.map(({ properties }, idx) => properties?.title ?? `sheet-${idx}`) ?? [],
       },
     );
+  }).catch((err) => {
+    return res.status(err.response.status).json(err.response.data);
   });
 }

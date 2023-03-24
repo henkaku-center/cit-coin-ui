@@ -1,5 +1,5 @@
 import {
-  Alert, AlertIcon, Box,
+  Alert, AlertDescription, AlertIcon, AlertTitle, Box,
   Button,
   Container,
   Grid,
@@ -12,48 +12,20 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
-import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
-import { MultipleChoiceMultipleSelect, MultipleChoiceSingleSelect } from '@/components/RadioCard';
-import React, { useEffect, useState } from 'react';
-import { QuestInterface } from '@/types';
 import useTranslation from 'next-translate/useTranslation';
-import axios from 'axios';
-import { AnswerSheet } from '@/components/Answersheet';
-import { useAccount } from 'wagmi';
-
+import { useAccount, useNetwork } from 'wagmi';
+import { QuestionManager } from '@/components/admin';
+import { defaultChain } from '@/utils/contract';
 
 const Admin = () => {
-  const [questions, setQuestions] = useState<QuestInterface[]>([]);
-  const { t, lang } = useTranslation('common');
-  const [sheetsLoading, setSheetsLoading] = useState(false);
-  const [sheetsError, setSheetsError] = useState(false);
+  const { t } = useTranslation('common');
   const { address, connector, isConnected } = useAccount();
-
-  useEffect(() => {
-    if (isConnected) {
-      setSheetsLoading(true);
-      setSheetsError(false);
-      axios.get('/api/quest/').then(response => {
-        setQuestions(response.data.questions);
-        setSheetsError(false);
-      }).catch(err => {
-        setSheetsError(true);
-      }).finally(() => {
-        setSheetsLoading(false);
-      });
-    }
-
-  }, [isConnected]);
+  const { chain } = useNetwork();
 
   const adminComponents = [
     {
       title: t('SETQUESTIONS'),
-      component: <>
-        {sheetsLoading && <Box display={'flex'} alignItems={'center'} justifyContent={'center'} minH={'50vh'}>
-          <Spinner size={'xl'} thickness={'3px'} color={'blue.500'} />
-        </Box>}
-        {!sheetsLoading && !sheetsError && <AnswerSheet quests={questions} />}
-      </>,
+      component: <QuestionManager />,
     },
     {
       title: t('Manage Students'),
@@ -72,8 +44,8 @@ const Admin = () => {
 
   return (
     <>
-      {isConnected && <Tabs orientation={'vertical'} variant={'soft-rounded'} colorScheme={'blue'}>
-        <TabList width={300}>
+      {isConnected && chain?.id===defaultChain.id && <Tabs orientation={'vertical'} variant={'soft-rounded'} colorScheme={'blue'}>
+        <TabList width={300} minWidth={300}>
           {adminComponents.map(({ title }, idx) => <Tab key={idx}>{title}</Tab>)}
         </TabList>
         <TabPanels>

@@ -4,14 +4,14 @@
     "HOME": "Home",
     "QUESTS": "Quests",
     "ADMIN": "Admin",
-    "FAUCET": "Faucet",
-    "WALLET__NOT_CONNECTED": "Wallet Not Connected",
-    "WALLET__SETTINGS": "Settings"
+    "FAUCET": "Faucet"
   },
   "wallet": {
     "ACCOUNT_DETAIL": "Account Detail",
     "CONNECT_TO_CONTINUE": "Please Connect your wallet first to continue",
     "CONNECTED_TO_DIFFERENT_CHAIN": "It looks like you are connected to the different chain.",
+    "CONNECTED": "Connected",
+    "NOT_CONNECTED": "Wallet Not Connected",
     "CONTRACT_ADDRESS": "Contract Address",
     "ADDRESS": "Wallet Address",
     "BALANCE": "Account Balance",

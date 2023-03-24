@@ -14,13 +14,16 @@ export default async function getQuests(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
+  let sheetId = req.query.sheet ?? '';
+  // if (sheetId.length) {
+  //   sheetId += '!';
+  // }
   await sheets.spreadsheets.values
     .get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: 'B2:G16',
+      range: `${sheetId}!B2:G16`,
     })
     .then((response) => {
-      // console.log(response.data);
       let questions = response.data.values?.map((d: string[]) => ({
         question: d[0],
         options: d.slice(1, 5),
@@ -33,41 +36,7 @@ export default async function getQuests(
         //@ts-ignore
         questions: questions,
       });
+    }).catch((err) =>{
+      return res.status(err.response.status).json(err.response.data)
     });
-  // res.status(200).json({
-  //   created_at: new Date(),
-  //   expires_at: new Date(),
-  //   questions: [
-  //     // {
-  //     //   question: 'Document Title',
-  //     //   selection: 'single',
-  //     //   options: [doc.title, 'ABC', 'DEF', 'GHI']
-  //     // },
-  //     {
-  //       question: 'Who Invented Blockchain Technology?',
-  //       selection: 'single',
-  //       options: ['Satoshi Nakamoto', 'Linus Torvalds', 'Bill Gates', 'Reid Hoffman'],
-  //     },
-  //     {
-  //       question: 'What is Pitpa Learn to Earn?',
-  //       selection: 'single',
-  //       options: ['A Web hosting platform', 'An internet service provider', 'A learning platform', 'An Automated Teller Machine'],
-  //     },
-  //     {
-  //       question: 'What can you earn through Pitpa Learn to Earn?',
-  //       selection: 'multiple',
-  //       options: ['NFTs', 'Certifications', 'Cryptocurrency', 'Real Cash'],
-  //     },
-  //     {
-  //       question: 'What is Cryptocurrency?',
-  //       selection: 'multiple',
-  //       options: [
-  //         'A digital currency in which transactions are verified and records maintained by a decentralized system using cryptography, rather than by a centralized authority.',
-  //         'An internet-based medium of exchange which uses cryptographical functions to conduct financial transactions',
-  //         'A form of money that is centralized, backed, and managed by a recognized government entity',
-  //         'There is no word such as cryptocurrency',
-  //       ],
-  //     },
-  //   ],
-  // });
 }

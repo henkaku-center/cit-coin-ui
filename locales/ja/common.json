@@ -4,14 +4,14 @@
     "HOME": "ホーム",
     "QUESTS": "クエスト",
     "ADMIN": "管理者",
-    "FAUCET": "フォセト",
-    "WALLET__NOT_CONNECTED": "ウォレットが接続されていない",
-    "WALLET__SETTINGS": "設定"
+    "FAUCET": "フォセト"
   },
   "wallet": {
     "ACCOUNT_DETAIL": "アカウントの詳細",
     "CONNECT_TO_CONTINUE": "続行するには、まずウォレットを接続してください。",
     "CONNECTED_TO_DIFFERENT_CHAIN": "別のチェーンに接続されているようです。",
+    "CONNECTED": "接続済み",
+    "NOT_CONNECTED": "ウォレットが接続されていない",
     "CONTRACT_ADDRESS": "コントラクトアドレス",
     "ADDRESS": "ウォレットアドレス",
     "BALANCE": "アカウントのバランス",
