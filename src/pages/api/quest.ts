@@ -1,13 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { QuestInterface } from '@/types';
+import { Quest } from '@/types';
 import { google } from 'googleapis';
 import { sheets } from '@/utils/google_client';
 
 type Data = {
   created_at: Date
   expires_at: Date
-  questions: QuestInterface[]
+  questions: Quest[]
 }
 
 export default async function getQuests(
@@ -26,8 +26,8 @@ export default async function getQuests(
     .then((response) => {
       let questions = response.data.values?.map((d: string[]) => ({
         question: d[0],
-        options: d.slice(1, 5),
-        selection: d[5] ?? 'single',
+        options: d.slice(1, 5).filter((a) => a.length > 0),  // used to remove empty string
+        selection: d[5] == 'multiple' ? 'multiple' : 'single',
 
       })).filter(({ question }) => question !== undefined);
       return res.status(200).json({
@@ -36,7 +36,7 @@ export default async function getQuests(
         //@ts-ignore
         questions: questions,
       });
-    }).catch((err) =>{
-      return res.status(err.response.status).json(err.response.data)
+    }).catch((err) => {
+      return res.status(err.response.status).json(err.response.data);
     });
 }

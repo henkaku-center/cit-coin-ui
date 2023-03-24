@@ -6,7 +6,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { QuestInterface } from '@/types';
+import { Quest } from '@/types';
 import useTranslation from 'next-translate/useTranslation';
 import { AnswerSheet } from '@/components/Answersheet';
 import { useAccount, useNetwork } from 'wagmi';
@@ -14,7 +14,7 @@ import { defaultChain } from '@/utils/contract';
 
 const Quests = () => {
   const [tabIndex, setTabIndex] = useState(0);
-  const [questions, setQuestions] = useState<QuestInterface[]>([]);
+  const [questions, setQuestions] = useState<Quest[]>([]);
   const { t } = useTranslation('common');
   const [sheetsLoading, setSheetsLoading] = useState(false);
   const [sheetsError, setSheetsError] = useState(false);

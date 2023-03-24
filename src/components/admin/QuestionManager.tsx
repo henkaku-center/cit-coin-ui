@@ -1,7 +1,7 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Select, Spacer, Spinner, Stack } from '@chakra-ui/react';
 import { AnswerSheet } from '@/components';
 import React, { useEffect, useState } from 'react';
-import { QuestInterface } from '@/types';
+import { Quest } from '@/types';
 import useTranslation from 'next-translate/useTranslation';
 import { useAccount } from 'wagmi';
 import axios from 'axios';
@@ -9,7 +9,7 @@ import axios from 'axios';
 export const QuestionManager = () => {
   const [sheets, setSheets] = useState<string[]>([]);
   const [activeSheet, setActiveSheet] = useState('');
-  const [questions, setQuestions] = useState<QuestInterface[]>([]);
+  const [questions, setQuestions] = useState<Quest[]>([]);
   const { t } = useTranslation('common');
   const [sheetsLoading, setSheetsLoading] = useState(false);
   const [sheetsError, setSheetsError] = useState(false);
