@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { QuestInterface } from '@/types';
 import { google } from 'googleapis';
+import { sheets } from '@/utils/google_client';
 
 type Data = {
   created_at: Date
@@ -13,22 +14,6 @@ export default async function getQuests(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  const GOOGLE_APPLICATION_CREDENTIALS = './keys/google-sheets-service-account.json';
-  const auth = new google.auth.GoogleAuth({
-    keyFile: GOOGLE_APPLICATION_CREDENTIALS,
-    // keyFile: './test.json',
-    scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-  });
-
-  google.options({
-    auth: auth,
-  });
-
-  const sheets = google.sheets({
-    auth: auth,
-    version: 'v4',
-  });
-
   await sheets.spreadsheets.values
     .get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
@@ -39,7 +24,7 @@ export default async function getQuests(
       let questions = response.data.values?.map((d: string[]) => ({
         question: d[0],
         options: d.slice(1, 5),
-        selection: d[5]??'single',
+        selection: d[5] ?? 'single',
 
       })).filter(({ question }) => question !== undefined);
       return res.status(200).json({

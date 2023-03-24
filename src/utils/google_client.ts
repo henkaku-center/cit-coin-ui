@@ -1,15 +1,19 @@
 import { google } from 'googleapis';
+import { Buffer } from 'buffer';
 
-const GOOGLE_APPLICATION_CREDENTIALS = './keys/google-sheets-service-account.json';
+const creds =JSON.parse(Buffer.from(
+  process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS || '',
+  'base64',
+).toString('ascii'));
+
 const auth = new google.auth.GoogleAuth({
-  keyFile: GOOGLE_APPLICATION_CREDENTIALS,
-  // scopes: ["https://www.googleapis.com/auth/cloud-platform"],
   scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+  credentials: creds,
 });
 
-google.options({
-  auth: auth,
-});
+// google.options({
+//   auth: auth,
+// });
 
 export const sheets = google.sheets({
   auth: auth,
