@@ -9,7 +9,8 @@
   "SUBMIT": "Submit",
   "faucet": {
     "ADDRESS_LABEL": "Enter your wallet address",
-    "ADDRESS_HELP_TEXT": "Your wallet address must be whitelisted to get funds."
+    "ADDRESS_HELP_TEXT": "Your wallet address must be whitelisted to get funds.",
+    "GET_MATIC_COINS": "Get Matic Coins"
   },
   "nav": {
     "ADMIN": "Admin",

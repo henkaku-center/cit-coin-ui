@@ -17,10 +17,9 @@ import {
   ModalBody,
   ModalFooter,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { default as NextLink } from 'next/link';
-import { MoonIcon, SunIcon, HamburgerIcon, LockIcon, UnlockIcon, WarningIcon } from '@chakra-ui/icons';
+import { MoonIcon, SunIcon, LockIcon, UnlockIcon, WarningIcon } from '@chakra-ui/icons';
 import setLanguage from 'next-translate/setLanguage';
 import Head from 'next/head';
 import { useAccount, useNetwork } from 'wagmi';
@@ -36,7 +35,6 @@ const Layout = ({ children }: LayoutProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { address, connector, isConnected } = useAccount();
   const { chain } = useNetwork();
-  const router = useRouter();
   const { t, lang } = useTranslation('common');
   const { colorMode, toggleColorMode } = useColorMode();
 

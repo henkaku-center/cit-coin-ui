@@ -58,7 +58,7 @@ export const AnswerSheet = (props: { quests: Quest[] }) => {
           {props.quests.map((_, idx) => (
             <Tab key={`q_tab_${idx}`} justifyContent={'flex-start'}>
               {(ans[idx].answer ?? 0) > 0 ?
-                <CheckCircleIcon mx={4} color={(ans[idx].answer ?? 0) > 0 ? 'blue.500' : 'transparent'} /> :
+                <CheckCircleIcon mx={4} color={'blue.500'}/> :
                 <QuestionIcon mx={4} color={'yellow.500'} />}
               {t('QUESTION')} {idx + 1}
             </Tab>

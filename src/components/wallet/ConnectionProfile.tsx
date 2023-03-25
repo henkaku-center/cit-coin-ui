@@ -95,7 +95,7 @@ export const ConnectionProfile = () => {
             onClick={() => connect({ connector })}
           >
             {!isLoading &&
-              `${t('wallet.CONNECT')} [ ${connector.name} ${!connector.ready ? ' (unsupported)' : ''} ]`}
+              `${t('wallet.CONNECT')} - ${connector.name} ${!connector.ready ? ' (unsupported)' : ''}`}
             {isLoading && connector.id === pendingConnector?.id && <Spinner />}
           </Button>
         ))}

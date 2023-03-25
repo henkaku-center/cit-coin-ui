@@ -1,12 +1,12 @@
 {
-  "quests": {
-    "SELECT_SHEET": "Select Sheet",
-    "SELECT_SHEET_LABEL": "Select Sheet"
+  "quest": {
+    "SELECT_SHEET": "シートを選択",
+    "SELECT_SHEET_LABEL": "シートを選択"
   },
   "tab": {
-    "SET_QUESTIONS": "Set Quests",
-    "MANAGE_STUDENTS": "Manage Students",
-    "STATISTICS": "Statistics",
-    "SETTINGS": "Settings"
+    "SET_QUESTIONS": "クエストを設定する",
+    "MANAGE_STUDENTS": "生徒を管理する",
+    "STATISTICS": "統計",
+    "SETTINGS": "設定"
   }
 }

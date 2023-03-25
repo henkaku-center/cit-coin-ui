@@ -3,7 +3,7 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
+  CardHeader, Code,
   Grid,
   Stack,
   Stat,
@@ -39,7 +39,7 @@ export const ContractDetail = () => {
     },
   });
   return (
-    <Card>
+    <Card variant={'filled'}>
       <CardHeader>
         <Text fontSize={'xl'} fontWeight={'bold'}>
           {isConnected && t('wallet.ACCOUNT_DETAIL')}
@@ -61,28 +61,9 @@ export const ContractDetail = () => {
             </Stat>
             <Grid py={5} templateColumns={'200px 1fr'} gap={2} fontWeight={'bold'}>
               <Text>{t('wallet.CONTRACT_ADDRESS')}</Text>
-              <Badge
-                fontSize={'large'}
-                fontFamily={'mono'}
-                rounded={'full'}
-                px={3}
-                py={1}
-                colorScheme={'green'}
-              >
-                {citCoin}
-              </Badge>
-
+              <Code px={3} py={1} variant={'outline'} fontSize={'lg'} borderRadius={'lg'}>{citCoin}</Code>
               <Text>{t('wallet.ADDRESS')}</Text>
-              <Badge
-                fontSize={'large'}
-                fontFamily={'mono'}
-                rounded={'full'}
-                px={3}
-                py={1}
-                colorScheme={'blue'}
-              >
-                {address}
-              </Badge>
+              <Code px={3} py={1} variant={'outline'} fontSize={'lg'} borderRadius={'lg'}>{address}</Code>
             </Grid>
             {/*<Button colorScheme={'orange'} width={'100%'} as={NextLink} href={'/mint'}>*/}
             {/*  Mint your Tokens*/}
