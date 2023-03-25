@@ -1,1 +1,12 @@
-{}
+{
+  "quest": {
+    "SELECT_SHEET": "Select Sheet",
+    "SELECT_SHEET_LABEL": "Select Sheet"
+  },
+  "tab": {
+    "SET_QUESTIONS": "Set Quests",
+    "MANAGE_STUDENTS": "Manage Students",
+    "STATISTICS": "Statistics",
+    "SETTINGS": "Settings"
+  }
+}

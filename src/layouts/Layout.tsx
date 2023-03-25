@@ -1,7 +1,6 @@
 import {
   Heading,
   Box,
-  Link,
   Flex,
   Spacer,
   useColorMode,
@@ -23,7 +22,6 @@ import useTranslation from 'next-translate/useTranslation';
 import { default as NextLink } from 'next/link';
 import { MoonIcon, SunIcon, HamburgerIcon, LockIcon, UnlockIcon, WarningIcon } from '@chakra-ui/icons';
 import setLanguage from 'next-translate/setLanguage';
-import Footer from '@/components/Footer';
 import Head from 'next/head';
 import { useAccount, useNetwork } from 'wagmi';
 import { NavLink } from '@/components';
@@ -117,7 +115,6 @@ const Layout = ({ children }: LayoutProps) => {
         </Alert>}
         {children}
       </Box>
-      <Footer />
     </>
   );
 };

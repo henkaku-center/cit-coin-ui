@@ -34,7 +34,7 @@ export const RadioCard = (props: RadioCardProps) => {
         <Box
           bg={state.isChecked ? 'blue.500' : '#8887'}
           borderColor={state.isChecked ? 'blue.500' : '#aaa3'}
-          borderRadius={props.square ? '6px' : '12px'} mr={3}
+          borderRadius={props.square ? 'md' : 'full'} mr={3}
           w={'20px'} h={'20px'} minW={'20px'}
           display={'flex'} alignItems={'center'} justifyContent={'center'}>
           <CheckIcon boxSize={3} color={'white'} />

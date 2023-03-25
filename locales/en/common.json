@@ -7,6 +7,10 @@
   "QUESTION": "Question",
   "SINGLE_SELECT": "Select single answer",
   "SUBMIT": "Submit",
+  "faucet": {
+    "ADDRESS_LABEL": "Enter your wallet address",
+    "ADDRESS_HELP_TEXT": "Your wallet address must be whitelisted to get funds."
+  },
   "nav": {
     "ADMIN": "Admin",
     "FAUCET": "Faucet",

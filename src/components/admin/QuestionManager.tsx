@@ -10,7 +10,7 @@ export const QuestionManager = () => {
   const [sheets, setSheets] = useState<string[]>([]);
   const [activeSheet, setActiveSheet] = useState('');
   const [questions, setQuestions] = useState<Quest[]>([]);
-  const { t } = useTranslation('common');
+  const { t } = useTranslation('admin');
   const [sheetsLoading, setSheetsLoading] = useState(false);
   const [sheetsError, setSheetsError] = useState(false);
 
@@ -47,8 +47,10 @@ export const QuestionManager = () => {
     <>
       <Stack mb={5} direction={'row'}>
         {sheets.length > 0 && <Select
-          borderRadius={'1rem'} borderWidth={2} variant={'filled'} display={'block'} width={'300px'}
-          placeholder={'Select Sheet'}
+          // border={'2px solid'} borderColor={'whiteAlpha.500'}
+          // variant={'filled'}
+          width={'300px'} borderWidth={2}
+          placeholder={t('quest.SELECT_SHEET')}
           isDisabled={sheetsLoading}
           onChange={(event) => {
             setActiveSheet(event.target.value);

@@ -1,7 +1,13 @@
 {
-  "locales": ["en", "ja"],
+  "locales": [
+    "en",
+    "ja"
+  ],
   "defaultLocale": "ja",
   "pages": {
-    "*": ["common"]
+    "*": [
+      "common",
+      "admin"
+    ]
   }
 }
