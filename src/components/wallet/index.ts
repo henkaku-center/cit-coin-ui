@@ -1,3 +1,3 @@
 export * from "./ConnectCard";
-export * from "./Profile";
+export * from "./ConnectionProfile";
 export * from "./ContractDetail";

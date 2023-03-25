@@ -1,33 +1,34 @@
 {
+  "ERROR_LOADING_CONTENT": "リソースの読み込みエラー",
+  "ERROR_LOADING_CONTENT_DESCRIPTION": "チェーンからのリソースの読み込み中にエラーが発生しました。後でもう一度お試しください。",
+  "MULTI_SELECT": "すべての正解を選択",
+  "NEXT": "次",
+  "PREVIOUS": "前",
+  "QUESTION": "問題",
+  "SINGLE_SELECT": "単一の回答を選択",
+  "SUBMIT": "提出",
   "nav": {
+    "ADMIN": "管理者",
+    "FAUCET": "フォセト",
     "HEADING": "稼ぐことを学ぶ",
     "HOME": "ホーム",
-    "QUESTS": "クエスト",
-    "ADMIN": "管理者",
-    "FAUCET": "フォセト"
+    "QUESTS": "クエスト"
   },
   "wallet": {
     "ACCOUNT_DETAIL": "アカウントの詳細",
-    "CONNECT_TO_CONTINUE": "続行するには、まずウォレットを接続してください。",
-    "CONNECTED_TO_DIFFERENT_CHAIN": "別のチェーンに接続されているようです。",
-    "CONNECTED": "接続済み",
-    "NOT_CONNECTED": "ウォレットが接続されていない",
-    "CONTRACT_ADDRESS": "コントラクトアドレス",
     "ADDRESS": "ウォレットアドレス",
     "BALANCE": "アカウントのバランス",
-    "SWITCH_NETWORK": "ネットワークを切り替える",
-    "CONNECTION_SUCCESSFUL": "メタマスクが正常に接続されました",
-    "CONNECTION_FAILURE": "メタマスク接続失敗",
-    "COULD_NOT_GET_BALANCE": "バランスが取れなかった",
     "CONNECT": "接続",
-    "DISCONNECT": "切断する"
-  },
-  "QUESTION": "問題",
-  "PREVIOUS": "前",
-  "NEXT": "次",
-  "SUBMIT": "提出",
-  "SINGLE_SELECT": "単一の回答を選択",
-  "MULTI_SELECT": "すべての正解を選択",
-  "ERROR_LOADING_CONTENT": "リソースの読み込みエラー",
-  "ERROR_LOADING_CONTENT_DESCRIPTION": "チェーンからのリソースの読み込み中にエラーが発生しました。後でもう一度お試しください。"
+    "CONNECTED": "接続済み",
+    "CONNECTED_TO_DIFFERENT_CHAIN": "別のチェーンに接続されているようです。",
+    "CONNECTION_FAILURE": "メタマスク接続失敗",
+    "CONNECTION_SUCCESSFUL": "メタマスクが正常に接続されました",
+    "CONNECT_TO_CONTINUE": "続行するには、まずウォレットを接続してください。",
+    "CONTRACT_ADDRESS": "コントラクトアドレス",
+    "COULD_NOT_GET_BALANCE": "バランスが取れなかった",
+    "DISCONNECT": "切断する",
+    "NOT_CONNECTED": "ウォレットが接続されていない",
+    "SETTINGS": "ウォレット セッティング",
+    "SWITCH_NETWORK": "ネットワークを切り替える"
+  }
 }

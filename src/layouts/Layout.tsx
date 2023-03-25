@@ -28,7 +28,7 @@ import Head from 'next/head';
 import { useAccount, useNetwork } from 'wagmi';
 import { NavLink } from '@/components';
 import { defaultChain } from '@/utils/contract';
-import { Profile } from '@/components/wallet';
+import { ConnectionProfile } from '@/components/wallet';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -94,10 +94,12 @@ const Layout = ({ children }: LayoutProps) => {
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size={'xl'}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{t('nav.WALLET__SETTINGS')}</ModalHeader>
+          <ModalHeader>
+            {t('wallet.SETTINGS')}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <Profile />
+            <ConnectionProfile />
           </ModalBody>
           <ModalFooter>
             <Button onClick={onClose}>Close</Button>

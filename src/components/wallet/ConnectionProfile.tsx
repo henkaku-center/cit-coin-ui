@@ -2,25 +2,19 @@ import { useAccount, useConnect, useDisconnect, useNetwork } from 'wagmi';
 import {
   Button,
   Box,
-  CardBody,
-  CardHeader,
-  Card,
   Stack,
   CardFooter,
   Spacer,
   Spinner,
   useToast,
-  Link,
-  Center,
   Badge,
 } from '@chakra-ui/react';
-import { default as NextLink } from 'next/link';
 
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import useTranslation from 'next-translate/useTranslation';
 import { defaultChain } from '@/utils/contract';
 
-export const Profile = () => {
+export const ConnectionProfile = () => {
   const { t } = useTranslation('common');
   const { address, connector, isConnected } = useAccount();
   const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
@@ -37,7 +31,7 @@ export const Profile = () => {
               {address}
             </Badge>
           </Box>
-          <Box>Connected to {connector?.name}</Box>
+          <Box>{t('wallet.CONNECTED')}</Box>
           <Spacer />
           <Button minWidth={250} colorScheme='red' onClick={() => disconnect()}>
             {t('wallet.DISCONNECT')}
