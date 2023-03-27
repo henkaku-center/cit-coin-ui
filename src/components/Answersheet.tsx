@@ -1,18 +1,44 @@
 import {
-  Alert, AlertIcon, Badge, Box,
+  Alert, AlertIcon, Box,
   Button, Heading, Progress, Spacer, Stack, Tab, TabList, TabPanel, TabPanels, Tabs,
 } from '@chakra-ui/react';
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, QuestionIcon } from '@chakra-ui/icons';
 import { MultipleChoiceMultipleSelect, MultipleChoiceSingleSelect } from '@/components/RadioCard';
 import React, { useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import { Quest } from '@/types';
+import { Quest, QuestWithAnswer } from '@/types';
+import { getContractAddress } from '@/utils/contract';
+import { useContractWrite, usePrepareContractWrite } from 'wagmi';
+import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 
-export const AnswerSheet = (props: { quests: Quest[] }) => {
+interface AnswersheetInterface {
+  quests: Quest[],
+  target: 'admin' | 'student'
+}
+
+export const AnswerSheet = (props: AnswersheetInterface) => {
   const [tabIndex, setTabIndex] = useState(0);
   const { t } = useTranslation('common');
-  const [ans, setAns] = useState<Quest[]>(props.quests.map((q) => ({ ...q, answer: 0 })));
+  const [ans, setAns] = useState<QuestWithAnswer[]>(props.quests.map((q) => ({ ...q, answer: 0 })));
   const answered = ans.filter(a => a.answer !== 0).length;
+  const answer = ans.map(a => a.answer).reduce((a, b) => a * 16 + b, 0);
+
+  const LearnToEarnAddress = getContractAddress('LearnToEarn');
+
+  const { config, error: configError } = usePrepareContractWrite({
+    address: LearnToEarnAddress,
+    functionName: props.target == 'student' ? 'answerQuest' : 'setQuest',
+    args: props.target == 'student' ? [answer] : [ans.length, answer],
+    abi: LearnToEarnABI,
+    enabled: true,
+    // enabled: answered == ans.length,
+  });
+  const {
+    write: ContractWrite,
+    isLoading: contractWriteLoading,
+    data: contractData,
+    error: contractWriteError,
+  } = useContractWrite(config);
 
   const handleTabsChange = (index: number) => {
     setTabIndex(index);
@@ -25,7 +51,7 @@ export const AnswerSheet = (props: { quests: Quest[] }) => {
     <Box py={5}>
       <Stack direction={'row'} mb={5}>
         <Spacer />
-        {/*<Button>Answers: {ans.map(a => a.answer?.toString(2).padStart(4, '0'))}</Button>*/}
+        {/*<Button>Answers: {answer.toString(2).padStart(ans.length * 4, '0')}</Button>*/}
         <Button
           leftIcon={<ArrowLeftIcon />}
           borderLeftRadius={'full'}
@@ -42,30 +68,34 @@ export const AnswerSheet = (props: { quests: Quest[] }) => {
           borderRightRadius={'full'}
           width={'10em'}
           colorScheme={'blue'}
-          isDisabled={tabIndex === props.quests.length - 1}
+          isDisabled={tabIndex === ans.length - 1}
           onClick={() => {
             setTabIndex(tabIndex + 1);
           }}>{t('NEXT')}
         </Button>
         <Spacer />
 
-        <Button colorScheme={'red'} width={'10em'}>{t('SUBMIT')}</Button>
+        <Button
+          colorScheme={'red'} width={'10em'}
+          onClick={() => {
+            ContractWrite?.();
+          }}
+        >{t('SUBMIT')}</Button>
       </Stack>
-      <Progress hasStripe={true} colorScheme='pink' min={0} max={props.quests.length} size='xs' value={answered}
-                mb={5} />
+      <Progress hasStripe={true} colorScheme='pink' min={0} max={ans.length} size='xs' value={answered} mb={5} />
       <Tabs orientation={'vertical'} index={tabIndex} onChange={handleTabsChange}>
         <TabList width={200} minWidth={200}>
-          {props.quests.map((_, idx) => (
+          {ans.map((_, idx) => (
             <Tab key={`q_tab_${idx}`} justifyContent={'flex-start'}>
               {(ans[idx].answer ?? 0) > 0 ?
-                <CheckCircleIcon mx={4} color={'blue.500'}/> :
+                <CheckCircleIcon mx={4} color={'blue.500'} /> :
                 <QuestionIcon mx={4} color={'yellow.500'} />}
               {t('QUESTION')} {idx + 1}
             </Tab>
           ))}
         </TabList>
         <TabPanels>
-          {props.quests.map(({ question, selection, options, answer }, questionIndex) => (
+          {ans.map(({ question, selection, options, answer }, questionIndex) => (
             <TabPanel key={`t_panel_${questionIndex}`}>
               <Alert variant={'subtle'} status={selection == 'single' ? 'info' : 'warning'} mb={5}>
                 <AlertIcon />

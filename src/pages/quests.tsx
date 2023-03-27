@@ -9,7 +9,7 @@ import axios from 'axios';
 import { Quest } from '@/types';
 import useTranslation from 'next-translate/useTranslation';
 import { AnswerSheet } from '@/components/Answersheet';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount, useNetwork, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { defaultChain } from '@/utils/contract';
 
 const Quests = () => {
@@ -22,7 +22,7 @@ const Quests = () => {
   const { chain } = useNetwork();
 
   useEffect(() => {
-    if (isConnected && chain?.id==defaultChain.id) {
+    if (isConnected && chain?.id == defaultChain.id) {
       setSheetsLoading(true);
       setSheetsError(false);
       axios.get('/api/quest/').then(response => {
@@ -42,7 +42,9 @@ const Quests = () => {
       {sheetsLoading && <Box display={'flex'} alignItems={'center'} justifyContent={'center'} minH={'50vh'}>
         <Spinner size={'xl'} thickness={'3px'} color={'blue.500'} />
       </Box>}
-      {!(sheetsLoading || sheetsError) && isConnected &&chain?.id==defaultChain.id && <AnswerSheet quests={questions} />}
+      {!(sheetsLoading || sheetsError) && isConnected && chain?.id == defaultChain.id &&
+        <AnswerSheet target="student" quests={questions}/>
+      }
       {sheetsError && <Alert status={'error'}>
         <AlertIcon />
         <AlertTitle>{t('ERROR_LOADING_CONTENT')}</AlertTitle>

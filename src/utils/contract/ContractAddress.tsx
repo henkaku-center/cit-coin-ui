@@ -14,14 +14,9 @@ interface getContractAddressArg {
 }
 
 const contractAddress: ContractAddress = {
-  CitCoin: process.env['CIT_COIN_ADDRESS'] as `0x${string}`,
-  LearnToEarn: process.env['LEARN_TO_EARN_ADDRESS'] as `0x${string}`,
+  CitCoin: process.env.NEXT_PUBLIC_CIT_COIN_ADDRESS as `0x${string}`,
+  LearnToEarn: process.env.NEXT_PUBLIC_LEARN_TO_EARN_ADDRESS as `0x${string}`,
 };
-
-// export enum DeployedContracts{
-//   CitCoin= 'CitCoin',
-//   LearnToEarn= 'LearnToEarn'
-// }
 
 export const getContractAddress = (name: keyof ContractAddress) => {
   return contractAddress[name];
