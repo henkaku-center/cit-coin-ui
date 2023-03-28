@@ -24,11 +24,12 @@ export const ContractDetail = () => {
 
   const { chain } = useNetwork();
 
-  const citCoin = getContractAddress('CitCoin');
+  const citCoinAddress = getContractAddress('CitCoin');
+  const LearnToEarnAddress = getContractAddress('LearnToEarn');
   const toast = useToast();
-  const { data } = useBalance({
+  const { data: citCoin } = useBalance({
     address: address,
-    token: citCoin,
+    token: citCoinAddress,
     watch: true,
     onError: () => {
       toast({
@@ -37,6 +38,11 @@ export const ContractDetail = () => {
         status: 'error',
       });
     },
+  });
+  const { data: matic } = useBalance({
+    address: address,
+    // token: citCoinAddress,
+    watch: true,
   });
   return (
     <Card variant={'filled'}>
@@ -49,25 +55,33 @@ export const ContractDetail = () => {
       {isConnected && chain?.id == defaultChain.id && (
         <CardBody>
           <Stack>
-            <Stat p={2} borderRadius={'1em'} border={'solid 2px'}>
-              <StatLabel>{t('wallet.BALANCE')}</StatLabel>
-              <StatNumber>
-                <Text as={'span'} color={'orange'}>
-                  {data?.formatted}
-                </Text>{' '}
-                {data?.symbol}
-              </StatNumber>
-              <StatHelpText>as of {new Date().toLocaleString()}</StatHelpText>
-            </Stat>
+            {[matic, citCoin].map((item, index) => (
+              <Stat key={index} p={2} borderRadius={'1em'} border={'solid 2px'} mb={4}>
+                <StatLabel>{t('wallet.BALANCE')} - {item?.symbol}</StatLabel>
+                <StatNumber>
+                  <Text as={'span'} color={'orange'} mr={2}>
+                    {item?.formatted}
+                  </Text>
+                  {item?.symbol}
+                </StatNumber>
+                <StatHelpText>as of {new Date().toLocaleString()}</StatHelpText>
+              </Stat>
+            ))}
+
             <Grid py={5} templateColumns={'200px 1fr'} gap={2} fontWeight={'bold'}>
               <Text>{t('wallet.CONTRACT_ADDRESS')}</Text>
-              <Code px={3} py={1} variant={'outline'} fontSize={'lg'} borderRadius={'lg'}>{citCoin}</Code>
+              <Code px={3} py={1} variant={'outline'} colorScheme={'red'} fontSize={'lg'} borderRadius={'lg'}>
+                {citCoinAddress}
+              </Code>
+              <Text>{t('wallet.CONTRACT_ADDRESS')}</Text>
+              <Code px={3} py={1} variant={'outline'} colorScheme={'green'} fontSize={'lg'} borderRadius={'lg'}>
+                {LearnToEarnAddress}
+              </Code>
               <Text>{t('wallet.ADDRESS')}</Text>
-              <Code px={3} py={1} variant={'outline'} fontSize={'lg'} borderRadius={'lg'}>{address}</Code>
+              <Code px={3} py={1} variant={'outline'} colorScheme={'blue'} fontSize={'lg'} borderRadius={'lg'}>
+                {address}
+              </Code>
             </Grid>
-            {/*<Button colorScheme={'orange'} width={'100%'} as={NextLink} href={'/mint'}>*/}
-            {/*  Mint your Tokens*/}
-            {/*</Button>*/}
           </Stack>
         </CardBody>
       )}
