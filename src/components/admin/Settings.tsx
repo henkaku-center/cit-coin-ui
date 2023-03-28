@@ -101,7 +101,7 @@ const AdminSetting = () => {
   }}>
     <FormControl>
       <FormLabel>
-        {t('settings.SET_REWARD_POINTS_LABEL')}
+        {t('settings.SET_ADMIN_LABEL')}
       </FormLabel>
       <Input value={admin} step={1000000} onChange={(e) => {
         setAdmin(e.target.value as `0x${string}`);

@@ -19,6 +19,11 @@
     "HOME": "ホーム",
     "QUESTS": "クエスト"
   },
+  "quest": {
+    "ALREADY_ANSWERED": "このクエストには既に回答済みです。質問が更新されたら、もう一度お試しください",
+    "NO_PERMISSION": "クエストを表示するには、コースに登録する必要があります。",
+    "UNKNOWN_ERROR": "契約で問題が発生しました。"
+  },
   "wallet": {
     "ACCOUNT_DETAIL": "アカウントの詳細",
     "ADDRESS": "ウォレットアドレス",

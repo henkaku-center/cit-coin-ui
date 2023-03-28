@@ -19,6 +19,11 @@
     "HOME": "Home",
     "QUESTS": "Quests"
   },
+  "quest": {
+    "ALREADY_ANSWERED": "You have already answered to this quest. Please try again once question gets refreshed.",
+    "NO_PERMISSION": "You must be enrolled in the course to see quests.",
+    "UNKNOWN_ERROR": "Something wrong happened with your contract."
+  },
   "wallet": {
     "ACCOUNT_DETAIL": "Account Detail",
     "ADDRESS": "Wallet Address",

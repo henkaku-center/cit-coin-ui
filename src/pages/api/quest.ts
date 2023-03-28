@@ -46,8 +46,7 @@ export default async function getQuests(
   } else {
     return res.status(200).json({
       created_at: new Date(),
-      expires_at: new Date(),
-      //@ts-ignore
+      expires_at: new Date(), //change it later once needed
       questions: activeQuest.questions,
     });
   }

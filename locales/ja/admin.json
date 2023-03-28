@@ -1,5 +1,6 @@
 {
   "SUBMIT": "提出",
+  "NO_PERMISSION": "続行する権限がありません。",
   "quest": {
     "SELECT_SHEET": "シートを選択",
     "SELECT_SHEET_LABEL": "シートを選択"
@@ -10,7 +11,9 @@
     "HELP_MAX_LIMIT": "値は 1,000,000,000,000,000 未満でなければなりません。",
     "HELP_EARNING": "生徒は 1 つの質問に答えると、上記の金額を獲得できます。",
     "ONLY_OWNER": "コントラクトの所有者のみがこのアクションを実行できます。",
-    "SET_REWARD_POINTS_LABEL": "報酬ポイントを設定"
+    "SET_REWARD_POINTS_LABEL": "報酬ポイントを設定",
+    "SET_ADMIN_LABEL": "管理者アドレスを設定"
+
   },
   "tab": {
     "SET_QUESTIONS": "クエストを設定する",

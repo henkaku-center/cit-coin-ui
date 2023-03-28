@@ -1,5 +1,6 @@
 {
   "SUBMIT": "Submit",
+  "NO_PERMISSION": "You do not have permissions to continue",
   "quest": {
     "SELECT_SHEET": "Select Sheet",
     "SELECT_SHEET_LABEL": "Select Sheet"
@@ -10,7 +11,8 @@
     "HELP_MAX_LIMIT": "The value must be less than 1,000,000,000,000,000.",
     "HELP_EARNING": "The student earns the above stated amount when they answer single question.",
     "ONLY_OWNER": "Only contract owner is allowed to perform this action",
-    "SET_REWARD_POINTS_LABEL": "Set Reward Points"
+    "SET_REWARD_POINTS_LABEL": "Set Reward Points",
+    "SET_ADMIN_LABEL": "Set admin address"
   },
   "tab": {
     "SET_QUESTIONS": "Set Quests",

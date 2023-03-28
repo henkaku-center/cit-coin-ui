@@ -1,5 +1,5 @@
 import {
-  Alert, Box, Flex,
+  Alert, Flex,
   Heading, Icon, Spinner,
   Tab,
   TabList, TabPanel,
@@ -7,12 +7,11 @@ import {
   Tabs,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useAccount, useContract, useContractRead, useNetwork } from 'wagmi';
+import { useAccount, useContractReads, useNetwork } from 'wagmi';
 import { QuestionManager, Settings } from '@/components/admin';
 import { defaultChain, getContractAddress } from '@/utils/contract';
 import { FaFile, FaUsers, FaChartBar } from 'react-icons/fa';
 import { SettingsIcon } from '@chakra-ui/icons';
-import { useEffect, useState } from 'react';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 
 const Admin = () => {
@@ -21,16 +20,21 @@ const Admin = () => {
   const { chain } = useNetwork();
 
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
-  const {
-    data: contractData,
-    error: contractError,
-    isLoading, isIdle,
-  } = useContractRead({
+
+  const LearnContract = {
     address: LearnToEarnAddress,
     abi: LearnToEarnABI,
-    functionName: 'admin',
     chainId: chain?.id,
+  };
+
+  const {
+    data: adminAddresses,
+    isError: contractReadError,
+    isLoading,
+  } = useContractReads({
+    contracts: ['admin', 'dev', 'owner'].map((_func) => ({ ...LearnContract, functionName: _func })),
   });
+  const hasPermissions = adminAddresses?.includes(address) ?? false;
 
   const adminComponents = [
     {
@@ -51,7 +55,7 @@ const Admin = () => {
     {
       title: t('tab.SETTINGS'),
       icon: SettingsIcon,
-      component: <Settings/>,
+      component: <Settings />,
     },
   ];
 
@@ -61,12 +65,12 @@ const Admin = () => {
       {isLoading && <Flex alignItems={'center'} justifyContent={'center'}>
         <Spinner />
       </Flex>}
-      {address !==contractData && (<Alert variant={'subtle'} status={'error'}>
+      {!hasPermissions && (<Alert variant={'subtle'} status={'error'}>
         {t('NO_PERMISSION')}
       </Alert>)}
-      {isConnected && chain?.id === defaultChain.id && address===contractData &&
+      {isConnected && chain?.id === defaultChain.id && hasPermissions &&
         <Tabs isLazy={true} orientation={'vertical'} variant={'unstyled'} colorScheme={'blue'} minHeight={'90vh'}>
-          <TabList width={300} minWidth={300} bg={'#cdf2'} borderRight={"solid #cdf8"}>
+          <TabList width={300} minWidth={300} bg={'#cdf2'} borderRight={'solid #cdf8'}>
             {adminComponents.map(({ title, icon }, idx) => (
               <Tab fontSize={'md'} key={idx} justifyContent={'flex-start'}
                    _selected={{ color: 'blue.500', fontWeight: 'bold' }}>
