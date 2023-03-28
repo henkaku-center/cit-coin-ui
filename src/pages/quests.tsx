@@ -26,7 +26,6 @@ const Quests = () => {
     setSheetsLoading(true);
     setSheetsError(false);
     axios.get('/api/quest/').then(response => {
-      console.log('Questions', response.data.questions);
       setQuestions(response.data.questions);
       setSheetsError(false);
     }).catch(err => {

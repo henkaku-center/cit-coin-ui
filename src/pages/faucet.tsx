@@ -11,6 +11,7 @@ import {
   Input, Text,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
+import { Fragment } from 'react';
 
 const FaucetPage = () => {
   const { t } = useTranslation('common');
@@ -51,10 +52,10 @@ const FaucetPage = () => {
         <Box>
           <Heading fontSize={'lg'} mb={8}>FAQs</Heading>
           {faqs.map(({ question, answer }, index) => (
-            <>
+            <Fragment key={index}>
               <Text fontSize={'md'} mb={3} fontWeight={'bold'}>{question}</Text>
               <Text mb={5}>{answer}</Text>
-            </>
+            </Fragment>
           ))}
         </Box>
 
