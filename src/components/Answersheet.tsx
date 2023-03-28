@@ -51,8 +51,8 @@ export const AnswerSheet = (props: AnswersheetInterface) => {
     <Box py={5}>
       {configError && <Alert status={'error'}>
         <AlertIcon />
-        {configError.message.includes('ERROR: ALREADY ANSWERED') ? t('quest.ALREADY_ANSWERED') :
-          configError.message.includes('INVALID: YOU MUST BE A STUDENT TO CONTINUE') ? t('quest.NO_PERMISSION') :
+        {configError?.message?.includes('ERROR: ALREADY ANSWERED') ? t('quest.ALREADY_ANSWERED') :
+          configError?.message?.includes('INVALID: YOU MUST BE A STUDENT TO CONTINUE') ? t('quest.NO_PERMISSION') :
             t('quest.UNKNOWN_ERROR')}
       </Alert>}
       {!configError && <>
