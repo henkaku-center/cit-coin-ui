@@ -21,18 +21,24 @@ const Quests = () => {
   const { address, connector, isConnected } = useAccount();
   const { chain } = useNetwork();
 
+
+  const getQuests = () => {
+    setSheetsLoading(true);
+    setSheetsError(false);
+    axios.get('/api/quest/').then(response => {
+      console.log('Questions', response.data.questions);
+      setQuestions(response.data.questions);
+      setSheetsError(false);
+    }).catch(err => {
+      setSheetsError(true);
+    }).finally(() => {
+      setSheetsLoading(false);
+    });
+  };
+
   useEffect(() => {
     if (isConnected && chain?.id == defaultChain.id) {
-      setSheetsLoading(true);
-      setSheetsError(false);
-      axios.get('/api/quest/').then(response => {
-        setQuestions(response.data.questions);
-        setSheetsError(false);
-      }).catch(err => {
-        setSheetsError(true);
-      }).finally(() => {
-        setSheetsLoading(false);
-      });
+      getQuests()
     }
 
   }, [isConnected, chain]);
@@ -43,7 +49,7 @@ const Quests = () => {
         <Spinner size={'xl'} thickness={'3px'} color={'blue.500'} />
       </Box>}
       {!(sheetsLoading || sheetsError) && isConnected && chain?.id == defaultChain.id &&
-        <AnswerSheet target="student" quests={questions}/>
+        <AnswerSheet target='student' quests={questions} />
       }
       {sheetsError && <Alert status={'error'}>
         <AlertIcon />
