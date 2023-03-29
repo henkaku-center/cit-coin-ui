@@ -1,9 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Quest } from '@/types';
-import { google } from 'googleapis';
 import { getSheetQuests, getSheetTitles, sheets } from '@/utils/google_client';
-import { activeQuest, QuestStorage, TQuestStorage } from '@/utils/questUtils';
+import { QuestStorage, TQuestStorage } from '@/utils/questUtils';
 
 interface ErrorResponse {
   code: string,

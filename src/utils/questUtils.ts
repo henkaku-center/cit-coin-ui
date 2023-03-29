@@ -1,5 +1,5 @@
 import { Quest } from '@/types';
-import fs from 'fs';
+// import fs from 'fs';
 import path from 'path';
 
 
@@ -13,6 +13,13 @@ export interface TQuestStorage {
   questions: Quest[]
 }
 
+// Use QuestData if file storage doesn't work
+let QuestData: TQuestStorage = {
+  sheetId: '',
+  published: new Date(),
+  questions: [],
+};
+
 async function setQuest(questions: Quest[], sheetId?: string) {
   const data: TQuestStorage = {
     sheetId: sheetId ?? '',
@@ -20,41 +27,46 @@ async function setQuest(questions: Quest[], sheetId?: string) {
     questions: questions,
   };
   return new Promise<TQuestStorage>((resolve, reject) => {
-    fs.writeFile(
-      path.join(process.cwd(), 'keys', 'db.json'),
-      Buffer.from(JSON.stringify(data)),
-      (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(data);
-        }
-      });
+    QuestData = data;
+    return resolve(data);
+    // in vercel, fs did not work
+    // fs.writeFile(
+    //   path.join(process.cwd(), 'keys', 'db.json'),
+    //   Buffer.from(JSON.stringify(data)),
+    //   (err) => {
+    //     if (err) {
+    //       reject(err);
+    //     } else {
+    //       resolve(data);
+    //     }
+    //   });
   });
 }
 
 async function getQuest() {
   let content = {};
   return new Promise<TQuestStorage>((resolve, reject) => {
-    fs.readFile(path.join(process.cwd(), 'keys', 'db.json'), function(err, data) {
-      // Check for errors
-      if (err) {
-        if (err.code === 'ENOENT') {
-          setQuest([], '');
-          return resolve({
-            'sheetId': '',
-            'published': new Date(),
-            'questions': [],
-          });
-        }
-        return reject(err);
-      } else {
-        // Converting to JSON
-        content = JSON.parse(data.toString());
-        return resolve(content as TQuestStorage);
-      }
-
-    });
+    return resolve(QuestData);
+    // Vercel does not support File Storage
+    // fs.readFile(path.join(process.cwd(), 'keys', 'db.json'), function(err, data) {
+    //   // Check for errors
+    //   if (err) {
+    //     if (err.code === 'ENOENT') {
+    //       setQuest([], '');
+    //       return resolve({
+    //         'sheetId': '',
+    //         'published': new Date(),
+    //         'questions': [],
+    //       });
+    //     }
+    //     return reject(err);
+    //   } else {
+    //     // Converting to JSON
+    //     content = JSON.parse(data.toString());
+    //     return resolve(content as TQuestStorage);
+    //   }
+    //
+    // });
   });
 }
 
