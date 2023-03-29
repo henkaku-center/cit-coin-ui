@@ -43,7 +43,7 @@ const AddSingleStudentForm = () => {
     <Button
       type={'submit'} my={5} colorScheme={'blue'}
       isLoading={contractWriteLoading}
-      isDisabled={!(!!configError || isAddress(studentAddress))}
+      isDisabled={(!!configError || !isAddress(studentAddress))}
     >{t('students.ADD_STUDENT')}</Button>
     {/*{JSON.stringify(config)}*/}
     <hr />

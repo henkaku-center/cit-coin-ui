@@ -9,6 +9,7 @@ import { usePrepareContractWrite, useContractWrite, useContractRead, useNetwork 
 import { useEffect, useState } from 'react';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import { getContractAddress } from '@/utils/contract';
+import { isAddress } from 'ethers/lib/utils';
 
 const RewardPointSetting = () => {
   const { t } = useTranslation('admin');
@@ -89,7 +90,7 @@ const AdminSetting = () => {
     functionName: 'setAdmin',
     args: [admin],
     abi: LearnToEarnABI,
-    enabled: !!admin,
+    enabled: isAddress(admin),
   });
   const {
     write: ContractWrite,
@@ -113,7 +114,7 @@ const AdminSetting = () => {
     <Button
       type={'submit'} my={5} colorScheme={'blue'}
       isLoading={contractWriteLoading}
-      isDisabled={!admin || admin == currentAdmin || !!configError}
+      isDisabled={(!!configError || !isAddress(admin) || admin==currentAdmin)}
     >{t('SUBMIT')}</Button>
   </form>);
 };
