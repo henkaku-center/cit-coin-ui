@@ -48,7 +48,7 @@ export const getSheetQuests = (sheetId: string) => {
         options: d.slice(1, 5).filter((a) => a.length > 0),  // used to remove empty string
         selection: d[5] == 'multiple' ? 'multiple' : 'single',
       })).filter(({ question }) => question !== undefined);
-      console.log(questions);
+      // console.log(questions);
       return resolve(questions as Quest[]);
     }).catch((error) => {
       reject(error);

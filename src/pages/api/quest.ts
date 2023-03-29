@@ -57,25 +57,24 @@ export default async function QuestsAPI(
     // });
     //
     // return res.status(200).json({});
+  } else{
+    // Handling GET Requests
+    let sheetId = req.query.sheet as string ?? '';
+    if (sheetId.length) {
+      // Admin calls this
+      let quests = await getSheetQuests(sheetId);
+      return res.status(200).json({
+        sheetId: sheetId,
+        published: new Date(),
+        questions: quests,
+      });
+
+    } else {
+      //student calls this
+      let quests = await QuestStorage.getQuest();
+      return res.status(200).json(quests);
+    }
   }
-
-  // Handling GET Requests
-  let sheetId = req.query.sheet as string ?? '';
-  if (sheetId.length) {
-    // Admin calls this
-    let quests = await getSheetQuests(sheetId);
-    return res.status(200).json({
-      sheetId: sheetId,
-      published: new Date(),
-      questions: quests,
-    });
-
-  } else {
-    //student calls this
-    let quests = await QuestStorage.getQuest();
-    return res.status(200).json(quests);
-  }
-
 
   // Handling GET Request
   // let sheetId = req.query.sheet as string ?? '';

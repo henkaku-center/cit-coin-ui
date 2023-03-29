@@ -3,10 +3,7 @@ import { AnswerSheet } from '@/components';
 import React, { useEffect, useState } from 'react';
 import { Quest } from '@/types';
 import useTranslation from 'next-translate/useTranslation';
-import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import axios from 'axios';
-import { getContractAddress } from '@/utils/contract';
-import QuestABI from '@/utils/abis/LearnToEarn.json';
 
 export const QuestionManager = () => {
   const [sheets, setSheets] = useState<string[]>([]);
@@ -65,7 +62,8 @@ export const QuestionManager = () => {
       {sheetsLoading && <Box display={'flex'} alignItems={'center'} justifyContent={'center'} minH={'50vh'}>
         <Spinner size={'xl'} thickness={'3px'} color={'blue.500'} />
       </Box>}
-      {!sheetsLoading && !sheetsError && questions.length > 0 && <AnswerSheet target={'admin'} quests={questions} />}
+      {!sheetsLoading && !sheetsError && questions.length > 0 &&
+        <AnswerSheet sheetId={activeSheet} target={'admin'} quests={questions} />}
       {sheetsError && <Alert status={'error'}>
         <AlertIcon />
         <AlertTitle>{t('ERROR_LOADING_CONTENT')}</AlertTitle>

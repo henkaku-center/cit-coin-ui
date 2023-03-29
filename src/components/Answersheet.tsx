@@ -10,10 +10,12 @@ import { Quest, QuestWithAnswer } from '@/types';
 import { getContractAddress } from '@/utils/contract';
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
+import axios from 'axios';
 
 interface AnswersheetInterface {
   quests: Quest[],
   target: 'admin' | 'student'
+  sheetId: string
 }
 
 export const AnswerSheet = (props: AnswersheetInterface) => {
@@ -42,6 +44,22 @@ export const AnswerSheet = (props: AnswersheetInterface) => {
 
   const handleTabsChange = (index: number) => {
     setTabIndex(index);
+  };
+
+  const setActiveSheet = () => {
+    let reqOptions = {
+      url: '/api/quest/',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: JSON.stringify({ 'sheetId': props.sheetId }),
+    };
+    axios.request(reqOptions).then((response) => {
+      alert('success');
+    }).catch((err) => {
+      alert('Error');
+    });
   };
 
   const onAnswer = (answer: number) => {
@@ -88,6 +106,9 @@ export const AnswerSheet = (props: AnswersheetInterface) => {
             colorScheme={'red'} width={'10em'}
             onClick={() => {
               ContractWrite?.();
+              if (props.target == 'admin') {
+                setActiveSheet();
+              }
             }}
           >{t('SUBMIT')}</Button>
         </Stack>
