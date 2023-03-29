@@ -11,10 +11,15 @@ import useTranslation from 'next-translate/useTranslation';
 import { AnswerSheet } from '@/components/Answersheet';
 import { useAccount, useNetwork, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { defaultChain } from '@/utils/contract';
+import { TQuestStorage } from '@/utils';
 
 const Quests = () => {
   const [tabIndex, setTabIndex] = useState(0);
-  const [questions, setQuestions] = useState<Quest[]>([]);
+  const [quest, setQuest] = useState<TQuestStorage>({
+    sheetId: '',
+    published: new Date(),
+    questions: []
+  });
   const { t } = useTranslation('common');
   const [sheetsLoading, setSheetsLoading] = useState(false);
   const [sheetsError, setSheetsError] = useState(false);
@@ -26,7 +31,7 @@ const Quests = () => {
     setSheetsLoading(true);
     setSheetsError(false);
     axios.get('/api/quest/').then(response => {
-      setQuestions(response.data.questions);
+      setQuest(response.data);
       setSheetsError(false);
     }).catch(err => {
       setSheetsError(true);
@@ -37,7 +42,7 @@ const Quests = () => {
 
   useEffect(() => {
     if (isConnected && chain?.id == defaultChain.id) {
-      getQuests()
+      getQuests();
     }
 
   }, [isConnected, chain]);
@@ -48,7 +53,7 @@ const Quests = () => {
         <Spinner size={'xl'} thickness={'3px'} color={'blue.500'} />
       </Box>}
       {!(sheetsLoading || sheetsError) && isConnected && chain?.id == defaultChain.id &&
-        <AnswerSheet target='student' quests={questions} />
+        <AnswerSheet sheetId={quest.sheetId} target='student' quests={quest.questions} />
       }
       {sheetsError && <Alert status={'error'}>
         <AlertIcon />

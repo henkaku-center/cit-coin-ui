@@ -1,6 +1,6 @@
 import {
   Alert, AlertIcon, Box,
-  Button, Heading, Progress, Spacer, Stack, Tab, TabList, TabPanel, TabPanels, Tabs,
+  Button, Heading, Progress, Spacer, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast,
 } from '@chakra-ui/react';
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, QuestionIcon } from '@chakra-ui/icons';
 import { MultipleChoiceMultipleSelect, MultipleChoiceSingleSelect } from '@/components/RadioCard';
@@ -24,6 +24,7 @@ export const AnswerSheet = (props: AnswersheetInterface) => {
   const [ans, setAns] = useState<QuestWithAnswer[]>(props.quests.map((q) => ({ ...q, answer: 0 })));
   const answered = ans.filter(a => a.answer !== 0).length;
   const answer = ans.map(a => a.answer).reduce((a, b) => a * 16 + b, 0);
+  // const toast = useToast()
 
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
 
@@ -56,6 +57,7 @@ export const AnswerSheet = (props: AnswersheetInterface) => {
       data: JSON.stringify({ 'sheetId': props.sheetId }),
     };
     axios.request(reqOptions).then((response) => {
+      // toast
       alert('success');
     }).catch((err) => {
       alert('Error');
