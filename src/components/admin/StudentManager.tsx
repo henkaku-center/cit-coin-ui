@@ -1,67 +1,41 @@
-import {
-  Button,
-  Container,
-  FormControl, FormHelperText, FormErrorMessage,
-  FormLabel,
-  Heading, Input, NumberDecrementStepper, NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Stack,
-} from '@chakra-ui/react';
+import { Button, Container, FormControl, FormErrorMessage, FormLabel, Heading, Input, Stack } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import { getContractAddress } from '@/utils/contract';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { isAddress } from '@ethersproject/address';
 
 const AddSingleStudentForm = () => {
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
   const { t } = useTranslation('admin');
-  const [address, setAddress] = useState<`0x${string}`>('0x');
-  const [isInvalid, setInvalid] = useState(false);
+  const [studentAddress, setStudentAddress] = useState<`0x${string}`>('0x');
 
   const { config, error: configError } = usePrepareContractWrite({
     address: LearnToEarnAddress,
-    functionName: 'setRewardPoint',
-    args: [address],
+    functionName: 'addStudent',
+    args: [studentAddress],
     abi: LearnToEarnABI,
-    enabled: address.length < 22,
+    enabled: isAddress(studentAddress),
   });
   const {
     write: ContractWrite,
     isLoading: contractWriteLoading,
   } = useContractWrite(config);
 
-  useEffect(() => {
-      if (address == '0x') {
-        setInvalid(false);
-      } else if (configError || address.length < 42) {
-        setInvalid(true);
-      } else {
-        setInvalid(false);
-      }
-      // if (address.length < 22) {
-      //   setInvalid(true);
-      // } else {
-      //   setInvalid(false);
-      // }
-    }, [configError, address],
-  );
-
-  // const isAddressValid = ()=> address.st
-
   return (<form onSubmit={(event) => {
     event.preventDefault();
+    ContractWrite?.();
   }}>
-    <FormControl isInvalid={isInvalid}>
+    <FormControl isInvalid={!(isAddress(studentAddress) || studentAddress == '0x')}>
       <FormLabel>
         {t('students.ENTER_ADDRESS')}
       </FormLabel>
       <Input
-        value={address}
+        fontFamily={'mono'}
+        value={studentAddress}
         onChange={(event) => {
-          setAddress(event.target.value as `0x${string}`);
+          setStudentAddress(event.target.value as `0x${string}`);
         }}
       />
       <FormErrorMessage>{t('students.ENTER_VALID_ADDRESS')}</FormErrorMessage>
@@ -69,8 +43,10 @@ const AddSingleStudentForm = () => {
     <Button
       type={'submit'} my={5} colorScheme={'blue'}
       isLoading={contractWriteLoading}
-      isDisabled={isInvalid || address === '0x'}
+      isDisabled={!(!!configError || isAddress(studentAddress))}
     >{t('students.ADD_STUDENT')}</Button>
+    {/*{JSON.stringify(config)}*/}
+    <hr />
   </form>);
 };
 
