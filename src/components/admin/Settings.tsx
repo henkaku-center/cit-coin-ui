@@ -123,11 +123,11 @@ export const Settings = () => {
 
   return (<Container maxW={'container.lg'}>
       <Heading mb={5}>{t('settings.HEADING')}</Heading>
-      <Stack>
+      <Stack spacing={10}>
         <RewardPointSetting />
-        <hr />
+        <hr/>
         <AdminSetting />
-        <hr />
+        <hr/>
       </Stack>
     </Container>
   );

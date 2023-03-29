@@ -14,6 +14,12 @@
     "SET_REWARD_POINTS_LABEL": "Set Reward Points",
     "SET_ADMIN_LABEL": "Set admin address"
   },
+  "students": {
+    "ADD_STUDENT": "Add Student",
+    "ENTER_ADDRESS": "Enter student's address",
+    "ENTER_VALID_ADDRESS": "Enter valid wallet address",
+    "HEADING": "Manage Students"
+  },
   "tab": {
     "SET_QUESTIONS": "Set Quests",
     "MANAGE_STUDENTS": "Manage Students",

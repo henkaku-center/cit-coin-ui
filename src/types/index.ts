@@ -4,6 +4,6 @@ export interface Quest {
   options: string[];
 }
 
-export interface QuestWithAnswer extends Quest{
+export interface QuestWithAnswer extends Quest {
   answer: number;
 }

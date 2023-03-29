@@ -13,7 +13,12 @@
     "ONLY_OWNER": "コントラクトの所有者のみがこのアクションを実行できます。",
     "SET_REWARD_POINTS_LABEL": "報酬ポイントを設定",
     "SET_ADMIN_LABEL": "管理者アドレスを設定"
-
+  },
+  "students": {
+    "ADD_STUDENT": "Add Student",
+    "ENTER_ADDRESS": "Enter student's address",
+    "ENTER_VALID_ADDRESS": "Enter valid wallet address",
+    "HEADING": "Manage Students"
   },
   "tab": {
     "SET_QUESTIONS": "クエストを設定する",

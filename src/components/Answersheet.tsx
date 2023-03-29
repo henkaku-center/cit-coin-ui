@@ -55,7 +55,7 @@ export const AnswerSheet = (props: AnswersheetInterface) => {
           configError?.message?.includes('INVALID: YOU MUST BE A STUDENT TO CONTINUE') ? t('quest.NO_PERMISSION') :
             t('quest.UNKNOWN_ERROR')}
       </Alert>}
-      {!configError && <>
+      {!(configError || contractWriteLoading) && <>
         <Stack direction={'row'} mb={5}>
           <Spacer />
           {/*<Button>Answers: {answer.toString(2).padStart(ans.length * 4, '0')}</Button>*/}
@@ -83,6 +83,8 @@ export const AnswerSheet = (props: AnswersheetInterface) => {
           <Spacer />
 
           <Button
+            isLoading={contractWriteLoading}
+            isDisabled={!ContractWrite}
             colorScheme={'red'} width={'10em'}
             onClick={() => {
               ContractWrite?.();

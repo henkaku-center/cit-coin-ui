@@ -13,6 +13,7 @@ import { defaultChain, getContractAddress } from '@/utils/contract';
 import { FaFile, FaUsers, FaChartBar } from 'react-icons/fa';
 import { SettingsIcon } from '@chakra-ui/icons';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
+import { StudentManager } from '@/components/admin/StudentManager';
 
 const Admin = () => {
   const { t } = useTranslation('admin');
@@ -45,7 +46,7 @@ const Admin = () => {
     {
       title: t('tab.MANAGE_STUDENTS'),
       icon: FaUsers,
-      component: <Heading>Manage Students</Heading>,
+      component: <StudentManager/>,
     },
     {
       title: t('tab.STATISTICS'),
