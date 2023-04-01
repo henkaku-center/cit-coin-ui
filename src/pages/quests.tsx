@@ -11,7 +11,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { AnswerSheet } from '@/components/Answersheet';
 import { useAccount, useNetwork, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { defaultChain } from '@/utils/contract';
-import { TQuestStorage } from '@/utils';
+import { TQuestStorage } from '@/types';
 
 const Quests = () => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -48,7 +48,7 @@ const Quests = () => {
   }, [isConnected, chain]);
 
   return (
-    <>
+    <Box m={5}>
       {sheetsLoading && <Box display={'flex'} alignItems={'center'} justifyContent={'center'} minH={'50vh'}>
         <Spinner size={'xl'} thickness={'3px'} color={'blue.500'} />
       </Box>}
@@ -62,7 +62,7 @@ const Quests = () => {
           {t('ERROR_LOADING_CONTENT_DESCRIPTION')}
         </AlertDescription>
       </Alert>}
-    </>
+    </Box>
   );
 };
 export default Quests;

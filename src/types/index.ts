@@ -7,3 +7,9 @@ export interface Quest {
 export interface QuestWithAnswer extends Quest {
   answer: number;
 }
+
+export interface TQuestStorage {
+  sheetId: string
+  published: Date | string,
+  questions: Quest[]
+}

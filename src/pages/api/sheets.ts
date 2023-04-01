@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { google } from 'googleapis';
-import { getSheetTitles, sheets } from '@/utils/google_client';
+import { sheets_client } from '@/utils/google_client';
 
 interface Data {
   sheets: string[];
@@ -19,7 +18,7 @@ export default async function handler(
    *   ]
    * }
    */
-  let sheets = await getSheetTitles();
+  let sheets = await sheets_client.getSheets();
   return res.status(200).json({ sheets: sheets });
 
   //

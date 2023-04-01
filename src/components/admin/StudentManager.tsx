@@ -50,6 +50,36 @@ const AddSingleStudentForm = () => {
   </form>);
 };
 
+
+const AddMultipleStudentForm = () => {
+  const { t } = useTranslation('admin');
+
+  return (<form onSubmit={(event) => {
+    event.preventDefault();
+    // ContractWrite?.();
+  }}>
+    <FormControl isInvalid={false}>
+      {/*todo: change later*/}
+      <FormLabel>
+        {t('students.ENTER_ADDRESS')}
+      </FormLabel>
+      <Input
+        fontFamily={'mono'}
+        // value={studentAddress}
+        // onChange={(event) => {
+        //   setStudentAddress(event.target.value as `0x${string}`);
+        // }}
+      />
+      <FormErrorMessage>{t('students.ENTER_VALID_ADDRESS')}</FormErrorMessage>
+    </FormControl>
+    <Button
+      type={'submit'} my={5} colorScheme={'blue'}
+      // isLoading={contractWriteLoading}
+      // isDisabled={(!!configError || !isAddress(studentAddress))}
+    >{t('students.ADD_STUDENT')}</Button>
+  </form>);
+};
+
 export const StudentManager = () => {
   const { t } = useTranslation('admin');
   return (<>
@@ -58,6 +88,7 @@ export const StudentManager = () => {
       <Stack spacing={10}>
         <AddSingleStudentForm />
         <hr />
+        <AddMultipleStudentForm/>
         <hr />
         <hr />
       </Stack>

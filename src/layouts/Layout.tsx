@@ -22,10 +22,11 @@ import { default as NextLink } from 'next/link';
 import { MoonIcon, SunIcon, LockIcon, UnlockIcon, WarningIcon } from '@chakra-ui/icons';
 import setLanguage from 'next-translate/setLanguage';
 import Head from 'next/head';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount, useContractReads, useNetwork } from 'wagmi';
 import { NavLink } from '@/components';
-import { defaultChain } from '@/utils/contract';
+import { defaultChain, getContractAddress } from '@/utils/contract';
 import { ConnectionProfile } from '@/components/wallet';
+import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -38,6 +39,20 @@ const Layout = ({ children }: LayoutProps) => {
   const { t, lang } = useTranslation('common');
   const { colorMode, toggleColorMode } = useColorMode();
 
+  const LearnContract = {
+    address: getContractAddress('LearnToEarn'),
+    abi: LearnToEarnABI,
+    chainId: chain?.id,
+  };
+
+  const {
+    data: adminAddresses,
+    isError: contractReadError,
+    isLoading,
+  } = useContractReads({
+    contracts: ['admin', 'dev', 'owner'].map((_func) => ({ ...LearnContract, functionName: _func })),
+  });
+
   return (
     <>
       <Head>
@@ -46,7 +61,7 @@ const Layout = ({ children }: LayoutProps) => {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <Flex px={8}>
+      <Flex px={8} position={'fixed'} top={0} left={0} right={0}>
         <NavLink as={NextLink} href='/' mr={16}>
           <Heading size='md'>
             <pre>{t('nav.HEADING')}</pre>
@@ -72,11 +87,12 @@ const Layout = ({ children }: LayoutProps) => {
                   ? 'orange'
                   : 'red'
             }
-            leftIcon={isConnected &&chain?.id===defaultChain.id ?<LockIcon/>: isConnected? <WarningIcon/>: <UnlockIcon />}
+            leftIcon={isConnected && chain?.id === defaultChain.id ? <LockIcon /> : isConnected ? <WarningIcon /> :
+              <UnlockIcon />}
           >
             {isConnected ? `${t('wallet.CONNECTED')} - ${chain?.name}` : t('wallet.NOT_CONNECTED')}
           </Button>
-          {isConnected && chain?.id === defaultChain.id && <NavLink href='/admin'>
+          {isConnected && chain?.id === defaultChain.id && adminAddresses?.includes(address) && <NavLink href='/admin'>
             {t('nav.ADMIN')}
           </NavLink>}
           <Button size='md' onClick={toggleColorMode} p={4}>
@@ -102,7 +118,7 @@ const Layout = ({ children }: LayoutProps) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <Box p={5} minH={'80vh'}>
+      <Box overflowY={'auto'} position={'fixed'} top={'60px'} left={0} right={0} bottom={0}>
         {!isConnected && <Alert status={'error'}>
           <AlertIcon />
           {t('wallet.CONNECT_TO_CONTINUE')}

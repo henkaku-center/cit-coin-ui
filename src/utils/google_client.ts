@@ -1,6 +1,8 @@
 import { google } from 'googleapis';
 import { Buffer } from 'buffer';
-import { Quest } from '@/types';
+import { Quest, TQuestStorage } from '@/types';
+import { initializeApp } from '@firebase/app';
+import { getDatabase, ref, set, get, child } from '@firebase/database';
 
 const creds = JSON.parse(Buffer.from(
   process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS || '',
@@ -12,33 +14,24 @@ const auth = new google.auth.GoogleAuth({
   credentials: creds,
 });
 
-// google.options({
-//   auth: auth,
-// });
+google.options({
+  auth: auth,
+});
 
 export const sheets = google.sheets({
   auth: auth,
   version: 'v4',
 });
 
-
-export const getSheetTitles = () => {
-  return new Promise<string[]>((resolve, reject) => {
-    sheets.spreadsheets.get({
-      spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      fields: 'sheets.properties.title',
-    }).then((response) => {
-      return resolve(response.data.sheets?.map(({ properties }) => properties?.title)
-        .filter((title) => (title !== undefined)) as string[]);
-    }).catch(err => {
-      return resolve([]);
-    });
-  });
-};
+const firebase_db = getDatabase(
+  initializeApp({
+    databaseURL: 'https://citcoin-default-rtdb.asia-southeast1.firebasedatabase.app',
+  }),
+);
 
 
-export const getSheetQuests = (sheetId: string) => {
-  return new Promise<Quest[]>((resolve, reject) => {
+export const sheets_client = {
+  getQuests: (sheetId: string) => new Promise<Quest[]>((resolve, reject) => {
     sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
       range: `${sheetId}!B2:G16`,
@@ -53,5 +46,39 @@ export const getSheetQuests = (sheetId: string) => {
     }).catch((error) => {
       reject(error);
     });
-  });
+  }),
+
+  getSheets: () => new Promise<string[]>((resolve, reject) => {
+    sheets.spreadsheets.get({
+      spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+      fields: 'sheets.properties.title',
+    }).then((response) => {
+      return resolve(response.data.sheets?.map(({ properties }) => properties?.title)
+        .filter((title) => (title !== undefined)) as string[]);
+    }).catch(err => {
+      return resolve([]);
+    });
+  }),
+};
+
+export const firebase_client = {
+  getQuests: () => new Promise<TQuestStorage>((resolve, reject) => {
+    get(child(ref(firebase_db), 'sheets')).then((snapshot) => {
+      console.log(snapshot.val());
+      resolve(snapshot.val());
+    }).catch(err => reject(err));
+  }),
+
+  setQuests: (data: Quest[], sheetId?: string) => new Promise((resolve, reject) => {
+    let quest: TQuestStorage = {
+      sheetId: sheetId ?? '',
+      published: new Date().toISOString(),
+      questions: data,
+    };
+    set(ref(firebase_db, 'sheets'), quest).then((resp) => {
+      resolve(resp);
+    }).catch((err) => {
+      reject(err);
+    });
+  }),
 };

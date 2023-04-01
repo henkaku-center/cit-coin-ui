@@ -46,7 +46,7 @@ const Admin = () => {
     {
       title: t('tab.MANAGE_STUDENTS'),
       icon: FaUsers,
-      component: <StudentManager/>,
+      component: <StudentManager />,
     },
     {
       title: t('tab.STATISTICS'),
@@ -70,8 +70,10 @@ const Admin = () => {
         {t('NO_PERMISSION')}
       </Alert>)}
       {isConnected && chain?.id === defaultChain.id && hasPermissions &&
-        <Tabs isLazy={true} orientation={'vertical'} variant={'unstyled'} colorScheme={'blue'} minHeight={'90vh'}>
-          <TabList width={300} minWidth={300} bg={'#cdf2'} borderRight={'solid #cdf8'}>
+        <Tabs
+          isLazy={true} orientation={'vertical'} variant={'unstyled'} colorScheme={'blue'} height={'100%'}
+        >
+          <TabList width={250} minWidth={250} bg={'#cdf2'} borderRight={'solid #cdf8'}>
             {adminComponents.map(({ title, icon }, idx) => (
               <Tab fontSize={'md'} key={idx} justifyContent={'flex-start'}
                    _selected={{ color: 'blue.500', fontWeight: 'bold' }}>
@@ -79,7 +81,7 @@ const Admin = () => {
                 {title}
               </Tab>))}
           </TabList>
-          <TabPanels>
+          <TabPanels overflowY={'auto'}>
             {adminComponents.map(({ component }, idx) => <TabPanel key={idx}>{component}</TabPanel>)}
           </TabPanels>
         </Tabs>}

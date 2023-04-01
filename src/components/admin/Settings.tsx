@@ -114,7 +114,7 @@ const AdminSetting = () => {
     <Button
       type={'submit'} my={5} colorScheme={'blue'}
       isLoading={contractWriteLoading}
-      isDisabled={(!!configError || !isAddress(admin) || admin==currentAdmin)}
+      isDisabled={(!!configError || !isAddress(admin) || admin == currentAdmin)}
     >{t('SUBMIT')}</Button>
   </form>);
 };
@@ -126,9 +126,9 @@ export const Settings = () => {
       <Heading mb={5}>{t('settings.HEADING')}</Heading>
       <Stack spacing={10}>
         <RewardPointSetting />
-        <hr/>
+        <hr />
         <AdminSetting />
-        <hr/>
+        <hr />
       </Stack>
     </Container>
   );
