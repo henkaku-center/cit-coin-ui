@@ -2,8 +2,16 @@
   "SUBMIT": "Submit",
   "NO_PERMISSION": "You do not have permissions to continue",
   "quest": {
+    "CURRENT_SHEET": "Currently Active",
     "SELECT_SHEET": "Select Sheet",
-    "SELECT_SHEET_LABEL": "Select Sheet"
+    "SELECT_SHEET_LABEL": "Select Sheet",
+    "UPDATE_CHANGES": "Update current sheet to quests",
+    "modal": {
+      "TITLE": "Update quests",
+      "BODY": "You are about change the content of quests without changing order of answers. Are you sure to continue?",
+      "YES": "Yes Continue",
+      "NO": "No, Cancel"
+    }
   },
   "settings": {
     "CURRENT_VALUE": "Current Value",

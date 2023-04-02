@@ -10,23 +10,46 @@ import { Quest, QuestWithAnswer } from '@/types';
 import { getContractAddress } from '@/utils/contract';
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
-import axios from 'axios';
+import { sheetActions } from '@/actions';
+import { useRouter } from 'next/router';
 
-interface AnswersheetInterface {
+interface AnswerSheetInterface {
   quests: Quest[],
   target: 'admin' | 'student'
   sheetId: string
 }
 
-export const AnswerSheet = (props: AnswersheetInterface) => {
+export const AnswerSheet = (props: AnswerSheetInterface) => {
   const [tabIndex, setTabIndex] = useState(0);
   const { t } = useTranslation('common');
   const [ans, setAns] = useState<QuestWithAnswer[]>(props.quests.map((q) => ({ ...q, answer: 0 })));
   const answered = ans.filter(a => a.answer !== 0).length;
   const answer = ans.map(a => a.answer).reduce((a, b) => a * 16 + b, 0);
-  // const toast = useToast()
-
+  const toast = useToast();
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
+  const router = useRouter();
+
+  const updateSheet = () => {
+    sheetActions.setActiveSheet(props.sheetId).then((response) => {
+      toast({
+        title: 'Question Updated',
+        description: 'All questions has been synced from google sheets',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+    }).catch((err) => {
+      toast({
+        title: 'Question Update failed',
+        description: 'There was an error updating sheets',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+    });
+  };
 
   const { config, error: configError } = usePrepareContractWrite({
     address: LearnToEarnAddress,
@@ -34,34 +57,31 @@ export const AnswerSheet = (props: AnswersheetInterface) => {
     args: props.target == 'student' ? [answer] : [ans.length, answer],
     abi: LearnToEarnABI,
     enabled: true,
-    // enabled: answered == ans.length,
   });
   const {
     write: ContractWrite,
     isLoading: contractWriteLoading,
-    data: contractData,
-    error: contractWriteError,
-  } = useContractWrite(config);
+  } = useContractWrite({
+    ...config,
+    onSuccess: (transaction) => {
+      transaction.wait().then((receipt) => {
+        if (props.target == 'admin') {
+          updateSheet();
+        } else {
+          toast({
+            title: 'Answer successfully submitted',
+            position: "top",
+            duration: 5000,
+            description: "Your answer has been successfully submitted"
+          });
+          router.push("/")
+        }
+      });
+    },
+  });
 
   const handleTabsChange = (index: number) => {
     setTabIndex(index);
-  };
-
-  const setActiveSheet = () => {
-    let reqOptions = {
-      url: '/api/quest/',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: JSON.stringify({ 'sheetId': props.sheetId }),
-    };
-    axios.request(reqOptions).then((response) => {
-      // toast
-      alert('success');
-    }).catch((err) => {
-      alert('Error');
-    });
   };
 
   const onAnswer = (answer: number) => {
@@ -104,13 +124,10 @@ export const AnswerSheet = (props: AnswersheetInterface) => {
 
           <Button
             isLoading={contractWriteLoading}
-            isDisabled={!ContractWrite}
+            isDisabled={!ContractWrite || (props.target === 'admin' && answered < props.quests.length)}
             colorScheme={'red'} width={'10em'}
             onClick={() => {
               ContractWrite?.();
-              if (props.target == 'admin') {
-                setActiveSheet();
-              }
             }}
           >{t('SUBMIT')}</Button>
         </Stack>

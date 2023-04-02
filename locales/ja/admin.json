@@ -2,8 +2,16 @@
   "SUBMIT": "提出",
   "NO_PERMISSION": "続行する権限がありません。",
   "quest": {
+    "CURRENT_SHEET": "現在アクティブ",
     "SELECT_SHEET": "シートを選択",
-    "SELECT_SHEET_LABEL": "シートを選択"
+    "SELECT_SHEET_LABEL": "シートを選択",
+    "UPDATE_CHANGES": "現在のシートをクエストに更新",
+    "modal": {
+      "TITLE": "更新クエスト",
+      "BODY": "回答の順番を変えずにクエストの内容を変更しようとしています。続行しますか?",
+      "YES": "はい、続行します",
+      "NO": "いいえ、キャンセルします"
+    }
   },
   "settings": {
     "CURRENT_VALUE": "現在の値",

@@ -3,6 +3,7 @@ import { Buffer } from 'buffer';
 import { Quest, TQuestStorage } from '@/types';
 import { initializeApp } from '@firebase/app';
 import { getDatabase, ref, set, get, child } from '@firebase/database';
+import { snapshot } from 'valtio';
 
 const creds = JSON.parse(Buffer.from(
   process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS || '',
@@ -69,16 +70,17 @@ export const firebase_client = {
     }).catch(err => reject(err));
   }),
 
-  setQuests: (data: Quest[], sheetId?: string) => new Promise((resolve, reject) => {
-    let quest: TQuestStorage = {
-      sheetId: sheetId ?? '',
-      published: new Date().toISOString(),
-      questions: data,
-    };
-    set(ref(firebase_db, 'sheets'), quest).then((resp) => {
-      resolve(resp);
-    }).catch((err) => {
-      reject(err);
-    });
-  }),
-};
+setQuests: (data: Quest[], sheetId?: string) => new Promise((resolve, reject) => {
+  let quest: TQuestStorage = {
+    sheetId: sheetId ?? '',
+    published: new Date().toISOString(),
+    questions: data,
+  };
+  set(ref(firebase_db, 'sheets'), quest).then((resp) => {
+    resolve(resp);
+  }).catch((err) => {
+    reject(err);
+  });
+}),
+}
+;
