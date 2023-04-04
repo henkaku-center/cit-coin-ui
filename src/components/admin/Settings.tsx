@@ -1,19 +1,15 @@
-import {
-  FormControl, FormLabel, Heading, NumberInput, Stack, NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper, FormHelperText, FormErrorMessage, HStack, Button, Flex, Container, Input,
-} from '@chakra-ui/react';
+import { FormControl, FormLabel, Heading, Stack, FormHelperText, Button, Container, Input } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { usePrepareContractWrite, useContractWrite, useContractRead, useNetwork } from 'wagmi';
 import { useEffect, useState } from 'react';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import { getContractAddress } from '@/utils/contract';
 import { isAddress } from 'ethers/lib/utils';
+import { BigNumber } from 'ethers';
 
 const RewardPointSetting = () => {
   const { t } = useTranslation('admin');
-  const [reward, setReward] = useState(0);
+  const [reward, setReward] = useState('');
   const { chain } = useNetwork();
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
   const {
@@ -26,12 +22,12 @@ const RewardPointSetting = () => {
     chainId: chain?.id,
   });
   useEffect(() => {
-    setReward(currentRewardPoint as number);
+    setReward(currentRewardPoint as string);
   }, [currentRewardPoint, currentRewardPointLoading]);
   const { config, error: configError } = usePrepareContractWrite({
     address: LearnToEarnAddress,
     functionName: 'setRewardPoint',
-    args: [reward],
+    args: [BigNumber.from(reward || "0")],
     abi: LearnToEarnABI,
     enabled: !!reward,
   });
@@ -47,23 +43,17 @@ const RewardPointSetting = () => {
       <FormLabel>
         {`${t('settings.SET_REWARD_POINTS_LABEL')} (${t('settings.CURRENT_VALUE')}: ${currentRewardPoint})`}
       </FormLabel>
-      <NumberInput value={reward} step={1000000} onChange={(_, valueAsNumber) => {
-        setReward(valueAsNumber || 0);
-      }}>
-        <NumberInputField />
-        <NumberInputStepper>
-          <NumberIncrementStepper />
-          <NumberDecrementStepper />
-        </NumberInputStepper>
-      </NumberInput>
-      <FormHelperText>{t('settings.HELP_MAX_LIMIT')}</FormHelperText>
+      <Input value={reward} onChange={(event) => {
+        setReward(event.target.value);
+      }} />
+      {/*<FormHelperText>{t('settings.HELP_MAX_LIMIT')}</FormHelperText>*/}
       <FormHelperText>{t('settings.HELP_EARNING')}</FormHelperText>
       <FormHelperText textColor={'blue.500'}>{t('settings.ONLY_OWNER')}</FormHelperText>
     </FormControl>
     <Button
       type={'submit'} my={5} colorScheme={'blue'}
       isLoading={contractWriteLoading}
-      isDisabled={!reward || reward == currentRewardPoint}
+      isDisabled={!reward || reward == currentRewardPoint || !!configError}
     >{t('SUBMIT')}</Button>
   </form>);
 };

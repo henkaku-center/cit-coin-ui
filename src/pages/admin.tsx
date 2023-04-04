@@ -33,9 +33,24 @@ const Admin = () => {
     isError: contractReadError,
     isLoading,
   } = useContractReads({
-    contracts: ['admin', 'dev', 'owner'].map((_func) => ({ ...LearnContract, functionName: _func })),
+    contracts: Object.entries(
+      {
+        'dev': []
+        , 'owner': [],
+        'isAdmin': [address],
+      }).map(
+      ([k, v], index) => {
+        // let args = v.length ? { args: v } : {};
+        return {
+          ...
+            LearnContract,
+          functionName: k,
+          args: v,
+        };
+      }),
   });
-  const hasPermissions = adminAddresses?.includes(address) ?? false;
+  const hasPermissions = adminAddresses?.includes(address) || adminAddresses?.includes(true);
+  console.log('adminAddresses: ', adminAddresses);
 
   const adminComponents = [
     {

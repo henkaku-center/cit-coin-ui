@@ -50,7 +50,21 @@ const Layout = ({ children }: LayoutProps) => {
     isError: contractReadError,
     isLoading,
   } = useContractReads({
-    contracts: ['admin', 'dev', 'owner'].map((_func) => ({ ...LearnContract, functionName: _func })),
+    contracts: Object.entries(
+      {
+        'dev': []
+        , 'owner': [],
+        'isAdmin': [address],
+      }).map(
+      ([k, v], index) => {
+        // let args = v.length ? { args: v } : {};
+        return {
+          ...
+            LearnContract,
+          functionName: k,
+          args: v,
+        };
+      }),
   });
 
   return (
@@ -92,7 +106,7 @@ const Layout = ({ children }: LayoutProps) => {
           >
             {isConnected ? `${t('wallet.CONNECTED')} - ${chain?.name}` : t('wallet.NOT_CONNECTED')}
           </Button>
-          {isConnected && chain?.id === defaultChain.id && adminAddresses?.includes(address) && <NavLink href='/admin'>
+          {isConnected && chain?.id === defaultChain.id && (adminAddresses?.includes(address) || adminAddresses?.includes(true)) && <NavLink href='/admin'>
             {t('nav.ADMIN')}
           </NavLink>}
           <Button size='md' onClick={toggleColorMode} p={4}>

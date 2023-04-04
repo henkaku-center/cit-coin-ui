@@ -28,6 +28,7 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
   const toast = useToast();
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
   const router = useRouter();
+  const [txnLoading, setTxnLoading] = useState(false);
 
   const updateSheet = () => {
     sheetActions.setActiveSheet(props.sheetId).then((response) => {
@@ -51,12 +52,12 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
     });
   };
 
-  const { config, error: configError } = usePrepareContractWrite({
+  const { config, error: configError, isIdle: isConfigIdle } = usePrepareContractWrite({
     address: LearnToEarnAddress,
     functionName: props.target == 'student' ? 'answerQuest' : 'setQuest',
     args: props.target == 'student' ? [answer] : [ans.length, answer],
     abi: LearnToEarnABI,
-    enabled: true,
+    enabled: answered === 0 || answered === ans.length,
   });
   const {
     write: ContractWrite,
@@ -64,18 +65,30 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
   } = useContractWrite({
     ...config,
     onSuccess: (transaction) => {
+      setTxnLoading(true);
       transaction.wait().then((receipt) => {
         if (props.target == 'admin') {
           updateSheet();
         } else {
           toast({
+            status: 'success',
             title: 'Answer successfully submitted',
-            position: "top",
+            position: 'top',
             duration: 5000,
-            description: "Your answer has been successfully submitted"
+            description: 'Your answer has been successfully submitted',
           });
-          router.push("/")
+          router.push('/');
         }
+      }).catch((err) => {
+        toast({
+          status: 'error',
+          title: 'Error Submitting Answer',
+          position: 'top',
+          duration: 5000,
+          description: 'Your answer has been successfully submitted',
+        });
+      }).finally(() => {
+        setTxnLoading(false);
       });
     },
   });
@@ -89,53 +102,57 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
   };
   return (
     <Box py={5}>
-      {configError && <Alert status={'error'}>
+      {configError && <Alert status={'error'} my={5}>
         <AlertIcon />
         {configError?.message?.includes('ERROR: ALREADY ANSWERED') ? t('quest.ALREADY_ANSWERED') :
           configError?.message?.includes('INVALID: YOU MUST BE A STUDENT TO CONTINUE') ? t('quest.NO_PERMISSION') :
             t('quest.UNKNOWN_ERROR')}
       </Alert>}
-      {!(configError || contractWriteLoading) && <>
-        <Stack direction={'row'} mb={5}>
-          <Spacer />
-          {/*<Button>Answers: {answer.toString(2).padStart(ans.length * 4, '0')}</Button>*/}
-          <Button
-            leftIcon={<ArrowLeftIcon />}
-            borderLeftRadius={'full'}
-            width={'10em'}
-            colorScheme={'blue'}
-            isDisabled={tabIndex == 0}
-            onClick={() => {
-              setTabIndex(tabIndex - 1);
-            }}>{t('PREVIOUS')}
-          </Button>
-          <Button width={'8em'} borderRadius={0}>{answered} / {ans.length}</Button>
-          <Button
-            rightIcon={<ArrowRightIcon />}
-            borderRightRadius={'full'}
-            width={'10em'}
-            colorScheme={'blue'}
-            isDisabled={tabIndex === ans.length - 1}
-            onClick={() => {
-              setTabIndex(tabIndex + 1);
-            }}>{t('NEXT')}
-          </Button>
-          <Spacer />
+      {txnLoading && <Alert status={'warning'} mb={5}>
+        <AlertIcon />
+        Please Wait, your transaction is being confirmed.
+      </Alert>}
+      <Stack direction={'row'} mb={5}>
+        <Spacer />
+        {/*<Button>Answers: {answer.toString(2).padStart(ans.length * 4, '0')}</Button>*/}
+        <Button
+          leftIcon={<ArrowLeftIcon />}
+          borderLeftRadius={'full'}
+          width={'10em'}
+          colorScheme={'blue'}
+          isDisabled={tabIndex == 0 || !!configError || txnLoading}
+          onClick={() => {
+            setTabIndex(tabIndex - 1);
+          }}>{t('PREVIOUS')}
+        </Button>
+        <Button width={'8em'} borderRadius={0}>{answered} / {ans.length}</Button>
+        <Button
+          rightIcon={<ArrowRightIcon />}
+          borderRightRadius={'full'}
+          width={'10em'}
+          colorScheme={'blue'}
+          isDisabled={(tabIndex === ans.length - 1) || !!configError || txnLoading}
+          onClick={() => {
+            setTabIndex(tabIndex + 1);
+          }}>{t('NEXT')}
+        </Button>
+        <Spacer />
 
-          <Button
-            isLoading={contractWriteLoading}
-            isDisabled={!ContractWrite || (props.target === 'admin' && answered < props.quests.length)}
-            colorScheme={'red'} width={'10em'}
-            onClick={() => {
-              ContractWrite?.();
-            }}
-          >{t('SUBMIT')}</Button>
-        </Stack>
-        <Progress hasStripe={true} colorScheme='pink' min={0} max={ans.length} size='xs' value={answered} mb={5} />
+        <Button
+          isLoading={txnLoading || contractWriteLoading}
+          isDisabled={!ContractWrite || (props.target === 'admin' && answered < props.quests.length) || !!configError}
+          colorScheme={'red'} width={'10em'}
+          onClick={() => {
+            ContractWrite?.();
+          }}
+        >{t('SUBMIT')}</Button>
+      </Stack>
+      <Progress hasStripe={true} colorScheme='pink' min={0} max={ans.length} size='xs' value={answered} mb={5} />
+      {!configError &&
         <Tabs orientation={'vertical'} index={tabIndex} onChange={handleTabsChange}>
           <TabList width={200} minWidth={200}>
             {ans.map((_, idx) => (
-              <Tab key={`q_tab_${idx}`} justifyContent={'flex-start'}>
+              <Tab key={`q_tab_${idx}`} justifyContent={'flex-start'} isDisabled={txnLoading}>
                 {(ans[idx].answer ?? 0) > 0 ?
                   <CheckCircleIcon mx={4} color={'blue.500'} /> :
                   <QuestionIcon mx={4} color={'yellow.500'} />}
@@ -160,8 +177,7 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
               </TabPanel>
             ))}
           </TabPanels>
-        </Tabs>
-      </>}
+        </Tabs>}
     </Box>
   );
 };
