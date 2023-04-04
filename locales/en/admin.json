@@ -23,7 +23,11 @@
     "SET_ADMIN_LABEL": "Set admin address"
   },
   "students": {
-    "ADD_STUDENT": "Add Student",
+    "ADD": "Add Student",
+    "REMOVE": "Remove Student",
+    "BULK_ADD": "Import Students from CSV",
+    "BULK_REMOVE": "Remove Students from CSV",
+    "CLEAR_FORM": "Clear Form",
     "ENTER_ADDRESS": "Enter student's address",
     "ENTER_VALID_ADDRESS": "Enter valid wallet address",
     "HEADING": "Manage Students"
