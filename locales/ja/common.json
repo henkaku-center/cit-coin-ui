@@ -37,7 +37,7 @@
     "CONTRACT_ADDRESS": "コントラクトアドレス",
     "COULD_NOT_GET_BALANCE": "残高が取得できませんでした",
     "DISCONNECT": "切断する",
-    "NOT_CONNECTED": "ウォレットが接続されていない",
+    "NOT_CONNECTED": "ウォレットが接続されていません",
     "SETTINGS": "ウォレット セッティング",
     "SWITCH_NETWORK": "ネットワークを切り替える"
   }
