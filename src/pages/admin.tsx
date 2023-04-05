@@ -50,7 +50,7 @@ const Admin = () => {
       }),
   });
   const hasPermissions = adminAddresses?.includes(address) || adminAddresses?.includes(true);
-  console.log('adminAddresses: ', adminAddresses);
+  // console.log('adminAddresses: ', adminAddresses);
 
   const adminComponents = [
     {
@@ -88,7 +88,7 @@ const Admin = () => {
         <Tabs
           isLazy={true} orientation={'vertical'} variant={'unstyled'} colorScheme={'blue'} height={'100%'}
         >
-          <TabList width={250} minWidth={250} bg={'#cdf2'} borderRight={'solid #cdf8'}>
+          <TabList width={250} minWidth={250} bg={'#abf2'}>
             {adminComponents.map(({ title, icon }, idx) => (
               <Tab fontSize={'md'} key={idx} justifyContent={'flex-start'}
                    _selected={{ color: 'blue.500', fontWeight: 'bold' }}>

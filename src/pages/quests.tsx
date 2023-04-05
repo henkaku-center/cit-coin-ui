@@ -52,7 +52,7 @@ const Quests = () => {
       {sheetsLoading && <Box display={'flex'} alignItems={'center'} justifyContent={'center'} minH={'50vh'}>
         <Spinner size={'xl'} thickness={'3px'} color={'blue.500'} />
       </Box>}
-      {!(sheetsLoading || sheetsError) && isConnected && chain?.id == defaultChain.id &&
+      {!(sheetsLoading || sheetsError) && isConnected && chain?.id == defaultChain.id && quest &&
         <AnswerSheet sheetId={quest.sheetId} target='student' quests={quest.questions} />
       }
       {sheetsError && <Alert status={'error'}>

@@ -3,7 +3,9 @@ import { Buffer } from 'buffer';
 import { Quest, TQuestStorage } from '@/types';
 import { initializeApp } from '@firebase/app';
 import { getDatabase, ref, set, get, child } from '@firebase/database';
-import { snapshot } from 'valtio';
+
+
+const _quest_path = process.env.NEXT_PUBLIC_LEARN_TO_EARN_ADDRESS || "dev";
 
 const creds = JSON.parse(Buffer.from(
   process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS || '',
@@ -64,8 +66,8 @@ export const sheets_client = {
 
 export const firebase_client = {
   getQuests: () => new Promise<TQuestStorage>((resolve, reject) => {
-    get(child(ref(firebase_db), 'sheets')).then((snapshot) => {
-      console.log(snapshot.val());
+    get(child(ref(firebase_db), `sheets/${_quest_path}`)).then((snapshot) => {
+      // console.log(snapshot.val());
       resolve(snapshot.val());
     }).catch(err => reject(err));
   }),
@@ -76,7 +78,7 @@ setQuests: (data: Quest[], sheetId?: string) => new Promise((resolve, reject) =>
     published: new Date().toISOString(),
     questions: data,
   };
-  set(ref(firebase_db, 'sheets'), quest).then((resp) => {
+  set(ref(firebase_db, `sheets/${_quest_path}`), quest).then((resp) => {
     resolve(resp);
   }).catch((err) => {
     reject(err);

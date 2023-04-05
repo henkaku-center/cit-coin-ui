@@ -121,13 +121,10 @@ const AddMultipleStudentForm = (props: StudentManageProps) => {
         // @ts-ignore
         setAddresses([...new Set(records)]);
       }
-      console.log(records);
     });
   };
 
   useEffect(() => {
-    console.log('Accepted files: ', acceptedFiles);
-    console.log(acceptedFiles);
     if (acceptedFiles.length) {
       acceptedFiles[0].arrayBuffer().then(buffer => {
         let string_data = new TextDecoder().decode(buffer);

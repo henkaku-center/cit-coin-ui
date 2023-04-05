@@ -1,10 +1,16 @@
-import { FormControl, FormLabel, Heading, Stack, FormHelperText, Button, Container, Input } from '@chakra-ui/react';
+import {
+  FormControl, FormLabel, Heading, Stack, FormHelperText, Button, Container, Input, NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+} from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { usePrepareContractWrite, useContractWrite, useContractRead, useNetwork } from 'wagmi';
 import { useEffect, useState } from 'react';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import { getContractAddress } from '@/utils/contract';
-import { isAddress } from 'ethers/lib/utils';
+import { isAddress, parseUnits } from 'ethers/lib/utils';
 import { BigNumber } from 'ethers';
 
 const RewardPointSetting = () => {
@@ -21,16 +27,22 @@ const RewardPointSetting = () => {
     functionName: 'rewardPoint',
     chainId: chain?.id,
   });
+
   useEffect(() => {
-    setReward(currentRewardPoint as string);
+    // dividing the value of rewards by 18 to set the current value in CIT coins
+    let reward_decimals = BigNumber.from(currentRewardPoint).div(parseUnits('1', 18))
+    setReward(reward_decimals.toString());
+    // setReward((currentRewardPoint as string).slice(-18));
   }, [currentRewardPoint, currentRewardPointLoading]);
+
   const { config, error: configError } = usePrepareContractWrite({
     address: LearnToEarnAddress,
     functionName: 'setRewardPoint',
-    args: [BigNumber.from(reward || "0")],
+    args: [parseUnits(reward || "0", 18)],
     abi: LearnToEarnABI,
     enabled: !!reward,
   });
+
   const {
     write: ContractWrite,
     isLoading: contractWriteLoading,
@@ -43,10 +55,19 @@ const RewardPointSetting = () => {
       <FormLabel>
         {`${t('settings.SET_REWARD_POINTS_LABEL')} (${t('settings.CURRENT_VALUE')}: ${currentRewardPoint})`}
       </FormLabel>
-      <Input value={reward} onChange={(event) => {
-        setReward(event.target.value);
-      }} />
-      {/*<FormHelperText>{t('settings.HELP_MAX_LIMIT')}</FormHelperText>*/}
+      <NumberInput min={10} max={1000} step={10}  value={reward} onChange={(valueAsString) => {
+        setReward(valueAsString || "0");
+      }}>
+        <NumberInputField />
+        <NumberInputStepper>
+          <NumberIncrementStepper />
+          <NumberDecrementStepper />
+        </NumberInputStepper>
+      </NumberInput>
+      {/*<Input value={reward} onChange={(event) => {*/}
+      {/*  setReward(event.target.value);*/}
+      {/*}} />*/}
+      <FormHelperText>{t('settings.HELP_EQUIVALENT')}</FormHelperText>
       <FormHelperText>{t('settings.HELP_EARNING')}</FormHelperText>
       <FormHelperText textColor={'blue.500'}>{t('settings.ONLY_OWNER')}</FormHelperText>
     </FormControl>
@@ -63,18 +84,18 @@ const AdminSetting = () => {
   const [admin, setAdmin] = useState<`0x${string}`>('0x');
   const { chain } = useNetwork();
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
-  const {
-    data: currentAdmin,
-    isLoading: currentRewardPointLoading,
-  } = useContractRead({
-    address: LearnToEarnAddress,
-    abi: LearnToEarnABI,
-    functionName: 'admin',
-    chainId: chain?.id,
-  });
-  useEffect(() => {
-    setAdmin(currentAdmin as `0x${string}`);
-  }, [currentAdmin, currentRewardPointLoading]);
+  // const {
+  //   data: currentAdmin,
+  //   isLoading: currentRewardPointLoading,
+  // } = useContractRead({
+  //   address: LearnToEarnAddress,
+  //   abi: LearnToEarnABI,
+  //   functionName: 'admin',
+  //   chainId: chain?.id,
+  // });
+  // useEffect(() => {
+  //   setAdmin(currentAdmin as `0x${string}`);
+  // }, [currentAdmin, currentRewardPointLoading]);
   const { config, error: configError } = usePrepareContractWrite({
     address: LearnToEarnAddress,
     functionName: 'setAdmin',
@@ -94,17 +115,17 @@ const AdminSetting = () => {
       <FormLabel>
         {t('settings.SET_ADMIN_LABEL')}
       </FormLabel>
-      <Input value={admin} step={1000000} onChange={(e) => {
+      <Input value={admin} onChange={(e) => {
         setAdmin(e.target.value as `0x${string}`);
       }} fontFamily={'mono'}
       />
-      <FormHelperText>{`${t('settings.CURRENT_VALUE')}: ${currentAdmin}`}</FormHelperText>
+      {/*<FormHelperText>{`${t('settings.CURRENT_VALUE')}: ${currentAdmin}`}</FormHelperText>*/}
       <FormHelperText textColor={'blue.500'}>{t('settings.ONLY_OWNER')}</FormHelperText>
     </FormControl>
     <Button
       type={'submit'} my={5} colorScheme={'blue'}
       isLoading={contractWriteLoading}
-      isDisabled={(!!configError || !isAddress(admin) || admin == currentAdmin)}
+      isDisabled={(!!configError || !isAddress(admin))}
     >{t('SUBMIT')}</Button>
   </form>);
 };

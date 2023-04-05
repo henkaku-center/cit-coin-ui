@@ -16,7 +16,7 @@
   "settings": {
     "CURRENT_VALUE": "現在の値",
     "HEADING": "セッティング",
-    "HELP_MAX_LIMIT": "値は 1,000,000,000,000,000 未満でなければなりません。",
+    "HELP_EQUIVALENT": "1 CIT コインは 1,000,000,000,000,000,000 単位に相当します",
     "HELP_EARNING": "生徒は 1 つの質問に答えると、上記の金額を獲得できます。",
     "ONLY_OWNER": "コントラクトの所有者のみがこのアクションを実行できます。",
     "SET_REWARD_POINTS_LABEL": "報酬ポイントを設定",

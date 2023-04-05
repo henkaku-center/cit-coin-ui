@@ -38,7 +38,6 @@ export const MetaMaskConnectCard = () => {
         loadingText="Connecting..."
         onClick={() => {
           MetaMask.connect().catch((err) => {
-            console.log(err);
           });
         }}
       >
@@ -57,7 +56,7 @@ export const MetaMaskConnectCard = () => {
           rightIcon={<ArrowForwardIcon />}
           onClick={() => {
             MetaMask?.switchChain?.(_chain.id).catch((err) => {
-              console.log(err);
+              // console.log(err);
             });
           }}
         >
