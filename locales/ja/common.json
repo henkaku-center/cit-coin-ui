@@ -35,7 +35,7 @@
     "CONNECTION_SUCCESSFUL": "メタマスクが正常に接続されました",
     "CONNECT_TO_CONTINUE": "続行するには、まずウォレットを接続してください。",
     "CONTRACT_ADDRESS": "コントラクトアドレス",
-    "COULD_NOT_GET_BALANCE": "バランスが取れなかった",
+    "COULD_NOT_GET_BALANCE": "残高が取得できませんでした",
     "DISCONNECT": "切断する",
     "NOT_CONNECTED": "ウォレットが接続されていない",
     "SETTINGS": "ウォレット セッティング",
