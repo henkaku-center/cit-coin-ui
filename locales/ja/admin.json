@@ -28,7 +28,7 @@
     "BULK_ADD": "CSVから学生をインポート",
     "BULK_REMOVE": "CSV から学生を削除",
     "CLEAR_FORM": "フォームをクリア",
-    "ENTER_ADDRESS": "学生の住所を入力してください",
+    "ENTER_ADDRESS": "学生のウォレットアドレスを入力してください",
     "ENTER_VALID_ADDRESS": "有効なウォレットアドレスを入力してください",
     "HEADING": "学生の管理"
   },
