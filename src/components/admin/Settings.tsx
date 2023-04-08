@@ -15,7 +15,7 @@ import { BigNumber } from 'ethers';
 
 const RewardPointSetting = () => {
   const { t } = useTranslation('admin');
-  const [reward, setReward] = useState('');
+  const [reward, setReward] = useState('0');
   const { chain } = useNetwork();
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
   const {
@@ -30,7 +30,7 @@ const RewardPointSetting = () => {
 
   useEffect(() => {
     // dividing the value of rewards by 18 to set the current value in CIT coins
-    let reward_decimals = BigNumber.from(currentRewardPoint).div(parseUnits('1', 18))
+    let reward_decimals = BigNumber.from(currentRewardPoint ?? '0').div(parseUnits('1', 18));
     setReward(reward_decimals.toString());
     // setReward((currentRewardPoint as string).slice(-18));
   }, [currentRewardPoint, currentRewardPointLoading]);
@@ -38,7 +38,7 @@ const RewardPointSetting = () => {
   const { config, error: configError } = usePrepareContractWrite({
     address: LearnToEarnAddress,
     functionName: 'setRewardPoint',
-    args: [parseUnits(reward || "0", 18)],
+    args: [parseUnits(reward || '0', 18)],
     abi: LearnToEarnABI,
     enabled: !!reward,
   });
@@ -53,10 +53,10 @@ const RewardPointSetting = () => {
   }}>
     <FormControl>
       <FormLabel>
-        {`${t('settings.SET_REWARD_POINTS_LABEL')} (${t('settings.CURRENT_VALUE')}: ${currentRewardPoint})`}
+        {t('settings.SET_REWARD_POINTS_LABEL')} (cJPY)
       </FormLabel>
-      <NumberInput min={10} max={1000} step={10}  value={reward} onChange={(valueAsString) => {
-        setReward(valueAsString || "0");
+      <NumberInput min={10} max={1000} step={10} value={parseInt(reward)} onChange={(valueAsString) => {
+        setReward(valueAsString || '0');
       }}>
         <NumberInputField />
         <NumberInputStepper>
@@ -64,11 +64,9 @@ const RewardPointSetting = () => {
           <NumberDecrementStepper />
         </NumberInputStepper>
       </NumberInput>
-      {/*<Input value={reward} onChange={(event) => {*/}
-      {/*  setReward(event.target.value);*/}
-      {/*}} />*/}
       <FormHelperText>{t('settings.HELP_EQUIVALENT')}</FormHelperText>
       <FormHelperText>{t('settings.HELP_EARNING')}</FormHelperText>
+      {/*<FormHelperText> {`${ t('settings.CURRENT_VALUE')}: ${currentRewardPoint}`}</FormHelperText>*/}
       <FormHelperText textColor={'blue.500'}>{t('settings.ONLY_OWNER')}</FormHelperText>
     </FormControl>
     <Button
@@ -81,21 +79,9 @@ const RewardPointSetting = () => {
 
 const AdminSetting = () => {
   const { t } = useTranslation('admin');
-  const [admin, setAdmin] = useState<`0x${string}`>('0x');
+  const [admin, setAdmin] = useState('');
   const { chain } = useNetwork();
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
-  // const {
-  //   data: currentAdmin,
-  //   isLoading: currentRewardPointLoading,
-  // } = useContractRead({
-  //   address: LearnToEarnAddress,
-  //   abi: LearnToEarnABI,
-  //   functionName: 'admin',
-  //   chainId: chain?.id,
-  // });
-  // useEffect(() => {
-  //   setAdmin(currentAdmin as `0x${string}`);
-  // }, [currentAdmin, currentRewardPointLoading]);
   const { config, error: configError } = usePrepareContractWrite({
     address: LearnToEarnAddress,
     functionName: 'setAdmin',
@@ -116,8 +102,8 @@ const AdminSetting = () => {
         {t('settings.SET_ADMIN_LABEL')}
       </FormLabel>
       <Input value={admin} onChange={(e) => {
-        setAdmin(e.target.value as `0x${string}`);
-      }} fontFamily={'mono'}
+        setAdmin(e.target.value);
+      }} fontFamily={'mono'} placeholder={'0x0000000000000000000000000000000000000000'}
       />
       {/*<FormHelperText>{`${t('settings.CURRENT_VALUE')}: ${currentAdmin}`}</FormHelperText>*/}
       <FormHelperText textColor={'blue.500'}>{t('settings.ONLY_OWNER')}</FormHelperText>

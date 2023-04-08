@@ -69,7 +69,7 @@ export const ContractDetail = () => {
             ))}
 
             <Grid py={5} templateColumns={'200px 1fr'} gap={2} fontWeight={'bold'}>
-              <Text>{t('wallet.CONTRACT_ADDRESS')}</Text>
+              <Text>cJPY</Text>
               <Code px={3} py={1} variant={'outline'} colorScheme={'red'} fontSize={'lg'} borderRadius={'lg'}>
                 {citCoinAddress}
               </Code>

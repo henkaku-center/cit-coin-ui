@@ -35,8 +35,7 @@ const Admin = () => {
   } = useContractReads({
     contracts: Object.entries(
       {
-        'dev': []
-        , 'owner': [],
+        'owner': [],
         'isAdmin': [address],
       }).map(
       ([k, v], index) => {

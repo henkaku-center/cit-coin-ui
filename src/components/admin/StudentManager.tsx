@@ -19,6 +19,7 @@ import { isAddress } from '@ethersproject/address';
 import { useDropzone } from 'react-dropzone';
 import { FaFile } from 'react-icons/fa';
 import { parse } from 'csv-parse';
+import { BigNumber } from 'ethers';
 
 const LearnToEarnAddress = getContractAddress('LearnToEarn');
 
@@ -37,6 +38,9 @@ const ManageSingleStudent = (props: StudentManageProps) => {
     args: [studentAddress],
     abi: LearnToEarnABI,
     enabled: isAddress(studentAddress),
+    // overrides: {
+    //   gasLimit: BigNumber.from(15e3),
+    // }
   });
   const {
     write: ContractWrite,

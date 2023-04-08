@@ -16,7 +16,7 @@
   "settings": {
     "CURRENT_VALUE": "Current Value",
     "HEADING": "Settings",
-    "HELP_EQUIVALENT": "1 CIT Coin is equal to 1,000,000,000,000,000,000 units.",
+    "HELP_EQUIVALENT": "1 cJPY is equal to 1,000,000,000,000,000,000 tokens.",
     "HELP_EARNING": "The student earns the above stated amount when they answer single question.",
     "ONLY_OWNER": "Only contract owner is allowed to perform this action",
     "SET_REWARD_POINTS_LABEL": "Set Reward Points",
