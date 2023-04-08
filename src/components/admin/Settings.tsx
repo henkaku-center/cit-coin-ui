@@ -3,7 +3,7 @@ import {
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
-  NumberDecrementStepper,
+  NumberDecrementStepper, useToast,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { usePrepareContractWrite, useContractWrite, useContractRead, useNetwork } from 'wagmi';
@@ -64,7 +64,6 @@ const RewardPointSetting = () => {
           <NumberDecrementStepper />
         </NumberInputStepper>
       </NumberInput>
-      <FormHelperText>{t('settings.HELP_EQUIVALENT')}</FormHelperText>
       <FormHelperText>{t('settings.HELP_EARNING')}</FormHelperText>
       {/*<FormHelperText> {`${ t('settings.CURRENT_VALUE')}: ${currentRewardPoint}`}</FormHelperText>*/}
       <FormHelperText textColor={'blue.500'}>{t('settings.ONLY_OWNER')}</FormHelperText>
@@ -77,14 +76,16 @@ const RewardPointSetting = () => {
   </form>);
 };
 
-const AdminSetting = () => {
+const AdminSetting = (props: { action: 'add' | 'remove' }) => {
+  const { action } = props;
+  const toast = useToast();
   const { t } = useTranslation('admin');
   const [admin, setAdmin] = useState('');
   const { chain } = useNetwork();
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
   const { config, error: configError } = usePrepareContractWrite({
     address: LearnToEarnAddress,
-    functionName: 'setAdmin',
+    functionName: action == 'add' ? 'setAdmin' : 'removeAdmin',
     args: [admin],
     abi: LearnToEarnABI,
     enabled: isAddress(admin),
@@ -92,14 +93,30 @@ const AdminSetting = () => {
   const {
     write: ContractWrite,
     isLoading: contractWriteLoading,
-  } = useContractWrite(config);
+  } = useContractWrite({
+    ...config, onSuccess: (data) => {
+      data.wait().then((txn) => {
+        toast({
+          position: 'top',
+          title: 'Success',
+          status: 'success',
+        });
+      }).catch((err) => {
+        toast({
+          position: 'top',
+          title: 'Error',
+          status: 'error',
+        });
+      });
+    },
+  });
   return (<form onSubmit={(e) => {
     e.preventDefault();
     ContractWrite?.();
   }}>
     <FormControl>
       <FormLabel>
-        {t('settings.SET_ADMIN_LABEL')}
+        {t(action === 'add' ? 'settings.ADD_ADMIN_LABEL' : 'settings.REMOVE_ADMIN_LABEL')}
       </FormLabel>
       <Input value={admin} onChange={(e) => {
         setAdmin(e.target.value);
@@ -124,7 +141,9 @@ export const Settings = () => {
       <Stack spacing={10}>
         <RewardPointSetting />
         <hr />
-        <AdminSetting />
+        <AdminSetting action={'add'} />
+        <hr />
+        <AdminSetting action={'remove'} />
         <hr />
       </Stack>
     </Container>

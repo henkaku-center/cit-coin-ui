@@ -16,11 +16,11 @@
   "settings": {
     "CURRENT_VALUE": "現在の値",
     "HEADING": "セッティング",
-    "HELP_EQUIVALENT": "1 cJPY は 1,000,000,000,000,000,000 トークンに相当します。",
     "HELP_EARNING": "生徒は 1 つの質問に答えると、上記の金額を獲得できます。",
     "ONLY_OWNER": "コントラクトの所有者のみがこのアクションを実行できます。",
     "SET_REWARD_POINTS_LABEL": "報酬ポイントを設定",
-    "SET_ADMIN_LABEL": "管理者アドレスを設定"
+    "ADD_ADMIN_LABEL": "管理者を追加",
+    "REMOVE_ADMIN_LABEL": "管理者を削除"
   },
   "students": {
     "ADD": "学生を追加する",
