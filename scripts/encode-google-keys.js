@@ -22,12 +22,13 @@ if (path_idx < 1 || process.argv.length < path_idx) {
 
 const filename = process.argv[path_idx];
 
-let file = readFile(filename, (err, data) => {
-  let content = data.toString('base64');
+readFile(filename, (err, data) => {
+  // removing unnecessary whitespaces
+  let key_trimmed = JSON.stringify(JSON.parse(data.toString()));
+  let key_base64 = new Buffer.from(key_trimmed).toString('base64');
+  console.log('\n', key_base64, '\n');
 
-  console.log(content, '\n');
-
-  writeFile(`${filename}.txt`, content, (err) => {
+  writeFile(filename.replace('.json', '.txt'), key_base64, (err) => {
     if (err) {
       console.log('Could not write to the file');
       process.exit(1);
