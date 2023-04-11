@@ -10,7 +10,7 @@ import { usePrepareContractWrite, useContractWrite, useContractRead, useNetwork 
 import { useEffect, useState } from 'react';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import { getContractAddress } from '@/utils/contract';
-import { isAddress, parseUnits } from 'ethers/lib/utils';
+import { formatUnits, isAddress, parseUnits } from 'ethers/lib/utils';
 import { BigNumber } from 'ethers';
 
 const RewardPointSetting = () => {
@@ -29,8 +29,7 @@ const RewardPointSetting = () => {
   });
 
   useEffect(() => {
-    // dividing the value of rewards by 18 to set the current value in CIT coins
-    let reward_decimals = BigNumber.from(currentRewardPoint ?? '0').div(parseUnits('1', 18));
+    let reward_decimals = formatUnits(BigNumber.from(currentRewardPoint ?? '0'), 18);
     setReward(reward_decimals.toString());
     // setReward((currentRewardPoint as string).slice(-18));
   }, [currentRewardPoint, currentRewardPointLoading]);
@@ -53,9 +52,9 @@ const RewardPointSetting = () => {
   }}>
     <FormControl>
       <FormLabel>
-        {t('settings.SET_REWARD_POINTS_LABEL')} (cJPY)
+        {t('settings.SET_REWARD_POINTS_LABEL')} (1 - 10000 cJPY)
       </FormLabel>
-      <NumberInput min={10} max={1000} step={10} value={parseInt(reward)} onChange={(valueAsString) => {
+      <NumberInput min={10} max={10000} step={10} value={parseInt(reward)} onChange={(valueAsString) => {
         setReward(valueAsString || '0');
       }}>
         <NumberInputField />
