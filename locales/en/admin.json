@@ -1,0 +1,41 @@
+{
+  "SUBMIT": "Submit",
+  "NO_PERMISSION": "You do not have permissions to continue",
+  "quest": {
+    "CURRENT_SHEET": "Currently Active",
+    "SELECT_SHEET": "Select Sheet",
+    "SELECT_SHEET_LABEL": "Select Sheet",
+    "UPDATE_CHANGES": "Update current sheet to quests",
+    "modal": {
+      "TITLE": "Update quests",
+      "BODY": "You are about change the content of quests without changing order of answers. Are you sure to continue?",
+      "YES": "Yes Continue",
+      "NO": "No, Cancel"
+    }
+  },
+  "settings": {
+    "CURRENT_VALUE": "Current Value",
+    "HEADING": "Settings",
+    "HELP_EARNING": "The student earns the above stated amount when they answer single question.",
+    "ONLY_OWNER": "Only contract owner is allowed to perform this action",
+    "SET_REWARD_POINTS_LABEL": "Set Reward Points",
+    "ADD_ADMIN_LABEL": "Add Admin",
+    "REMOVE_ADMIN_LABEL": "Remove Admin"
+  },
+  "students": {
+    "ADD": "Add Student",
+    "REMOVE": "Remove Student",
+    "BULK_ADD": "Import Students from CSV",
+    "BULK_REMOVE": "Remove Students from CSV",
+    "CLEAR_FORM": "Clear Form",
+    "ENTER_ADDRESS": "Enter student's address",
+    "ENTER_VALID_ADDRESS": "Enter valid wallet address",
+    "HEADING": "Manage Students"
+  },
+  "tab": {
+    "SET_QUESTIONS": "Set Quests",
+    "MANAGE_STUDENTS": "Manage Students",
+    "STATISTICS": "Statistics",
+    "SETTINGS": "Settings"
+  }
+}

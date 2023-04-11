@@ -1,0 +1,44 @@
+{
+  "ERROR_LOADING_CONTENT": "Error Loading Resources",
+  "ERROR_LOADING_CONTENT_DESCRIPTION": "There was an error loading resources from the chain, please try again later",
+  "MULTI_SELECT": "Select all correct answers",
+  "NEXT": "Next",
+  "PREVIOUS": "Previous",
+  "QUESTION": "Question",
+  "SINGLE_SELECT": "Select single answer",
+  "SUBMIT": "Submit",
+  "faucet": {
+    "ADDRESS_LABEL": "Enter your wallet address",
+    "ADDRESS_HELP_TEXT": "Your wallet address must be whitelisted to get funds.",
+    "GET_MATIC_COINS": "Get Matic Coins"
+  },
+  "nav": {
+    "ADMIN": "Admin",
+    "FAUCET": "Faucet",
+    "HEADING": "Learn To Earn",
+    "HOME": "Home",
+    "QUESTS": "Quests"
+  },
+  "quest": {
+    "ALREADY_ANSWERED": "You have already answered to this quest. Please try again once question gets refreshed.",
+    "NO_PERMISSION": "You must be enrolled in the course to see quests.",
+    "UNKNOWN_ERROR": "Something wrong happened with your contract."
+  },
+  "wallet": {
+    "ACCOUNT_DETAIL": "Account Detail",
+    "ADDRESS": "Wallet Address",
+    "BALANCE": "Account Balance",
+    "CONNECT": "Connect",
+    "CONNECTED": "Connected",
+    "CONNECTED_TO_DIFFERENT_CHAIN": "It looks like you are connected to the different chain.",
+    "CONNECTION_FAILURE": "Metamask Connection Failure",
+    "CONNECTION_SUCCESSFUL": "Metamask successfully connected",
+    "CONNECT_TO_CONTINUE": "Please Connect your wallet first to continue",
+    "CONTRACT_ADDRESS": "Contract Address",
+    "COULD_NOT_GET_BALANCE": "Could not get the balance",
+    "DISCONNECT": "Disconnect",
+    "NOT_CONNECTED": "Wallet Not Connected",
+    "SETTINGS": "Wallet Settings",
+    "SWITCH_NETWORK": "Switch Network"
+  }
+}

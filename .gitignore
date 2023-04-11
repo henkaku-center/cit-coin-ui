@@ -39,3 +39,12 @@ next-env.d.ts
 .idea
 .vscode
 .fleet
+
+.env
+.env.*
+!.env.*example
+
+# Cypress Video Recordings
+cypress/videos
+keys/**
+!keys/README.md
