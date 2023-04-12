@@ -32,7 +32,7 @@ const FaucetPage = () => {
   ];
   return (
     <>
-      <Heading textAlign={'center'}>Pitpa Faucet</Heading>
+      <Heading textAlign={'center'}>Faucet</Heading>
       <Container maxW={'container.md'} py={10}>
         <Card variant={'filled'} mb={10}>
           <CardBody>

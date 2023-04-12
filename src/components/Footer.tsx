@@ -70,17 +70,17 @@ const Footer = () => {
         <Text>COPYRIGHT_LINE</Text>
         <Stack direction={'row'} spacing={6}>
           <SocialButton
-            label={'Instagram'}
-            href={'https://twitter.com/PitPa_jp'}
+            label={'Twitter'}
+            href={'https://twitter.com/sakazukixyz'}
           >
-            <Text mr={2}>Pitpa_jp</Text>
+            <Text mr={2}>sakazuki</Text>
             <Icon as={AiFillTwitterCircle} />
           </SocialButton>
           <SocialButton
             label={'website'}
-            href={'https://pitpa.jp/'}
+            href={'https://sakazuki.xyz'}
           >
-            <Text mr={2}>pitpa.jp</Text>
+            <Text mr={2}>sakazuki.xyz</Text>
             <Icon as={FaGlobeAsia} />
           </SocialButton>
         </Stack>
