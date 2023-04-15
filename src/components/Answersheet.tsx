@@ -140,7 +140,7 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
 
         <Button
           isLoading={txnLoading || contractWriteLoading}
-          isDisabled={!ContractWrite || (props.target === 'admin' && answered < props.quests.length) || !!configError}
+          isDisabled={!ContractWrite || answered < props.quests.length || !!configError}
           colorScheme={'red'} width={'10em'}
           onClick={() => {
             ContractWrite?.();
