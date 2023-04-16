@@ -84,9 +84,9 @@ const Layout = ({ children }: LayoutProps) => {
           <NavLink href={'/quests'}>
             {t('nav.QUESTS')}
           </NavLink>
-          {/*<NavLink href='/faucet'>*/}
-          {/*  {t('nav.FAUCET')}*/}
-          {/*</NavLink>*/}
+          <NavLink href='/faucet'>
+            {t('nav.FAUCET')}
+          </NavLink>
         </>}
         <Spacer />
         <Stack alignItems={'center'} direction='row' spacing={4}>

@@ -10,7 +10,11 @@
   "faucet": {
     "ADDRESS_LABEL": "Enter your wallet address",
     "ADDRESS_HELP_TEXT": "Your wallet address must be whitelisted to get funds.",
-    "GET_MATIC_COINS": "Get Matic Coins"
+    "GET_MATIC_COINS": "Get Matic Coins",
+    "TOKEN_CLAIM_ERROR": "Tokens Claimed Failed",
+    "TOKEN_CLAIM_ERROR_DESCRIPTION": "There was an error claiming tokens, please try again later",
+    "TOKEN_CLAIM_SUCCESS": "Tokens Claimed Successfully",
+    "TOKEN_CLAIM_SUCCESS_DESCRIPTION": "Tokens claimed successfully"
   },
   "nav": {
     "ADMIN": "Admin",
