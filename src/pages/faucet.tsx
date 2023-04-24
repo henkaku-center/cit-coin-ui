@@ -18,6 +18,7 @@ import axios from 'axios';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useAccount, useContractRead, useNetwork } from 'wagmi';
 import FaucetAbi from '@/utils/abis/Faucet.json';
+import { ApiError } from '@/types';
 
 const FaucetPage = () => {
   const { t } = useTranslation('common');
@@ -109,12 +110,13 @@ const FaucetPage = () => {
                       duration: 5000,
                     });
                     setTxn(resp.data.data.transaction.hash);
-                  }).catch((err) => {
+                  }).catch((err: ApiError) => {
+                    console.error(err);
                     toast({
                       position: 'top',
                       status: 'error',
-                      title: t('faucet.TOKEN_CLAIM_ERROR'),
-                      description: t('faucet.TOKEN_CLAIM_ERROR_DESCRIPTION'),
+                      title: t(err.response.data.code??'faucet.TOKEN_CLAIM_ERROR'),
+                      description: t(err.response.data.details?.error?.reason??'faucet.TOKEN_CLAIM_ERROR_DESCRIPTION'),
                       isClosable: true,
                       duration: 5000,
                     });

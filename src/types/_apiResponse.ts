@@ -7,6 +7,7 @@ export enum ApiResponseCodes {
   CLAIMED_RECENTLY = 'CLAIMED_RECENTLY',
   UNKNOWN_ERROR = 'UNKNOWN_ERROR',
   DB_ERROR = 'DB_ERROR',
+  CONTRACT_ERROR = 'CONTRACT_ERROR',
 }
 
 export interface BaseApiResponse {

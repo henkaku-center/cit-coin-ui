@@ -4,6 +4,7 @@ import { isAddress } from 'ethers/lib/utils';
 import { sendMatic } from '@/utils/contract/etherUtils';
 import { ethers } from 'ethers';
 
+
 async function handlePost(req: NextApiRequest, resp: NextApiResponse<ApiSuccess | ApiError>) {
   /**
    * @dev This method handles POST requests to the faucet API where user can request some matic coins as rewards
@@ -25,8 +26,7 @@ async function handlePost(req: NextApiRequest, resp: NextApiResponse<ApiSuccess 
     });
   }
 
-  sendMatic(address, ethers.utils.parseEther('0.2')).then((txn) => {
-    console.log(txn.hash);
+  sendMatic(address).then((txn) => {
     return resp.status(200).json({
       code: ApiResponseCodes.SUCCESS,
       message: 'SUCCESSFULLY_SENT_TOKENS',
@@ -35,10 +35,10 @@ async function handlePost(req: NextApiRequest, resp: NextApiResponse<ApiSuccess 
       },
     });
   }).catch((err) => {
-    console.log(err);
     return resp.status(500).json({
-      code: ApiResponseCodes.UNKNOWN_ERROR,
-      message: 'UNKNOWN_ERROR',
+      code: ApiResponseCodes.CONTRACT_ERROR,
+      message: 'ERROR_WHILE_SENDING_TOKENS',
+      details: err,
     });
   });
 }
