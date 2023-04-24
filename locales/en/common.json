@@ -14,7 +14,8 @@
     "TOKEN_CLAIM_ERROR": "Tokens Claimed Failed",
     "TOKEN_CLAIM_ERROR_DESCRIPTION": "There was an error claiming tokens, please try again later",
     "TOKEN_CLAIM_SUCCESS": "Tokens Claimed Successfully",
-    "TOKEN_CLAIM_SUCCESS_DESCRIPTION": "Tokens claimed successfully"
+    "TOKEN_CLAIM_SUCCESS_DESCRIPTION": "Tokens claimed successfully",
+    "USE_ANOTHER_WALLET": "Use another Wallet Address"
   },
   "nav": {
     "ADMIN": "Admin",

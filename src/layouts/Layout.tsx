@@ -80,14 +80,12 @@ const Layout = ({ children }: LayoutProps) => {
             <pre>{t('nav.HEADING')}</pre>
           </Heading>
         </NavLink>
-        {isConnected && chain?.id === defaultChain.id && <>
-          <NavLink href={'/quests'}>
-            {t('nav.QUESTS')}
-          </NavLink>
-          <NavLink href='/faucet'>
-            {t('nav.FAUCET')}
-          </NavLink>
-        </>}
+        {isConnected && chain?.id === defaultChain.id && <NavLink href={'/quests'}>
+          {t('nav.QUESTS')}
+        </NavLink>}
+        <NavLink href='/faucet'>
+          {t('nav.FAUCET')}
+        </NavLink>
         <Spacer />
         <Stack alignItems={'center'} direction='row' spacing={4}>
           <Button
@@ -105,9 +103,10 @@ const Layout = ({ children }: LayoutProps) => {
           >
             {isConnected ? `${t('wallet.CONNECTED')} - ${chain?.name}` : t('wallet.NOT_CONNECTED')}
           </Button>
-          {isConnected && chain?.id === defaultChain.id && (adminAddresses?.includes(address) || adminAddresses?.includes(true)) && <NavLink href='/admin'>
-            {t('nav.ADMIN')}
-          </NavLink>}
+          {isConnected && chain?.id === defaultChain.id && (adminAddresses?.includes(address) || adminAddresses?.includes(true)) &&
+            <NavLink href='/admin'>
+              {t('nav.ADMIN')}
+            </NavLink>}
           <Button size='md' onClick={toggleColorMode} p={4}>
             {colorMode == 'dark' ? <SunIcon /> : <MoonIcon />}
           </Button>
