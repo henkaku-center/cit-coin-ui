@@ -90,7 +90,7 @@ export const ConnectionProfile = () => {
       <Stack>
         {connectors.map((connector) => (
           <Button
-            disabled={!connector.ready}
+            isDisabled={!connector.ready}
             key={connector.id}
             onClick={() => connect({ connector })}
           >
