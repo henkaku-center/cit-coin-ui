@@ -182,7 +182,7 @@ const Layout = ({ children }: LayoutProps) => {
           </HStack>
         </Box>
         <Box width={'full'} display={{ base: 'none', lg: 'block' }}>
-          <HStack spacing={4}>
+          <HStack spacing={1}>
             {NavItems}
           </HStack>
         </Box>

@@ -1,6 +1,6 @@
 import {
   Alert, AlertIcon, Box,
-  Button, Heading, Progress, Spacer, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast,
+  Button, Heading, HStack, Progress, Spacer, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast,
 } from '@chakra-ui/react';
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, QuestionIcon } from '@chakra-ui/icons';
 import { MultipleChoiceMultipleSelect, MultipleChoiceSingleSelect } from '@/components/RadioCard';
@@ -112,32 +112,31 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
         <AlertIcon />
         Please Wait, your transaction is being confirmed.
       </Alert>}
-      <Stack direction={'row'} mb={5}>
-        <Spacer />
-        {/*<Button>Answers: {answer.toString(2).padStart(ans.length * 4, '0')}</Button>*/}
-        <Button
-          leftIcon={<ArrowLeftIcon />}
-          borderLeftRadius={'full'}
-          width={'10em'}
-          colorScheme={'blue'}
-          isDisabled={tabIndex == 0 || !!configError || txnLoading}
-          onClick={() => {
-            setTabIndex(tabIndex - 1);
-          }}>{t('PREVIOUS')}
-        </Button>
-        <Button width={'8em'} borderRadius={0}>{answered} / {ans.length}</Button>
-        <Button
-          rightIcon={<ArrowRightIcon />}
-          borderRightRadius={'full'}
-          width={'10em'}
-          colorScheme={'blue'}
-          isDisabled={(tabIndex === ans.length - 1) || !!configError || txnLoading}
-          onClick={() => {
-            setTabIndex(tabIndex + 1);
-          }}>{t('NEXT')}
-        </Button>
-        <Spacer />
-
+      <Stack direction={'row'} mb={5} flexWrap={'wrap'} align={'center'} justifyContent={'flex-end'} spacing={5}>
+        <HStack align={'center'} maxW={480} w={'full'} my={3} spacing={0}>
+          <Button
+            leftIcon={<ArrowLeftIcon />}
+            borderLeftRadius={'full'}
+            width={{ base: '35%' }}
+            colorScheme={'blue'}
+            isDisabled={tabIndex == 0 || !!configError || txnLoading}
+            onClick={() => {
+              setTabIndex(tabIndex - 1);
+            }}>{t('PREVIOUS')}
+          </Button>
+          <Button width={'30%'} borderRadius={0}>{answered} / {ans.length}</Button>
+          <Button
+            rightIcon={<ArrowRightIcon />}
+            borderRightRadius={'full'}
+            width={'35%'}
+            colorScheme={'blue'}
+            isDisabled={(tabIndex === ans.length - 1) || !!configError || txnLoading}
+            onClick={() => {
+              setTabIndex(tabIndex + 1);
+            }}>{t('NEXT')}
+          </Button>
+        </HStack>
+        {/*<Spacer />*/}
         <Button
           isLoading={txnLoading || contractWriteLoading}
           isDisabled={!ContractWrite || answered < props.quests.length || !!configError}
@@ -150,7 +149,7 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
       <Progress hasStripe={true} colorScheme='pink' min={0} max={ans.length} size='xs' value={answered} mb={5} />
       {!configError &&
         <Tabs orientation={'vertical'} index={tabIndex} onChange={handleTabsChange}>
-          <TabList width={200} minWidth={200}>
+          <TabList width={200} minWidth={200} display={{base: 'none', md: 'block'}}>
             {ans.map((_, idx) => (
               <Tab key={`q_tab_${idx}`} justifyContent={'flex-start'} isDisabled={txnLoading}>
                 {(ans[idx].answer ?? 0) > 0 ?
