@@ -126,9 +126,10 @@ const Layout = ({ children }: LayoutProps) => {
     {isConnected && chain?.id === defaultChain.id && <NavLink href={'/quests'}>
       {t('nav.QUESTS')}
     </NavLink>}
-    <NavLink href='/faucet'>
-      {t('nav.FAUCET')}
-    </NavLink>
+    {/*todo: The line is commented since faucet is not yet available now. */}
+    {/*<NavLink href='/faucet'>*/}
+    {/*  {t('nav.FAUCET')}*/}
+    {/*</NavLink>*/}
     <Spacer />
     <Button
       onClick={onOpen}
