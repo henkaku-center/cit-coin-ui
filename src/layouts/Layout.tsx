@@ -1,10 +1,8 @@
 import {
   Heading,
   Box,
-  Flex,
   Spacer,
   Button,
-  Stack,
   Alert,
   VStack,
   useColorMode,
@@ -25,8 +23,7 @@ import {
   DrawerBody,
   DrawerFooter,
   IconButton,
-  Text,
-  Icon, Link, HStack,
+  HStack,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { default as NextLink } from 'next/link';
@@ -38,8 +35,8 @@ import { NavLink } from '@/components';
 import { defaultChain, getContractAddress } from '@/utils/contract';
 import { ConnectionProfile } from '@/components/wallet';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
-import { AiFillTwitterCircle } from 'react-icons/ai';
-import { FaGlobeAsia } from 'react-icons/fa';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -85,7 +82,7 @@ const MobileNav = (props: { children: React.ReactNode }) => {
 };
 
 const Layout = ({ children }: LayoutProps) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
   const { address, connector, isConnected } = useAccount();
   const { chain } = useNetwork();
   const { t, lang } = useTranslation('common');
@@ -126,26 +123,31 @@ const Layout = ({ children }: LayoutProps) => {
     {isConnected && chain?.id === defaultChain.id && <NavLink href={'/quests'}>
       {t('nav.QUESTS')}
     </NavLink>}
-    {/*todo: The line is commented since faucet is not yet available now. */}
-    {/*<NavLink href='/faucet'>*/}
-    {/*  {t('nav.FAUCET')}*/}
-    {/*</NavLink>*/}
+    <NavLink href='/faucet'>
+      {t('nav.FAUCET')}
+    </NavLink>
     <Spacer />
-    <Button
-      onClick={onOpen}
-      variant={'outline'}
-      colorScheme={
-        isConnected && chain?.id == defaultChain.id
-          ? 'green'
-          : isConnected
-            ? 'orange'
-            : 'red'
-      }
-      leftIcon={isConnected && chain?.id === defaultChain.id ? <LockIcon /> : isConnected ? <WarningIcon /> :
-        <UnlockIcon />}
-    >
-      {isConnected ? `${t('wallet.CONNECTED')} - ${chain?.name}` : t('wallet.NOT_CONNECTED')}
-    </Button>
+    <ConnectButton
+      label={t('wallet.CONNECT')}
+      // chainStatus={'icon'}
+      // accountStatus={'avatar'}
+      // showBalance={{smallScreen: false, largeScreen: true}}
+    />
+    {/*<Button*/}
+    {/*  onClick={onOpen}*/}
+    {/*  variant={'outline'}*/}
+    {/*  colorScheme={*/}
+    {/*    isConnected && chain?.id == defaultChain.id*/}
+    {/*      ? 'green'*/}
+    {/*      : isConnected*/}
+    {/*        ? 'orange'*/}
+    {/*        : 'red'*/}
+    {/*  }*/}
+    {/*  leftIcon={isConnected && chain?.id === defaultChain.id ? <LockIcon /> : isConnected ? <WarningIcon /> :*/}
+    {/*    <UnlockIcon />}*/}
+    {/*>*/}
+    {/*  {isConnected ? `${t('wallet.CONNECTED')} - ${chain?.name}` : t('wallet.NOT_CONNECTED')}*/}
+    {/*</Button>*/}
     {isConnected && chain?.id === defaultChain.id && (adminAddresses?.includes(address) || adminAddresses?.includes(true)) &&
       <NavLink href='/admin'>
         {t('nav.ADMIN')}
@@ -188,21 +190,21 @@ const Layout = ({ children }: LayoutProps) => {
           </HStack>
         </Box>
       </HStack>
-      <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size={'xl'}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            {t('wallet.SETTINGS')}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <ConnectionProfile />
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {/*<Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size={'xl'}>*/}
+      {/*  <ModalOverlay />*/}
+      {/*  <ModalContent>*/}
+      {/*    <ModalHeader>*/}
+      {/*      {t('wallet.SETTINGS')}*/}
+      {/*    </ModalHeader>*/}
+      {/*    <ModalCloseButton />*/}
+      {/*    <ModalBody pb={6}>*/}
+      {/*      <ConnectionProfile />*/}
+      {/*    </ModalBody>*/}
+      {/*    <ModalFooter>*/}
+      {/*      <Button onClick={onClose}>Close</Button>*/}
+      {/*    </ModalFooter>*/}
+      {/*  </ModalContent>*/}
+      {/*</Modal>*/}
       <Box overflowY={'auto'} position={'fixed'} top={'60px'} left={0} right={0} bottom={0}>
         {!isConnected && <Alert status={'error'}>
           <AlertIcon />

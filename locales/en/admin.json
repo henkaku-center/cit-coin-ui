@@ -1,6 +1,9 @@
 {
   "SUBMIT": "Submit",
   "NO_PERMISSION": "You do not have permissions to continue",
+  "faucet": {
+    "HEADING": "Faucet Setting"
+  },
   "quest": {
     "CURRENT_SHEET": "Currently Active",
     "SELECT_SHEET": "Select Sheet",

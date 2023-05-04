@@ -1,6 +1,9 @@
 {
   "SUBMIT": "提出",
   "NO_PERMISSION": "続行する権限がありません。",
+  "faucet": {
+    "HEADING": "ファセットセッティング"
+  },
   "quest": {
     "CURRENT_SHEET": "現在アクティブ",
     "SELECT_SHEET": "シートを選択",
