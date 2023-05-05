@@ -68,6 +68,11 @@ const Admin = () => {
       component: <Heading>Statistics</Heading>,
     },
     {
+      title: t('tab.FAUCET'),
+      icon: SettingsIcon,
+      component: <Settings />,
+    },
+    {
       title: t('tab.SETTINGS'),
       icon: SettingsIcon,
       component: <Settings />,

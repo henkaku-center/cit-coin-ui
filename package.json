@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "cypress open --e2e --browser electron",
-    "encode-keys": "node scripts/encode-google-keys.js"
+    "encode-keys": "node scripts/encode-google-keys.js",
+    "test1": "node tmp.js"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",

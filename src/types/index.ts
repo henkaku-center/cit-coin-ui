@@ -1,3 +1,4 @@
+export * from './_apiResponse';
 export interface Quest {
   question: string;
   selection: 'single' | 'multiple';

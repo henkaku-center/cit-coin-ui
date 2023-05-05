@@ -3,7 +3,7 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader, Code,
+  CardHeader, Code, Flex,
   Grid,
   Stack,
   Stat,
@@ -13,7 +13,6 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
-import NextLink from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { useAccount, useBalance, useNetwork } from 'wagmi';
 import { defaultChain, getContractAddress } from '@/utils/contract';
@@ -67,21 +66,20 @@ export const ContractDetail = () => {
                 <StatHelpText>as of {new Date().toLocaleString()}</StatHelpText>
               </Stat>
             ))}
-
-            <Grid py={5} templateColumns={'200px 1fr'} gap={2} fontWeight={'bold'}>
-              <Text>cJPY</Text>
-              <Code px={3} py={1} variant={'outline'} colorScheme={'red'} fontSize={'lg'} borderRadius={'lg'}>
-                {citCoinAddress}
-              </Code>
-              <Text>{t('wallet.CONTRACT_ADDRESS')}</Text>
-              <Code px={3} py={1} variant={'outline'} colorScheme={'green'} fontSize={'lg'} borderRadius={'lg'}>
-                {LearnToEarnAddress}
-              </Code>
-              <Text>{t('wallet.ADDRESS')}</Text>
-              <Code px={3} py={1} variant={'outline'} colorScheme={'blue'} fontSize={'lg'} borderRadius={'lg'}>
-                {address}
-              </Code>
-            </Grid>
+            <Stack spacing={3} py={5}>
+              {[
+                { label: 'cJPY', value: citCoinAddress, color: 'red' },
+                { label: t('wallet.CONTRACT_ADDRESS'), value: LearnToEarnAddress, color: 'green' },
+                { label: t('wallet.ADDRESS'), value: address, color: 'blue' },
+              ].map(({ label, value, color }, index) => (
+                <Flex flexWrap={'wrap'} key={index}>
+                  <Text fontSize={'sm'} minW={'180px'}>{label}</Text>
+                  <Code px={3} py={1} variant={'outline'} colorScheme={color} borderRadius={'lg'}>
+                    {value}
+                  </Code>
+                </Flex>
+              ))}
+            </Stack>
           </Stack>
         </CardBody>
       )}

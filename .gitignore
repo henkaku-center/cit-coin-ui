@@ -48,3 +48,4 @@ next-env.d.ts
 cypress/videos
 keys/**
 !keys/README.md
+**/tmp*

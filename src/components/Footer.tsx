@@ -15,15 +15,16 @@ import { AiFillTwitterCircle } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
 import { default as NextLink } from 'next/link';
 
-const SocialButton = ({
-                        children,
-                        label,
-                        href,
-                      }: {
-  children: React.ReactNode
-  label: string
-  href: string
-}) => {
+const SocialButton = (
+  {
+    children,
+    label,
+    href,
+  }: {
+    children: React.ReactNode
+    label: string
+    href: string
+  }) => {
   return (
     <Button
       bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
@@ -48,7 +49,7 @@ const SocialButton = ({
 };
 
 const Footer = () => {
-    const { t, lang } = useTranslation('common');
+  const { t, lang } = useTranslation('common');
 
   return (
     <Box
@@ -67,7 +68,7 @@ const Footer = () => {
         align={{ base: 'center', md: 'center' }}
       >
         {/*<Text>{t('COPYRIGHT_LINE')}</Text>*/}
-        <Text>COPYRIGHT_LINE</Text>
+        <Text>{t('COPYRIGHT_LINE')}</Text>
         <Stack direction={'row'} spacing={6}>
           <SocialButton
             label={'Twitter'}

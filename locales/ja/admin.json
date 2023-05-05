@@ -33,6 +33,7 @@
     "HEADING": "学生の管理"
   },
   "tab": {
+    "FAUCET": "ファセット",
     "SET_QUESTIONS": "クエストを設定する",
     "MANAGE_STUDENTS": "生徒を管理する",
     "STATISTICS": "統計",

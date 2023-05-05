@@ -1,4 +1,5 @@
 {
+  "COPYRIGHT_LINE": "© 2023 Pitpa Inc. All rights reserved.",
   "ERROR_LOADING_CONTENT": "Error Loading Resources",
   "ERROR_LOADING_CONTENT_DESCRIPTION": "There was an error loading resources from the chain, please try again later",
   "MULTI_SELECT": "Select all correct answers",
@@ -10,7 +11,12 @@
   "faucet": {
     "ADDRESS_LABEL": "Enter your wallet address",
     "ADDRESS_HELP_TEXT": "Your wallet address must be whitelisted to get funds.",
-    "GET_MATIC_COINS": "Get Matic Coins"
+    "GET_MATIC_COINS": "Get Matic Coins",
+    "TOKEN_CLAIM_ERROR": "Tokens Claimed Failed",
+    "TOKEN_CLAIM_ERROR_DESCRIPTION": "There was an error claiming tokens, please try again later",
+    "TOKEN_CLAIM_SUCCESS": "Tokens Claimed Successfully",
+    "TOKEN_CLAIM_SUCCESS_DESCRIPTION": "Tokens claimed successfully",
+    "USE_ANOTHER_WALLET": "Use another Wallet Address"
   },
   "nav": {
     "ADMIN": "Admin",
