@@ -129,7 +129,7 @@ const Layout = ({ children }: LayoutProps) => {
     <Spacer />
     <ConnectButton
       label={t('wallet.CONNECT')}
-      // chainStatus={'icon'}
+      chainStatus={'icon'}
       // accountStatus={'avatar'}
       // showBalance={{smallScreen: false, largeScreen: true}}
     />

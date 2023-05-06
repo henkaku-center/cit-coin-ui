@@ -47,8 +47,9 @@ const FaucetPage = () => {
     },
     {
       question: 'How does it work?',
+      // todo: change this part
       // @ts-ignore: offering is either undefined or bigNumber
-      answer: `You can request ${formatUnits(offering ?? '0', 18)} MATIC every 24h once you get authenticated. This matic is used to answer
+      answer: `You can request ${formatUnits(offering ?? '0', 18)} MATIC once you get authenticated. This matic is used to answer
        quests that are added to the polygon mainnet.`,
     },
   ];
