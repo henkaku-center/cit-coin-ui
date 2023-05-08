@@ -11,11 +11,10 @@ import {
   Text,
 } from '@chakra-ui/react';
 import FaucetABI from '@/utils/abis/Faucet.json';
-import { BigNumber } from 'ethers';
+import { BigNumber, BigNumberish } from 'ethers';
 import { useContractReads, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { formatUnits, parseEther, parseUnits } from 'ethers/lib/utils';
 import { useState } from 'react';
-import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 
 const faucetAddress = process.env.NEXT_PUBLIC_FAUCET_ADDRESS as `0x${string}`;
 
@@ -42,7 +41,7 @@ export const FaucetSettings = () => {
   });
   const [lockDuration, locked, offering] = data ?? [null, null, BigNumber.from(0)];
   // @ts-ignore
-  const [newOffering, setNewOffering] = useState<BigNumber>(offering);
+  const [newOffering, setNewOffering] = useState<BigNumberish>(offering);
 
   const { config, error: configError } = usePrepareContractWrite({
     address: faucetAddress,
@@ -52,7 +51,7 @@ export const FaucetSettings = () => {
     // enabled: !!newOffering || offering.toString() == newOffering.toString(),
   });
 
-  const {write: setOffering, isLoading: isOfferingLoading} = useContractWrite(config)
+  const { write: setOffering, isLoading: isOfferingLoading } = useContractWrite(config);
 
   return (<Container maxW={'container.lg'}>
     <Heading mb={5}>{t('faucet.HEADING')}</Heading>
@@ -77,12 +76,12 @@ export const FaucetSettings = () => {
           </NumberInputStepper>
         </NumberInput>
         <FormHelperText>{newOffering.toString()}</FormHelperText>
-        <FormHelperText>{`Current Value: ${formatUnits(offering)}`}</FormHelperText>
+        <FormHelperText>{`Current Value: ${formatUnits(offering as BigNumberish)}`}</FormHelperText>
       </FormControl>
       <Button
-        isDisabled={offering.toString() == newOffering.toString()}
+        isDisabled={(offering as BigNumberish).toString() == newOffering.toString()}
         isLoading={isOfferingLoading}
-        onClick={()=>setOffering?.()}
+        onClick={() => setOffering?.()}
       >Submit</Button>
 
       {/*Section 2: Locking */}

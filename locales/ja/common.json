@@ -15,7 +15,8 @@
     "TOKEN_CLAIM_ERROR_DESCRIPTION": "トークンの請求中にエラーが発生しました。後でもう一度お試しください",
     "TOKEN_CLAIM_SUCCESS": "トークンが正常に請求されました",
     "TOKEN_CLAIM_SUCCESS_DESCRIPTION": "トークンは正常に請求されました",
-    "USE_ANOTHER_WALLET": "別のウォレット アドレスを使用する"
+    "USE_ANOTHER_WALLET": "別のウォレット アドレスを使用する",
+    "LOCKED": "ファセットは現在ロックされています!!"
   },
   "nav": {
     "ADMIN": "管理者",

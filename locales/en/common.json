@@ -16,7 +16,8 @@
     "TOKEN_CLAIM_ERROR_DESCRIPTION": "There was an error claiming tokens, please try again later",
     "TOKEN_CLAIM_SUCCESS": "Tokens Claimed Successfully",
     "TOKEN_CLAIM_SUCCESS_DESCRIPTION": "Tokens claimed successfully",
-    "USE_ANOTHER_WALLET": "Use another Wallet Address"
+    "USE_ANOTHER_WALLET": "Use another Wallet Address",
+    "LOCKED": "The faucet is currently locked!!"
   },
   "nav": {
     "ADMIN": "Admin",

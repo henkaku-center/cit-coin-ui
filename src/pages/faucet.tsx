@@ -8,7 +8,7 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  Heading, HStack,
+  Heading,
   Input, Link, Stack, Text, useToast,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
@@ -16,9 +16,11 @@ import { Fragment, useEffect, useState } from 'react';
 import { formatUnits, isAddress, parseEther } from 'ethers/lib/utils';
 import axios from 'axios';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { useAccount, useContractRead, useNetwork } from 'wagmi';
-import FaucetAbi from '@/utils/abis/Faucet.json';
+import { useAccount, useContractReads, useNetwork } from 'wagmi';
 import { ApiError } from '@/types';
+import { BigNumber, BigNumberish } from 'ethers';
+import FaucetABI from '@/utils/abis/Faucet.json';
+import { formatDuration } from '@/utils/timeUtils';
 
 const FaucetPage = () => {
   const { t } = useTranslation('common');
@@ -30,16 +32,26 @@ const FaucetPage = () => {
   const [txn, setTxn] = useState<string>('');
   const toast = useToast();
   const faucetAddress = (process.env.NEXT_PUBLIC_FAUCET_ADDRESS || '') as `0x${string}`;
-  const { data: offering } = useContractRead({
+  const baseContract = {
     address: faucetAddress,
-    abi: FaucetAbi,
-    functionName: 'offering',
+    abi: FaucetABI,
     chainId: chain?.id,
+  };
+
+  const { data, isLoading } = useContractReads({
+    contracts: [
+      { ...baseContract, functionName: 'lockDuration' },
+      { ...baseContract, functionName: 'locked' },
+      { ...baseContract, functionName: 'offering' },
+    ],
   });
+  const [lockDuration, locked, offering] = data ?? [0, true, BigNumber.from(0)];
+
   const faqs = [
     {
       question: 'What is Faucet?',
-      answer: 'To request funds, simply enter your wallet address and hit “Send Me MATIC”. We support wallets as received addresses but not smart contracts.',
+      answer: `To request funds, simply enter your wallet address and hit “Send Me MATIC”. We
+        support wallets as received addresses but not smart contracts.`,
     },
     {
       question: 'How do I use this?',
@@ -47,10 +59,9 @@ const FaucetPage = () => {
     },
     {
       question: 'How does it work?',
-      // todo: change this part
-      // @ts-ignore: offering is either undefined or bigNumber
-      answer: `You can request ${formatUnits(offering ?? '0', 18)} MATIC once you get authenticated. This matic is used to answer
-       quests that are added to the polygon mainnet.`,
+      answer: `You can request ${formatUnits(offering as BigNumberish ?? '0', 18)}
+      MATIC if the faucet is unlocked. The current unlock duration is
+      ${formatDuration(lockDuration as number)} after your successful request.`,
     },
   ];
 
@@ -75,10 +86,6 @@ const FaucetPage = () => {
                 opacity={checked ? 0.5 : 1}
               >{address}
               </Badge>
-              {/*<Text>*/}
-              {/*  Faucet Address: {faucetAddress}*/}
-              {/*  offering: {offering}*/}
-              {/*</Text>*/}
               <Checkbox onChange={(e) => {
                 setChecked(e.target.checked);
               }}>{t('faucet.USE_ANOTHER_WALLET')}</Checkbox>
@@ -86,6 +93,7 @@ const FaucetPage = () => {
             {(!isConnected || checked) && <FormControl mb={5}>
               <FormLabel>{t('faucet.ADDRESS_LABEL')}</FormLabel>
               <Input
+                isDisabled={locked as boolean}
                 value={newAddress} onChange={e => setNewAddress(e.target.value)}
                 placeholder={'0x00000000000000000000'}
                 size={'lg'} fontFamily={'mono'} />
@@ -93,10 +101,10 @@ const FaucetPage = () => {
             </FormControl>}
             <FormControl>
               <Button
-                isDisabled={!isAddress(newAddress)}
+                isDisabled={!isAddress(newAddress) || locked as boolean}
                 isLoading={loading}
                 size={'lg'} px={8}
-                colorScheme={'blue'}
+                colorScheme={locked?'red':'blue'}
                 borderRadius={'full'}
                 width={'full'}
                 onClick={() => {
@@ -116,8 +124,8 @@ const FaucetPage = () => {
                     toast({
                       position: 'top',
                       status: 'error',
-                      title: t(err.response.data.code??'faucet.TOKEN_CLAIM_ERROR'),
-                      description: t(err.response.data.details?.error?.reason??'faucet.TOKEN_CLAIM_ERROR_DESCRIPTION'),
+                      title: t(err.response.data.code ?? 'faucet.TOKEN_CLAIM_ERROR'),
+                      description: t(err.response.data.details?.error?.reason ?? 'faucet.TOKEN_CLAIM_ERROR_DESCRIPTION'),
                       isClosable: true,
                       duration: 5000,
                     });
@@ -126,7 +134,7 @@ const FaucetPage = () => {
                   });
                 }}
               >
-                {t('faucet.GET_MATIC_COINS')}
+                {t(locked?'faucet.LOCKED':'faucet.GET_MATIC_COINS')}
               </Button>
             </FormControl>
           </CardBody>
