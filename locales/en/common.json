@@ -17,7 +17,9 @@
     "TOKEN_CLAIM_SUCCESS": "Tokens Claimed Successfully",
     "TOKEN_CLAIM_SUCCESS_DESCRIPTION": "Tokens claimed successfully",
     "USE_ANOTHER_WALLET": "Use another Wallet Address",
-    "LOCKED": "The faucet is currently locked!!"
+    "LOCK_DURATION": "Lock Duration",
+    "LOCKED": "The faucet is currently locked!!",
+    "OFFERING": "Offering"
   },
   "nav": {
     "ADMIN": "Admin",

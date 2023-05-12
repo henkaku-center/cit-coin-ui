@@ -8,7 +8,7 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  Heading,
+  Heading, HStack,
   Input, Link, Stack, Text, useToast,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
@@ -104,7 +104,7 @@ const FaucetPage = () => {
                 isDisabled={!isAddress(newAddress) || locked as boolean}
                 isLoading={loading}
                 size={'lg'} px={8}
-                colorScheme={locked?'red':'blue'}
+                colorScheme={locked ? 'red' : 'blue'}
                 borderRadius={'full'}
                 width={'full'}
                 onClick={() => {
@@ -134,7 +134,7 @@ const FaucetPage = () => {
                   });
                 }}
               >
-                {t(locked?'faucet.LOCKED':'faucet.GET_MATIC_COINS')}
+                {t(locked ? 'faucet.LOCKED' : 'faucet.GET_MATIC_COINS')}
               </Button>
             </FormControl>
           </CardBody>
@@ -154,6 +154,18 @@ const FaucetPage = () => {
             </Box>}
           </CardFooter>
         </Card>
+        <HStack my={5}>
+          <Text minWidth={'120px'}>{t('faucet.LOCK_DURATION')}:</Text>
+          <Badge colorScheme={'red'} borderRadius={'full'} px={5} py={1}>
+            {formatDuration(lockDuration as number, 'en')}
+          </Badge>
+        </HStack>
+        <HStack my={5}>
+          <Text minWidth={'120px'}>{t('faucet.OFFERING')}:</Text>
+          <Badge colorScheme={'red'} borderRadius={'full'} px={5} py={1}>
+            {formatUnits(offering as BigNumberish ?? '0', 18)} MATIC
+          </Badge>
+        </HStack>
         <Box>
           <Heading fontSize={'lg'} mb={8}>FAQs</Heading>
           {faqs.map(({ question, answer }, index) => (

@@ -1,4 +1,8 @@
-export const formatDuration = (seconds: number) => {
+export const formatDuration = (seconds: number, lang='en') => {
+    const units = {
+    en: ['second', 'minute', 'hour', 'day'],
+    ja: ['秒', '分', '時間', '日']
+  };
   let days = Math.floor(seconds / (86400));
   let hours = Math.floor((seconds / (3600)) % 24);
   let minutes = Math.floor((seconds / 60) % 60);

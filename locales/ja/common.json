@@ -16,7 +16,9 @@
     "TOKEN_CLAIM_SUCCESS": "トークンが正常に請求されました",
     "TOKEN_CLAIM_SUCCESS_DESCRIPTION": "トークンは正常に請求されました",
     "USE_ANOTHER_WALLET": "別のウォレット アドレスを使用する",
-    "LOCKED": "ファセットは現在ロックされています!!"
+    "LOCK_DURATION": "ロック期間",
+    "LOCKED": "ファセットは現在ロックされています!!",
+    "OFFERING": "献金"
   },
   "nav": {
     "ADMIN": "管理者",
