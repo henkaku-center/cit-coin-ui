@@ -23,7 +23,7 @@ import {
   DrawerBody,
   DrawerFooter,
   IconButton,
-  HStack,
+  HStack, Flex,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { default as NextLink } from 'next/link';
@@ -36,6 +36,7 @@ import { defaultChain, getContractAddress } from '@/utils/contract';
 import { ConnectionProfile } from '@/components/wallet';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useRef } from 'react';
 
 
 interface LayoutProps {
@@ -53,7 +54,6 @@ interface navItemInterface {
 const MobileNav = (props: { children: React.ReactNode }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { t, lang } = useTranslation('common');
-
   return (
     <>
       <IconButton
@@ -68,8 +68,10 @@ const MobileNav = (props: { children: React.ReactNode }) => {
           <DrawerContent>
             <DrawerCloseButton />
             <DrawerHeader>Menu</DrawerHeader>
-            <DrawerBody as={VStack} align={'stretch'}>
-              {props.children}
+            <DrawerBody>
+              <VStack align={'stretch'} spacing={2}>
+                {props.children}
+              </VStack>
             </DrawerBody>
             <DrawerFooter pt={10}>
               {t('COPYRIGHT_LINE')}
@@ -129,9 +131,8 @@ const Layout = ({ children }: LayoutProps) => {
     <Spacer />
     <ConnectButton
       label={t('wallet.CONNECT')}
+      // mounted={true}
       chainStatus={'icon'}
-      // accountStatus={'avatar'}
-      // showBalance={{smallScreen: false, largeScreen: true}}
     />
     {/*<Button*/}
     {/*  onClick={onOpen}*/}
@@ -168,28 +169,27 @@ const Layout = ({ children }: LayoutProps) => {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <HStack spacing={4} px={8} position={'fixed'} top={0} left={0} right={0}>
-        <Box display={{ base: 'block', lg: 'none' }}>
-          <HStack spacing={4}>
-            <MobileNav>
-              {NavItems}
-              <hr style={{ marginTop: '3em' }} />
-            </MobileNav>
-            <Spacer />
-            <NavLink as={NextLink} href='/' mr={16}>
-              <Heading size='md'>
-                <pre>{t('nav.HEADING')}</pre>
-              </Heading>
-            </NavLink>
-            <Spacer/>
-          </HStack>
-        </Box>
-        <Box width={'full'} display={{ base: 'none', lg: 'block' }}>
-          <HStack spacing={1}>
+      <Box px={8} position={'fixed'} top={0} left={0} right={0}>
+        <HStack display={{ base: 'flex', lg: 'none' }} width={'full'}>
+          <MobileNav>
             {NavItems}
-          </HStack>
-        </Box>
-      </HStack>
+            <hr style={{ marginTop: '3em' }} />
+          </MobileNav>
+          <NavLink as={NextLink} href='/' mr={16}>
+            <Heading size='sm'>
+              <pre>{t('nav.HEADING')}</pre>
+            </Heading>
+          </NavLink>
+          <Spacer />
+          <ConnectButton
+            label={t('wallet.CONNECT')}
+            chainStatus={'icon'}
+          />
+        </HStack>
+        <HStack spacing={1} width={'full'} display={{ base: 'none', lg: 'flex' }}>
+          {NavItems}
+        </HStack>
+      </Box>
       {/*<Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size={'xl'}>*/}
       {/*  <ModalOverlay />*/}
       {/*  <ModalContent>*/}
