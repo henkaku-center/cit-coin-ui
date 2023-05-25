@@ -72,7 +72,7 @@ const FaucetPage = () => {
   }, [checked, address]);
   return (
     <>
-      <Heading textAlign={'center'}>Pitpa Faucet</Heading>
+      <Heading textAlign={'center'}>{t('faucet.HEADING')}</Heading>
       <Container maxW={'container.md'} py={10}>
         <Card variant={'filled'} mb={10}>
           <CardBody>

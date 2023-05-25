@@ -13,9 +13,15 @@ const faucet = new ethers.Contract(faucetAddress, faucetAbi, signer);
 
 export function sendMatic(recipient: string) {
   return new Promise((resolve, reject) => {
-    faucet.requestTokens(recipient, {value: parseEther('0.0')}).then((tx: ethers.ContractTransaction) => {
+    faucet.requestTokens(recipient, {
+      value: parseEther('0.0'),
+      // gasLimit: null,
+      maxFeePerGas: 200e9,
+      maxPriorityFeePerGas:200e9
+    }).then((tx: ethers.ContractTransaction) => {
       resolve(tx);
     }).catch((error: any) => {
+      console.log(error);
       reject(error);
     });
   });

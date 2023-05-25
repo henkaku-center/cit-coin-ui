@@ -9,6 +9,7 @@
   "SINGLE_SELECT": "Select single answer",
   "SUBMIT": "Submit",
   "faucet": {
+    "HEADING": "CIT Faucet",
     "ADDRESS_LABEL": "Enter your wallet address",
     "ADDRESS_HELP_TEXT": "Your wallet address must be whitelisted to get funds.",
     "GET_MATIC_COINS": "Get Matic Coins",
