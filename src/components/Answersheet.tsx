@@ -166,9 +166,10 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
                   <AlertIcon />
                   {selection === 'single' ? t('SINGLE_SELECT') : t('MULTI_SELECT')}
                 </Alert>
-                {/*<Heading size={'md'} mb={3} dangerouslySetInnerHTML={{ __html: question.replace('\n', '<br>') }}/>*/}
                 <Heading as={Box} size={'md'} mb={3}>
-                  <Text mb={4} display={{base: 'block', md: 'none'}}>{t('QUESTION')} {questionIndex + 1}.</Text>
+                  <Text mb={4} display={{base: 'block', md: 'none'}} color={'blue.500'}>{t('QUESTION')}
+                    {questionIndex + 1}.
+                  </Text>
                   {question.split(/(?:\r\n|\r|\n)/g).map((para, idx)=>(
                   <Text key={idx} mb={4}>{para}</Text>
                 ))}</Heading>
