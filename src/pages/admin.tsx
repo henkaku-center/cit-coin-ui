@@ -14,6 +14,7 @@ import { FaFile, FaUsers, FaChartBar } from 'react-icons/fa';
 import { SettingsIcon } from '@chakra-ui/icons';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import { StudentManager } from '@/components/admin/StudentManager';
+import { FaucetSettings } from '@/components/admin/Faucet';
 
 const Admin = () => {
   const { t } = useTranslation('admin');
@@ -70,7 +71,7 @@ const Admin = () => {
     {
       title: t('tab.FAUCET'),
       icon: SettingsIcon,
-      component: <Settings />,
+      component: <FaucetSettings />,
     },
     {
       title: t('tab.SETTINGS'),

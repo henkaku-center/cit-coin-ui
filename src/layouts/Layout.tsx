@@ -1,10 +1,8 @@
 import {
   Heading,
   Box,
-  Flex,
   Spacer,
   Button,
-  Stack,
   Alert,
   VStack,
   useColorMode,
@@ -25,8 +23,7 @@ import {
   DrawerBody,
   DrawerFooter,
   IconButton,
-  Text,
-  Icon, Link, HStack,
+  HStack, Flex,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { default as NextLink } from 'next/link';
@@ -38,8 +35,9 @@ import { NavLink } from '@/components';
 import { defaultChain, getContractAddress } from '@/utils/contract';
 import { ConnectionProfile } from '@/components/wallet';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
-import { AiFillTwitterCircle } from 'react-icons/ai';
-import { FaGlobeAsia } from 'react-icons/fa';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useRef } from 'react';
+
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -56,7 +54,6 @@ interface navItemInterface {
 const MobileNav = (props: { children: React.ReactNode }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { t, lang } = useTranslation('common');
-
   return (
     <>
       <IconButton
@@ -71,8 +68,10 @@ const MobileNav = (props: { children: React.ReactNode }) => {
           <DrawerContent>
             <DrawerCloseButton />
             <DrawerHeader>Menu</DrawerHeader>
-            <DrawerBody as={VStack} align={'stretch'}>
-              {props.children}
+            <DrawerBody>
+              <VStack align={'stretch'} spacing={2}>
+                {props.children}
+              </VStack>
             </DrawerBody>
             <DrawerFooter pt={10}>
               {t('COPYRIGHT_LINE')}
@@ -85,7 +84,7 @@ const MobileNav = (props: { children: React.ReactNode }) => {
 };
 
 const Layout = ({ children }: LayoutProps) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
   const { address, connector, isConnected } = useAccount();
   const { chain } = useNetwork();
   const { t, lang } = useTranslation('common');
@@ -126,26 +125,30 @@ const Layout = ({ children }: LayoutProps) => {
     {isConnected && chain?.id === defaultChain.id && <NavLink href={'/quests'}>
       {t('nav.QUESTS')}
     </NavLink>}
-    {/*todo: The line is commented since faucet is not yet available now. */}
-    {/*<NavLink href='/faucet'>*/}
-    {/*  {t('nav.FAUCET')}*/}
-    {/*</NavLink>*/}
+    <NavLink href='/faucet'>
+      {t('nav.FAUCET')}
+    </NavLink>
     <Spacer />
-    <Button
-      onClick={onOpen}
-      variant={'outline'}
-      colorScheme={
-        isConnected && chain?.id == defaultChain.id
-          ? 'green'
-          : isConnected
-            ? 'orange'
-            : 'red'
-      }
-      leftIcon={isConnected && chain?.id === defaultChain.id ? <LockIcon /> : isConnected ? <WarningIcon /> :
-        <UnlockIcon />}
-    >
-      {isConnected ? `${t('wallet.CONNECTED')} - ${chain?.name}` : t('wallet.NOT_CONNECTED')}
-    </Button>
+    <ConnectButton
+      label={t('wallet.CONNECT')}
+      // mounted={true}
+      chainStatus={'icon'}
+    />
+    {/*<Button*/}
+    {/*  onClick={onOpen}*/}
+    {/*  variant={'outline'}*/}
+    {/*  colorScheme={*/}
+    {/*    isConnected && chain?.id == defaultChain.id*/}
+    {/*      ? 'green'*/}
+    {/*      : isConnected*/}
+    {/*        ? 'orange'*/}
+    {/*        : 'red'*/}
+    {/*  }*/}
+    {/*  leftIcon={isConnected && chain?.id === defaultChain.id ? <LockIcon /> : isConnected ? <WarningIcon /> :*/}
+    {/*    <UnlockIcon />}*/}
+    {/*>*/}
+    {/*  {isConnected ? `${t('wallet.CONNECTED')} - ${chain?.name}` : t('wallet.NOT_CONNECTED')}*/}
+    {/*</Button>*/}
     {isConnected && chain?.id === defaultChain.id && (adminAddresses?.includes(address) || adminAddresses?.includes(true)) &&
       <NavLink href='/admin'>
         {t('nav.ADMIN')}
@@ -166,43 +169,42 @@ const Layout = ({ children }: LayoutProps) => {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <HStack spacing={4} px={8} position={'fixed'} top={0} left={0} right={0}>
-        <Box display={{ base: 'block', lg: 'none' }}>
-          <HStack spacing={4}>
-            <MobileNav>
-              {NavItems}
-              <hr style={{ marginTop: '3em' }} />
-            </MobileNav>
-            <Spacer />
-            <NavLink as={NextLink} href='/' mr={16}>
-              <Heading size='md'>
-                <pre>{t('nav.HEADING')}</pre>
-              </Heading>
-            </NavLink>
-            <Spacer/>
-          </HStack>
-        </Box>
-        <Box width={'full'} display={{ base: 'none', lg: 'block' }}>
-          <HStack spacing={1}>
+      <Box px={8} position={'fixed'} top={0} left={0} right={0}>
+        <HStack display={{ base: 'flex', lg: 'none' }} width={'full'}>
+          <MobileNav>
             {NavItems}
-          </HStack>
-        </Box>
-      </HStack>
-      <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size={'xl'}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            {t('wallet.SETTINGS')}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <ConnectionProfile />
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+            <hr style={{ marginTop: '3em' }} />
+          </MobileNav>
+          <NavLink as={NextLink} href='/' mr={16}>
+            <Heading size='sm'>
+              <pre>{t('nav.HEADING')}</pre>
+            </Heading>
+          </NavLink>
+          <Spacer />
+          <ConnectButton
+            label={t('wallet.CONNECT')}
+            chainStatus={'icon'}
+          />
+        </HStack>
+        <HStack spacing={1} width={'full'} display={{ base: 'none', lg: 'flex' }}>
+          {NavItems}
+        </HStack>
+      </Box>
+      {/*<Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size={'xl'}>*/}
+      {/*  <ModalOverlay />*/}
+      {/*  <ModalContent>*/}
+      {/*    <ModalHeader>*/}
+      {/*      {t('wallet.SETTINGS')}*/}
+      {/*    </ModalHeader>*/}
+      {/*    <ModalCloseButton />*/}
+      {/*    <ModalBody pb={6}>*/}
+      {/*      <ConnectionProfile />*/}
+      {/*    </ModalBody>*/}
+      {/*    <ModalFooter>*/}
+      {/*      <Button onClick={onClose}>Close</Button>*/}
+      {/*    </ModalFooter>*/}
+      {/*  </ModalContent>*/}
+      {/*</Modal>*/}
       <Box overflowY={'auto'} position={'fixed'} top={'60px'} left={0} right={0} bottom={0}>
         {!isConnected && <Alert status={'error'}>
           <AlertIcon />

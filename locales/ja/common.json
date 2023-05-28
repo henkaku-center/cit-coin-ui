@@ -8,6 +8,7 @@
   "SINGLE_SELECT": "単一の回答を選択",
   "SUBMIT": "提出",
   "faucet": {
+    "HEADING": "CIT ファセット",
     "ADDRESS_LABEL": "ウォレットアドレスを入力してください",
     "ADDRESS_HELP_TEXT": "資金を得るには、ウォレット アドレスがホワイトリストに登録されている必要があります。",
     "GET_MATIC_COINS": "マティックコインを入手",
@@ -15,7 +16,10 @@
     "TOKEN_CLAIM_ERROR_DESCRIPTION": "トークンの請求中にエラーが発生しました。後でもう一度お試しください",
     "TOKEN_CLAIM_SUCCESS": "トークンが正常に請求されました",
     "TOKEN_CLAIM_SUCCESS_DESCRIPTION": "トークンは正常に請求されました",
-    "USE_ANOTHER_WALLET": "別のウォレット アドレスを使用する"
+    "USE_ANOTHER_WALLET": "別のウォレット アドレスを使用する",
+    "LOCK_DURATION": "ロック期間",
+    "LOCKED": "ファセットは現在ロックされています!!",
+    "OFFERING": "献金"
   },
   "nav": {
     "ADMIN": "管理者",

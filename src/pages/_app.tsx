@@ -1,33 +1,64 @@
-import { WagmiConfig, createClient, configureChains } from 'wagmi'
-import { ChakraProvider } from '@chakra-ui/react'
-import type { AppProps } from 'next/app'
-import { theme } from '@/layouts/theme'
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import Layout from '@/layouts/Layout'
-import { publicProvider } from '@wagmi/core/providers/public'
+import { WagmiConfig, createClient, configureChains } from 'wagmi';
+import { ChakraProvider, useColorMode } from '@chakra-ui/react';
+import type { AppProps } from 'next/app';
+import { theme } from '@/layouts/theme';
+import Layout from '@/layouts/Layout';
+import { publicProvider } from '@wagmi/core/providers/public';
 import { defaultChain } from '@/utils/contract';
+import '@rainbow-me/rainbowkit/styles.css';
+import {
+  getDefaultWallets,
+  RainbowKitProvider,
+  lightTheme,
+  darkTheme,
+} from '@rainbow-me/rainbowkit';
 
 const { chains, provider } = configureChains(
   [defaultChain],
-  [publicProvider()],
-)
+  [
+    publicProvider(),
+  ],
+);
 
-const client = createClient({
+const { connectors } = getDefaultWallets({
+  appName: process.env['NEXT_PUBLIC_WALLET_CONNECT_PROJECT_NAME '] || '',
+  projectId: process.env['NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID '] || '',
+  chains,
+});
+
+const wagmiClient = createClient({
   autoConnect: true,
-  connectors: [new MetaMaskConnector({ chains })],
+  connectors: connectors,
   provider,
-})
+});
+
+const RainbowWrapper = (props: { children: any }) => {
+  const { colorMode } = useColorMode();
+
+  return (
+    <RainbowKitProvider
+      chains={chains}
+      modalSize={'wide'}
+      theme={colorMode == 'dark' ? darkTheme() : lightTheme()}
+    >
+      {props.children}
+    </RainbowKitProvider>
+  );
+};
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+
   return (
-    <WagmiConfig client={client}>
+    <WagmiConfig client={wagmiClient}>
       <ChakraProvider theme={theme}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <RainbowWrapper>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </RainbowWrapper>
       </ChakraProvider>
     </WagmiConfig>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;
