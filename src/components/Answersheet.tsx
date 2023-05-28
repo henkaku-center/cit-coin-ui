@@ -1,6 +1,6 @@
 import {
   Alert, AlertIcon, Box,
-  Button, Heading, HStack, Progress, Spacer, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast,
+  Button, Heading, HStack, Progress, Spacer, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useToast,
 } from '@chakra-ui/react';
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, QuestionIcon } from '@chakra-ui/icons';
 import { MultipleChoiceMultipleSelect, MultipleChoiceSingleSelect } from '@/components/RadioCard';
@@ -166,7 +166,12 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
                   <AlertIcon />
                   {selection === 'single' ? t('SINGLE_SELECT') : t('MULTI_SELECT')}
                 </Alert>
-                <Heading size={'md'} mb={3}>{questionIndex + 1}. {question}</Heading>
+                {/*<Heading size={'md'} mb={3} dangerouslySetInnerHTML={{ __html: question.replace('\n', '<br>') }}/>*/}
+                <Heading as={Box} size={'md'} mb={3}>
+                  <Text mb={4} display={{base: 'block', md: 'none'}}>{t('QUESTION')} {questionIndex + 1}.</Text>
+                  {question.split(/(?:\r\n|\r|\n)/g).map((para, idx)=>(
+                  <Text key={idx} mb={4}>{para}</Text>
+                ))}</Heading>
                 <Box p={5}>
                   {selection === 'single' &&
                     <MultipleChoiceSingleSelect options={options} answer={answer} onAnswer={onAnswer} />}
