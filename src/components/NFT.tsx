@@ -13,6 +13,8 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 interface Asset {
   title: string;
@@ -54,32 +56,17 @@ const AssetCard = (props: { asset: Asset }) => {
 
 
 export const AssetLibrary = () => {
-  const assets: Asset[] = [
-    {
-      title: 'Grade C',
-      description: 'To earn this card, you must earn at least 3000 cJPY',
-      earning: 3000,
-      url: '/nft/art1.svg',
-    },
-    {
-      title: 'Grade B',
-      description: 'To earn this card, you must earn at least 8000 cJPY',
-      earning: 8000,
-      url: '/nft/art2.svg',
-    },
-    {
-      title: 'Grade A',
-      description: 'To earn this badge, you must earn at least 10000 cJPY',
-      earning: 10000,
-      url: '/nft/art3.svg',
-    },
-  ];
+  const [assets, setAssets] = useState<Asset[]>([])
+  useEffect(() => {
+    axios.get('/api/nft').then((resp)=>{
+      setAssets(resp.data.results)
+    })
+  });
   return (
     <VStack width={'full'}>
       <Alert variant={'subtle'} status={'info'}>
         <Heading>Available NFTs</Heading>
       </Alert>
-
       {assets.map((asset, index) => (
         <AssetCard key={index} asset={asset} />
       ))}
