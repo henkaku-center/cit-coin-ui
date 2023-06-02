@@ -27,16 +27,14 @@ import {
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { default as NextLink } from 'next/link';
-import { MoonIcon, SunIcon, LockIcon, UnlockIcon, WarningIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { MoonIcon, SunIcon, HamburgerIcon } from '@chakra-ui/icons';
 import setLanguage from 'next-translate/setLanguage';
 import Head from 'next/head';
 import { useAccount, useContractReads, useNetwork } from 'wagmi';
 import { NavLink } from '@/components';
 import { defaultChain, getContractAddress } from '@/utils/contract';
-import { ConnectionProfile } from '@/components/wallet';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useRef } from 'react';
 
 
 interface LayoutProps {

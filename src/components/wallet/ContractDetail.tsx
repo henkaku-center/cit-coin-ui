@@ -44,7 +44,7 @@ export const ContractDetail = () => {
     watch: true,
   });
   return (
-    <Card variant={'filled'}>
+    <Card variant={'filled'} width={'full'}>
       <CardHeader>
         <Text fontSize={'xl'} fontWeight={'bold'}>
           {isConnected && t('wallet.ACCOUNT_DETAIL')}

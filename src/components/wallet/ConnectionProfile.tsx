@@ -14,6 +14,10 @@ import { ArrowForwardIcon } from '@chakra-ui/icons';
 import useTranslation from 'next-translate/useTranslation';
 import { defaultChain } from '@/utils/contract';
 
+/**
+ * This component is replaced by the contract detail card will be removed in future commits.
+ * @constructor
+ */
 export const ConnectionProfile = () => {
   const { t } = useTranslation('common');
   const { address, connector, isConnected } = useAccount();

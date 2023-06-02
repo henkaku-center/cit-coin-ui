@@ -14,6 +14,10 @@ import { ArrowForwardIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import NextLink from 'next/link';
 import { defaultChain } from '@/utils/contract';
 
+/**
+ * This is currently replaced by the wallet connect modal and will be removed in future commits
+ * @constructor
+ */
 export const MetaMaskConnectCard = () => {
   const { t } = useTranslation('common');
   const { chain } = useNetwork();

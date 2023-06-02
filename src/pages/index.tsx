@@ -1,18 +1,22 @@
 import {
-  Box,
-  Stack,
+  Box, Center, HStack,
+  Stack, Wrap, WrapItem,
 } from '@chakra-ui/react';
 import { ContractDetail } from '@/components/wallet';
 import Footer from '@/components/Footer';
+import { AssetLibrary } from '@/components/NFT';
 
 const Home = () => {
   return (
     <>
-      <Box p={10} minH={'70vh'}>
-        <Stack alignItems={'center'}>
+      <Wrap m={5} justify={'center'}>
+        <WrapItem w={{ base: 'full', lg: '45%' }}>
           <ContractDetail />
-        </Stack>
-      </Box>
+        </WrapItem>
+        <WrapItem w={{ base: 'full', lg: '50%' }}>
+          <AssetLibrary />
+        </WrapItem>
+      </Wrap>
       <Footer />
     </>
   );
