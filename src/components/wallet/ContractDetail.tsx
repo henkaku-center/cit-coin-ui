@@ -1,10 +1,7 @@
 import {
-  Badge,
-  Button,
   Card,
   CardBody,
   CardHeader, Code, Flex,
-  Grid,
   Stack,
   Stat,
   StatHelpText,
@@ -54,18 +51,16 @@ export const ContractDetail = () => {
       {isConnected && chain?.id == defaultChain.id && (
         <CardBody>
           <Stack>
-            {[matic, citCoin].map((item, index) => (
-              <Stat key={index} p={2} borderRadius={'1em'} border={'solid 2px'} mb={4}>
-                <StatLabel>{t('wallet.BALANCE')} - {item?.symbol}</StatLabel>
-                <StatNumber>
-                  <Text as={'span'} color={'orange'} mr={2}>
-                    {item?.formatted}
-                  </Text>
-                  {item?.symbol}
-                </StatNumber>
-                <StatHelpText>as of {new Date().toLocaleString()}</StatHelpText>
-              </Stat>
-            ))}
+            <Stat p={2} borderRadius={'1em'} border={'solid 2px'} mb={4}>
+              <StatLabel>{t('wallet.BALANCE')} - {citCoin?.symbol}</StatLabel>
+              <StatNumber fontSize={'lg'}>
+                <Text as={'span'} color={'orange'} mr={2}>
+                  {citCoin?.formatted}
+                </Text>
+                {citCoin?.symbol}
+              </StatNumber>
+              <StatHelpText>as of {new Date().toLocaleString()}</StatHelpText>
+            </Stat>
             <Stack spacing={3} py={5}>
               {[
                 { label: 'cJPY', value: citCoinAddress, color: 'red' },
