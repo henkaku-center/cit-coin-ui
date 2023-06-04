@@ -26,9 +26,8 @@ interface Asset {
 const AssetCard = (props: { asset: Asset }) => {
   const { asset } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [value, setValue] = useState('test');
-
-  const [svg, setSvg] = useState('');
+  const [score, setScore] = useState('test');
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   return (
     <Card direction={'row'} position={'relative'} overflow={'hidden'} width={'full'} variant={'elevated'}>
@@ -62,28 +61,24 @@ const AssetCard = (props: { asset: Asset }) => {
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Box dangerouslySetInnerHTML={{__html: svg}}/>
-            {/*{svg}*/}
-            {/*<Lorem count={2} />*/}
+            {imageUrl && <Image src={imageUrl} alt={score} />}
           </ModalBody>
 
           <ModalFooter>
             <form onSubmit={(e) => {
               e.preventDefault();
               axios.post('/api/nft/', {
-                level: value,
-              }).then(resp => {
-                setSvg(resp.data.svg);
+                score: score,
+              }, { responseType: 'arraybuffer' }).then(resp => {
+                const blob = new Blob([resp.data], { type: 'image/png' });
+                setImageUrl(URL.createObjectURL(blob));
               });
             }}>
-              <Input value={value} onChange={(e)=>{
-                setValue(e.target.value)
+              <Input value={score} onChange={(e) => {
+                setScore(e.target.value);
               }}></Input>
               <Button type={'submit'}>Render</Button>
             </form>
-            {/*<Button colorSchseme='blue' mr={3} onClick={onClose}>*/}
-            {/*  Close*/}
-            {/*</Button>*/}
           </ModalFooter>
         </ModalContent>
       </Modal>

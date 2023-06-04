@@ -12,7 +12,7 @@ export default async function(
   } else if (req.method == 'POST') {
     if (!req.body.score) {
       resp.status(400).json({
-        level: ['This field is required'],
+        score: ['This field is required'],
       });
     }
     let image = await IpfsUtils.renderSvg(req.body.score);

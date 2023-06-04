@@ -134,9 +134,6 @@ export const IpfsUtils = {
     const renderer = Canvg.fromString(context, result, preset);
     await renderer.render()
     return _canvas.toBuffer('image/png')
-    // return  _canc.toBuffer('image/png')
-
-    // return result;
   },
   getRewardTitle: function(point: number) {
     if (point >= 8000) {
