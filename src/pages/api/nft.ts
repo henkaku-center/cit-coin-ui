@@ -15,9 +15,24 @@ export default async function NFT(
         score: ['This field is required'],
       });
     }
-    let image = await IpfsUtils.renderSvg(req.body.score);
+    let score = 0;
+    try {
+      score = parseInt(req.body.score);
+      if (score < 10000) {
+        return resp.status(400).json({
+          code: 'INSUFFICIENT_FUNDS',
+          message: 'Insufficient balance to claim NFT',
+        });
+      }
+    } catch (e) {
+      return resp.status(400).json({
+        code: 'INVALID DATA',
+        message: 'Invalid Data Supplied',
+      });
+    }
+    let image = await IpfsUtils.renderSvg(score);
     resp.setHeader('Content-Type', 'image/png');
-    resp.setHeader('Content-length', image.length);
+    // resp.setHeader('Content-length', image.length);
     return resp.send(image);
 
   } else {

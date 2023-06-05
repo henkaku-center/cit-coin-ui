@@ -8,7 +8,7 @@ import {
   CardFooter,
   CardHeader,
   Heading, HStack,
-  Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
+  Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberInput,
   Stack,
   Text, useDisclosure,
   VStack,
@@ -27,30 +27,18 @@ interface Asset {
 const AssetCard = (props: { asset: Asset }) => {
   const { asset } = props;
   return (
-    <Card position={'relative'} overflow={'hidden'} width={'full'} variant={'elevated'}>
-      <Badge
-        colorScheme={'orange'}
+    <Box position={'relative'}>
+      <Box
+        bg={'orange.400'} color={'white'}
         position={'absolute'}
-        top={'20px'}
-        right={0}
-        p={1} px={3}
+        top={5} right={0} px={1}
         borderLeftRadius={'full'}
-        // minW={'120px'}
-        // fontSize={'md'}
         textAlign={'right'}
       >
         {asset.earning} cJPY
-      </Badge>
-      <CardHeader>
-        {asset.title}
-      </CardHeader>
-      <CardBody display={'flex'} justifyContent={'center'}>
-        <Image minW={180} minH={180} width={200} src={asset.url} alt={asset.title} />
-      </CardBody>
-      {/*<CardFooter>*/}
-      {/*  {asset.description}*/}
-      {/*</CardFooter>*/}
-    </Card>
+      </Box>
+        <Image minW={150} minH={150} width={100} src={asset.url} alt={asset.title} />
+    </Box>
   );
 };
 
@@ -89,7 +77,7 @@ export const AssetLibrary = () => {
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {imageUrl && <Image src={imageUrl} alt={score} />}
+            {imageUrl && <Image src={imageUrl} alt={score} width={400} height={400} />}
           </ModalBody>
           <ModalFooter>
             <form onSubmit={(e) => {
@@ -101,10 +89,12 @@ export const AssetLibrary = () => {
                 setImageUrl(URL.createObjectURL(blob));
               });
             }}>
-              <Input value={score} onChange={(e) => {
-                setScore(e.target.value);
-              }}></Input>
-              <Button type={'submit'}>Render</Button>
+              <HStack>
+                <Input type={'number'} value={score} onChange={(e) => {
+                  setScore(e.target.value);
+                }}></Input>
+                <Button colorScheme={'blue'} type={'submit'}>Render</Button>
+              </HStack>
             </form>
           </ModalFooter>
         </ModalContent>
