@@ -7,10 +7,22 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Heading, HStack,
-  Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberInput,
+  Heading,
+  HStack,
+  Image,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  NumberInput,
+  Spacer,
   Stack,
-  Text, useDisclosure,
+  Text,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -37,7 +49,7 @@ const AssetCard = (props: { asset: Asset }) => {
       >
         {asset.earning} cJPY
       </Box>
-        <Image minW={150} minH={150} width={100} src={asset.url} alt={asset.title} />
+      <Image minW={150} minH={150} width={100} src={asset.url} alt={asset.title} />
     </Box>
   );
 };
@@ -71,32 +83,35 @@ export const AssetLibrary = () => {
 
         <Button colorScheme={'green'} w={'full'} onClick={onOpen}>{t('CLAIM_REWARDS')}</Button>
       </VStack>
-      <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>
+            Preview
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {imageUrl && <Image src={imageUrl} alt={score} width={400} height={400} />}
+            <Stack>
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                axios.post('/api/nft/', {
+                  score: score,
+                }, { responseType: 'arraybuffer' }).then(resp => {
+                  const blob = new Blob([resp.data], { type: 'image/png' });
+                  setImageUrl(URL.createObjectURL(blob));
+                });
+              }}>
+                <HStack spacing={0} mb={5}>
+                  <Input borderLeftRadius={'full'} width={300} type={'number'} value={score} onChange={(e) => {
+                    setScore(e.target.value);
+                  }}></Input>
+                  <Button width={100} colorScheme={'blue'} type={'submit'} borderRightRadius={'full'}>Render</Button>
+                </HStack>
+              </form>
+              {imageUrl && <Image src={imageUrl} alt={score} minW={300} width={400} height={400} />}
+            </Stack>
+
           </ModalBody>
-          <ModalFooter>
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              axios.post('/api/nft/', {
-                score: score,
-              }, { responseType: 'arraybuffer' }).then(resp => {
-                const blob = new Blob([resp.data], { type: 'image/png' });
-                setImageUrl(URL.createObjectURL(blob));
-              });
-            }}>
-              <HStack>
-                <Input type={'number'} value={score} onChange={(e) => {
-                  setScore(e.target.value);
-                }}></Input>
-                <Button colorScheme={'blue'} type={'submit'}>Render</Button>
-              </HStack>
-            </form>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
