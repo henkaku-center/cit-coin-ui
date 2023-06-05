@@ -7,7 +7,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Heading,
+  Heading, HStack,
   Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
   Stack,
   Text, useDisclosure,
@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import useTranslation from 'next-translate/useTranslation';
 
 interface Asset {
   title: string;
@@ -25,12 +26,8 @@ interface Asset {
 
 const AssetCard = (props: { asset: Asset }) => {
   const { asset } = props;
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [score, setScore] = useState('test');
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-
   return (
-    <Card direction={'row'} position={'relative'} overflow={'hidden'} width={'full'} variant={'elevated'}>
+    <Card position={'relative'} overflow={'hidden'} width={'full'} variant={'elevated'}>
       <Badge
         colorScheme={'orange'}
         position={'absolute'}
@@ -38,23 +35,54 @@ const AssetCard = (props: { asset: Asset }) => {
         right={0}
         p={1} px={3}
         borderLeftRadius={'full'}
-        minW={'120px'}
-        fontSize={'md'}
+        // minW={'120px'}
+        // fontSize={'md'}
         textAlign={'right'}
       >
         {asset.earning} cJPY
       </Badge>
       <CardHeader>
-        <Image minW={100} minH={100} width={100} src={asset.url} placeholder={asset.title} />
+        {asset.title}
       </CardHeader>
-      <Stack w={'full'}>
-        <CardBody>
-          <Heading fontSize={'xl'} mb={4}>{asset.title}</Heading>
-          <Text>{asset.description}</Text>
-          <Button colorScheme={'green'} w={'full'} onClick={onOpen}>Preview and Check Eligibility</Button>
-        </CardBody>
-      </Stack>
+      <CardBody display={'flex'} justifyContent={'center'}>
+        <Image minW={180} minH={180} width={200} src={asset.url} alt={asset.title} />
+      </CardBody>
+      {/*<CardFooter>*/}
+      {/*  {asset.description}*/}
+      {/*</CardFooter>*/}
+    </Card>
+  );
+};
 
+
+export const AssetLibrary = () => {
+  const [assets, setAssets] = useState<Asset[]>([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [score, setScore] = useState('test');
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const { t } = useTranslation('default');
+
+
+  useEffect(() => {
+    axios.get('/api/nft').then((resp) => {
+      setAssets(resp.data.results);
+    });
+  }, []);
+
+  return (
+    <>
+      <VStack width={'full'}>
+        <Alert variant={'subtle'} status={'info'}>
+          <Heading>Available NFTs</Heading>
+        </Alert>
+        <HStack>
+          {assets.map((asset, index) => (
+            <AssetCard key={index} asset={asset} />
+          ))}
+        </HStack>
+
+        <Button colorScheme={'green'} w={'full'} onClick={onOpen}>{t('CLAIM_REWARDS')}</Button>
+      </VStack>
       <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
         <ModalOverlay />
         <ModalContent>
@@ -63,7 +91,6 @@ const AssetCard = (props: { asset: Asset }) => {
           <ModalBody>
             {imageUrl && <Image src={imageUrl} alt={score} />}
           </ModalBody>
-
           <ModalFooter>
             <form onSubmit={(e) => {
               e.preventDefault();
@@ -82,28 +109,6 @@ const AssetCard = (props: { asset: Asset }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Card>
-  );
-};
-
-
-export const AssetLibrary = () => {
-  const [assets, setAssets] = useState<Asset[]>([]);
-
-  useEffect(() => {
-    axios.get('/api/nft').then((resp) => {
-      setAssets(resp.data.results);
-    });
-  }, []);
-
-  return (
-    <VStack width={'full'}>
-      <Alert variant={'subtle'} status={'info'}>
-        <Heading>Available NFTs</Heading>
-      </Alert>
-      {assets.map((asset, index) => (
-        <AssetCard key={index} asset={asset} />
-      ))}
-    </VStack>
+    </>
   );
 };

@@ -88,30 +88,17 @@ id="tspan841">{{SCORE_VALUE}}</tspan></tspan></text></svg>`;
 
 export const NftLevels = [
   {
-    title: 'Beginner',
+    title: 'Normal',
     description: 'This is a basic badge that unlocks at 3000cJPY.',
-    earning: 3000,
-    url: '/nft/art1.svg',
+    earning: 8000,
+    url: '/nft/normal.svg',
   },
   {
-    title: 'Intermediate',
+    title: 'Premium',
     description: 'This badge unlocks when you earn at least 5000cJPY.',
-    earning: 5000,
-    url: '/nft/art2.svg',
-  },
-  {
-    title: 'Expert',
-    description: 'This badges unlocks only when you earn at least 8000cJPY.',
-    earning: 8000,
-    url: '/nft/art3.svg',
+    earning: 20000,
+    url: '/nft/premium.svg',
   }
-  ,
-  {
-    title: 'Pro',
-    description: 'This badges unlocks only when you earn at least 8000cJPY.',
-    earning: 8000,
-    url: '/nft/art3.svg',
-  },
 ];
 
 export const IpfsUtils = {

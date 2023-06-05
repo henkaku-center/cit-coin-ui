@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { IpfsUtils, NftLevels } from '@/utils';
 
-export default async function(
+export default async function NFT(
   req: NextApiRequest,
   resp: NextApiResponse) {
 
@@ -23,5 +23,4 @@ export default async function(
   } else {
     return resp.status(405);
   }
-
 }
