@@ -21,3 +21,8 @@ export interface CachedJson {
   date: number;
   tokenUri: string;
 }
+
+export interface IPinRequest {
+  address: `0x${string}`;
+  points: number;
+}

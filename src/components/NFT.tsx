@@ -46,6 +46,8 @@ const AssetCard = (props: { asset: Asset }) => {
         top={5} right={0} px={1}
         borderLeftRadius={'full'}
         textAlign={'right'}
+        fontSize={'xs'}
+        shadow={'dark-lg'}
       >
         {asset.earning} cJPY
       </Box>
