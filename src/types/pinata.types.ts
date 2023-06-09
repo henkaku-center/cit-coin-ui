@@ -1,7 +1,8 @@
 export interface PinataPinnedResponse {
   IpfsHash: string;
-  pinSize: number;
-  timestamp: string;
+  PinSize: number;
+  Timestamp: string;
+  isDuplicate?: boolean
 }
 
 export interface FilePinned {

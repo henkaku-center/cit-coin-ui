@@ -23,7 +23,7 @@ import {
   Stack,
   Text,
   useDisclosure, useToast,
-  VStack,
+  VStack, Wrap, WrapItem,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -31,6 +31,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useAccount } from 'wagmi';
 import { PinataPinnedResponse } from '@/types/pinata.types';
 import { IpfsUtils } from '@/utils';
+import { Span } from 'next/dist/server/lib/trace/tracer';
 
 interface Asset {
   title: string;
@@ -67,6 +68,7 @@ export const AssetLibrary = () => {
 
   const [loading, setLoading] = useState(false);
   const { address, connector, isConnected } = useAccount();
+  // const [pinResp, setPinResp] = useState<PinataPinnedResponse | null>(null);
   const [pinResp, setPinResp] = useState<PinataPinnedResponse | null>(null);
   const toast = useToast();
 
@@ -111,7 +113,7 @@ export const AssetLibrary = () => {
             });
           }}>{t('CLAIM_REWARDS')}</Button>
       </VStack>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
@@ -119,18 +121,41 @@ export const AssetLibrary = () => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Stack>
-              {pinResp && <Image
-                src={`https://gateway.pinata.cloud/ipfs/${pinResp.IpfsHash}`}
-                alt={pinResp.IpfsHash} minW={300} width={400} height={400}
-              />}
-            </Stack>
+            <Wrap>
+              <WrapItem width={{ base: 'full', lg: '48%' }} p={{ base: 5 }}>
+                <Stack width={'full'}>
+                  <Box
+                    as={Link}
+                    target={'_blank'}
+                    href={`https://gateway.pinata.cloud/ipfs/${pinResp?.IpfsHash}`}
+                    color={'orange'}>
+                    {pinResp?.IpfsHash}
+                  </Box>
+                  <Box>Pin Size: {pinResp?.PinSize}</Box>
+                  {pinResp?.Timestamp && <Box>Created: {(new Date(pinResp.Timestamp)).toLocaleString()}</Box>}
+                  <Spacer />
+                  <Button
+                    colorScheme={'orange'}
+                    as={Link} target={'_blank'} href={`https://gateway.pinata.cloud/ipfs/${pinResp?.IpfsHash}`}
+                  >
+                    Preview Full Size Image
+                  </Button>
+                </Stack>
+              </WrapItem>
+              <WrapItem
+                as={Link} width={{ base: 'full', lg: '48%' }}
+                href={`https://gateway.pinata.cloud/ipfs/${pinResp?.IpfsHash}`}
+                target={'_blank'} justifyContent={{ base: 'center', lg: 'end' }}
+              >
+                {pinResp && <Image
+                  src={`https://gateway.pinata.cloud/ipfs/${pinResp.IpfsHash}`}
+                  alt={pinResp.IpfsHash} minW={200} width={300} height={300}
+                  objectFit={'contain'}
+                />}
+              </WrapItem>
+            </Wrap>
           </ModalBody>
-          <ModalFooter>
-            <Link target={'_blank'} href={`https://gateway.pinata.cloud/ipfs/${pinResp?.IpfsHash}`}>
-              Click to preview full
-            </Link>
-          </ModalFooter>
+          <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
     </>
