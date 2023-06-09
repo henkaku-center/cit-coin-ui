@@ -1,16 +1,11 @@
 import {
   Alert,
-  Badge,
   Box,
   Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
   Heading,
   HStack,
   Image,
-  Input, Link,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -18,10 +13,8 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  NumberInput,
   Spacer,
   Stack,
-  Text,
   useDisclosure, useToast,
   VStack, Wrap, WrapItem,
 } from '@chakra-ui/react';
@@ -30,8 +23,6 @@ import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
 import { useAccount } from 'wagmi';
 import { PinataPinnedResponse } from '@/types/pinata.types';
-import { IpfsUtils } from '@/utils';
-import { Span } from 'next/dist/server/lib/trace/tracer';
 
 interface Asset {
   title: string;

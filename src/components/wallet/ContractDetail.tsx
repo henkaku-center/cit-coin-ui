@@ -1,7 +1,7 @@
 import {
   Card,
   CardBody,
-  CardHeader, Code, Flex,
+  CardHeader, Code, Flex, Link,
   Stack,
   Stat,
   StatHelpText,
@@ -22,6 +22,7 @@ export const ContractDetail = () => {
 
   const citCoinAddress = getContractAddress('CitCoin');
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
+  const NFTAddress = getContractAddress('NFT');
   const toast = useToast();
   const { data: citCoin } = useBalance({
     address: address,
@@ -66,10 +67,15 @@ export const ContractDetail = () => {
                 { label: 'cJPY', value: citCoinAddress, color: 'red' },
                 { label: t('wallet.CONTRACT_ADDRESS'), value: LearnToEarnAddress, color: 'green' },
                 { label: t('wallet.ADDRESS'), value: address, color: 'blue' },
+                { label: 'NFT', value: NFTAddress, color: 'blue' },
               ].map(({ label, value, color }, index) => (
                 <Flex flexWrap={'wrap'} key={index}>
                   <Text fontSize={'sm'} minW={'180px'}>{label}</Text>
-                  <Code px={3} py={1} variant={'outline'} colorScheme={color} borderRadius={'lg'}>
+                  <Code
+                    as={Link} px={3} py={1} variant={'outline'} colorScheme={color} borderRadius={'lg'}
+                    href={`https://${process.env.NODE_ENV??'dev' === 'dev' ? 'mumbai.' : ''}polygonscan.com/address/${value}`}
+                    target={'_blank'}
+                  >
                     {value}
                   </Code>
                 </Flex>
