@@ -1,6 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { IpfsUtils, NftLevels, svgUtils } from '@/utils';
-import { isAddress } from 'ethers/lib/utils';
+import { formatEther, formatUnits, isAddress, parseEther } from 'ethers/lib/utils';
+import { ethers } from 'ethers';
+import nftAbi from '@/utils/abis/CitNFT.json';
+import cjpyAbi from '@/utils/abis/CitCoin.json';
+import { citSigner } from '@/utils/contract/etherUtils';
+
+const nftAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS as `0x{string}`;
+const cjpyAddress = process.env.NEXT_PUBLIC_CIT_COIN_ADDRESS as `0x{string}`;
+
+const cjpy = new ethers.Contract(cjpyAddress, cjpyAbi, citSigner);
+const nft = new ethers.Contract(nftAddress, nftAbi, citSigner);
 
 export default async function NFTHandler(
   req: NextApiRequest,
@@ -15,49 +25,33 @@ export default async function NFTHandler(
 
   // Handling the post Request
   else if (req.method == 'POST') {
-    const {address, points} = req.body;
-    let errors: { address?: string, points?: string } = {};
+    const { address } = req.body;
 
-    if (!points) {
-      errors.points = 'This field is required';
-    }
     // check if address exists or is valid
     if (!address) {
-      errors.address = 'This field is required';
+      resp.status(400).json({ address: 'This field is required' });
     }
-
     if (!(isAddress(address))) {
-      errors.address = 'Invalid address is supplied';
-    }
-    // respond with validation error if any
-    if (Object.keys(errors).length) {
-      return resp.status(400).json({ errors });
+      resp.status(400).json({ address: 'Invalid address is supplied' });
     }
 
+    // Check if user has already earned an NFT
 
-    let score = parseInt(points);
-    if (isNaN(score)) {
-      return resp.status(400).json({
-        code: 'INVALID DATA',
-        message: 'Invalid Data Supplied',
-      });
-    }
-    if (score < 10000) {
+
+    const balance = parseInt(formatEther(await cjpy.balanceOf(address)));
+
+
+    if (balance < 10000) {
       return resp.status(400).json({
         code: 'INSUFFICIENT_FUNDS',
         message: 'Insufficient balance to claim NFT',
       });
     }
 
-    // let image = await svgUtils.renderSvg(score);
-    // resp.setHeader('Content-Type', 'image/png');
-    // return resp.send(image);
-
-
-    IpfsUtils.pin({ address: address, points: score }).then((data) => {
+    IpfsUtils.pin({ address: address, points: balance }).then((data) => {
       return resp.status(200).json(data);
-    }).catch((err)=>{
-      return resp.status(500).json(err)
+    }).catch((err) => {
+      return resp.status(500).json(err);
     });
 
   } else {

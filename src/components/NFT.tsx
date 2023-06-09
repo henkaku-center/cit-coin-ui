@@ -10,7 +10,7 @@ import {
   Heading,
   HStack,
   Image,
-  Input,
+  Input, Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -22,12 +22,15 @@ import {
   Spacer,
   Stack,
   Text,
-  useDisclosure,
+  useDisclosure, useToast,
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
+import { useAccount } from 'wagmi';
+import { PinataPinnedResponse } from '@/types/pinata.types';
+import { IpfsUtils } from '@/utils';
 
 interface Asset {
   title: string;
@@ -60,10 +63,12 @@ const AssetCard = (props: { asset: Asset }) => {
 export const AssetLibrary = () => {
   const [assets, setAssets] = useState<Asset[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [score, setScore] = useState('test');
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { t } = useTranslation('default');
 
+  const [loading, setLoading] = useState(false);
+  const { address, connector, isConnected } = useAccount();
+  const [pinResp, setPinResp] = useState<PinataPinnedResponse | null>(null);
+  const toast = useToast();
 
   useEffect(() => {
     axios.get('/api/nft').then((resp) => {
@@ -83,37 +88,49 @@ export const AssetLibrary = () => {
           ))}
         </HStack>
 
-        <Button colorScheme={'green'} w={'full'} onClick={onOpen}>{t('CLAIM_REWARDS')}</Button>
+        <Button
+          colorScheme={'green'} w={'full'} isDisabled={!address} isLoading={loading}
+          onClick={(event) => {
+            setLoading(true);
+            axios.post('/api/nft', {
+              address: address,
+            }).then((resp) => {
+              setPinResp(resp.data);
+              onOpen();
+            }).catch((err) => {
+              console.log(err);
+              toast({
+                status: 'error',
+                position: 'top',
+                isClosable: true,
+                title: err.response.data.code ?? 'Error completing request',
+                description: err.response.data.message ?? 'We\'re unable to process your request, please try again later.',
+              });
+            }).finally(() => {
+              setLoading(false);
+            });
+          }}>{t('CLAIM_REWARDS')}</Button>
       </VStack>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            Preview
+            Congratulations !! You&apos;ve successfully earned an NFT
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Stack>
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                axios.post('/api/nft/', {
-                  score: score,
-                }, { responseType: 'arraybuffer' }).then(resp => {
-                  const blob = new Blob([resp.data], { type: 'image/png' });
-                  setImageUrl(URL.createObjectURL(blob));
-                });
-              }}>
-                <HStack spacing={0} mb={5}>
-                  <Input borderLeftRadius={'full'} width={300} type={'number'} value={score} onChange={(e) => {
-                    setScore(e.target.value);
-                  }}></Input>
-                  <Button width={100} colorScheme={'blue'} type={'submit'} borderRightRadius={'full'}>Render</Button>
-                </HStack>
-              </form>
-              {imageUrl && <Image src={imageUrl} alt={score} minW={300} width={400} height={400} />}
+              {pinResp && <Image
+                src={`https://gateway.pinata.cloud/ipfs/${pinResp.IpfsHash}`}
+                alt={pinResp.IpfsHash} minW={300} width={400} height={400}
+              />}
             </Stack>
-
           </ModalBody>
+          <ModalFooter>
+            <Link target={'_blank'} href={`https://gateway.pinata.cloud/ipfs/${pinResp?.IpfsHash}`}>
+              Click to preview full
+            </Link>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

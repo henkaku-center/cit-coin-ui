@@ -1,7 +1,7 @@
 import PinataClient, { PinataPinResponse } from '@pinata/sdk';
 import { svgUtils } from '@/utils/svgUtils';
 import { IPinRequest, PinataPinnedResponse } from '@/types/pinata.types';
-import {Readable} from "stream";
+import { Readable } from 'stream';
 
 // const IPFS_BASE_URL = "https://ipfs.io/ipfs";
 // const IPFS_BASE_URL = process.env.PINATA_IPFS_BASE_URL ?? 'https://gateway.pinata.cloud/ipfs';
@@ -35,16 +35,12 @@ export const IpfsUtils = {
         reject(err);
       });
     });
-
   },
 
+  getImageUrl: function(response: PinataPinnedResponse) {
+    return `${IPFS_BASE_URL}/${response.ipfsHash}`
+  },
 
-  // pinImage: function() {
-  //
-  // },
-  // pinMetaData: function() {
-  //
-  // },
   // getStoragePath: function(address: `0x${string}`) {
   //   return `pitpa/citNFT/${address.toLowerCase()}.json`;
   // },

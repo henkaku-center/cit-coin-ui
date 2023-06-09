@@ -1,5 +1,5 @@
 export interface PinataPinnedResponse {
-  ipfsHash: string;
+  IpfsHash: string;
   pinSize: number;
   timestamp: string;
 }

@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { ApiError, ApiResponseCodes, ApiSuccess } from '@/types';
 import { isAddress } from 'ethers/lib/utils';
 import { sendMatic } from '@/utils/contract/etherUtils';
-import { ethers } from 'ethers';
 
 
 async function handlePost(req: NextApiRequest, resp: NextApiResponse<ApiSuccess | ApiError>) {
