@@ -11,8 +11,9 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useAccount, useBalance, useNetwork } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { defaultChain, getContractAddress } from '@/utils/contract';
+import { useTokenBalance } from '@/hooks/useTokenBalance';
 
 export const ContractDetail = () => {
   const { t } = useTranslation('common');
@@ -23,24 +24,7 @@ export const ContractDetail = () => {
   const citCoinAddress = getContractAddress('CitCoin');
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
   const NFTAddress = getContractAddress('NFT');
-  const toast = useToast();
-  const { data: citCoin } = useBalance({
-    address: address,
-    token: citCoinAddress,
-    watch: true,
-    onError: () => {
-      toast({
-        title: t('wallet.COULD_NOT_GET_BALANCE'),
-        position: 'top',
-        status: 'error',
-      });
-    },
-  });
-  const { data: matic } = useBalance({
-    address: address,
-    // token: citCoinAddress,
-    watch: true,
-  });
+  const citCoinBalance = useTokenBalance({ address, tokenAddress: citCoinAddress, watch: true });
   return (
     <Card variant={'filled'} width={'full'}>
       <CardHeader>
@@ -53,12 +37,12 @@ export const ContractDetail = () => {
         <CardBody>
           <Stack>
             <Stat p={2} borderRadius={'1em'} border={'solid 2px'} mb={4}>
-              <StatLabel>{t('wallet.BALANCE')} - {citCoin?.symbol}</StatLabel>
+              <StatLabel>{t('wallet.BALANCE')} - {citCoinBalance?.symbol}</StatLabel>
               <StatNumber fontSize={'lg'}>
                 <Text as={'span'} color={'orange'} mr={2}>
-                  {citCoin?.formatted}
+                  {citCoinBalance?.formatted}
                 </Text>
-                {citCoin?.symbol}
+                {citCoinBalance?.symbol}
               </StatNumber>
               <StatHelpText>as of {new Date().toLocaleString()}</StatHelpText>
             </Stat>
@@ -73,7 +57,7 @@ export const ContractDetail = () => {
                   <Text fontSize={'sm'} minW={'180px'}>{label}</Text>
                   <Code
                     as={Link} px={3} py={1} variant={'outline'} colorScheme={color} borderRadius={'lg'}
-                    href={`https://${process.env.NODE_ENV??'dev' === 'dev' ? 'mumbai.' : ''}polygonscan.com/address/${value}`}
+                    href={`https://${process.env.NODE_ENV ?? 'dev' === 'dev' ? 'mumbai.' : ''}polygonscan.com/address/${value}`}
                     target={'_blank'}
                   >
                     {value}

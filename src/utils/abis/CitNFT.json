@@ -10,11 +10,6 @@
         "internalType": "contract IERC20",
         "name": "_cJpy",
         "type": "address"
-      },
-      {
-        "internalType": "contract ILearnToEarn",
-        "name": "_learnToEarn",
-        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -197,13 +192,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "claimToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -266,16 +254,48 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "_status",
+        "type": "bool"
+      }
+    ],
+    "name": "lock",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "name": "learnToEarn",
+    "name": "locked",
     "outputs": [
       {
-        "internalType": "contract ILearnToEarn",
+        "internalType": "bool",
         "name": "",
-        "type": "address"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "tokenUri",
+        "type": "string"
+      }
+    ],
+    "name": "mint",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -291,7 +311,7 @@
         "type": "address"
       }
     ],
-    "name": "mintNFT",
+    "name": "mintTo",
     "outputs": [
       {
         "internalType": "uint256",
@@ -558,11 +578,11 @@
       },
       {
         "internalType": "string",
-        "name": "finalTokenUri",
+        "name": "_newTokenUri",
         "type": "string"
       }
     ],
-    "name": "updateNFT",
+    "name": "update",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -14,15 +14,19 @@ import {
   ModalHeader,
   ModalOverlay,
   Spacer,
-  Stack,
+  Stack, Text,
   useDisclosure, useToast,
   VStack, Wrap, WrapItem,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
-import { useAccount } from 'wagmi';
+import { useAccount, useBalance, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { PinataPinnedResponse } from '@/types/pinata.types';
+import { getContractAddress } from '@/utils/contract';
+import { UseContractConfig } from '@/hooks';
+import { useTokenBalance } from '@/hooks/useTokenBalance';
+import { formatUnits, parseUnits } from 'ethers/lib/utils';
 
 interface Asset {
   title: string;
@@ -53,15 +57,58 @@ const AssetCard = (props: { asset: Asset }) => {
 
 
 export const AssetLibrary = () => {
+  const { chain } = useNetwork();
   const [assets, setAssets] = useState<Asset[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { t } = useTranslation('default');
-
   const [loading, setLoading] = useState(false);
   const { address, connector, isConnected } = useAccount();
-  // const [pinResp, setPinResp] = useState<PinataPinnedResponse | null>(null);
   const [pinResp, setPinResp] = useState<PinataPinnedResponse | null>(null);
   const toast = useToast();
+  const { contractAddress: citCoinAddress, abi: citCoinAbi } = UseContractConfig('CitCoin');
+  const { contractAddress: citNFTAddress, abi: citNFTAbi } = UseContractConfig('NFT');
+  const balance = useTokenBalance({ address, tokenAddress: citCoinAddress });
+
+  const citCoinConfig = {
+    address: citCoinAddress,
+    abi: citCoinAbi,
+    chainId: chain?.id,
+  };
+
+  const { data: allowance } = useContractRead({
+    ...citCoinConfig,
+    functionName: 'allowance',
+    args: [address, citNFTAddress],
+  });
+
+  const { config: ApproveConfig, isError: contractConfigError } = usePrepareContractWrite({
+    ...citCoinConfig,
+    functionName: 'approve',
+    args: [citNFTAddress, balance?.value],
+  });
+  const {
+    write: approve,
+    isLoading: contractWriteLoading,
+    isError: contractWriteError,
+  } = useContractWrite(ApproveConfig);
+
+
+  const {
+    config: mintNFTConfig,
+    isError: isMintConfigError,
+  } = usePrepareContractWrite({
+    address: citNFTAddress,
+    abi: citNFTAbi,
+    chainId: chain?.id,
+    functionName: 'mint',
+    args: [`https://gateway.pinata.cloud/ipfs/${pinResp?.IpfsHash}`],
+  });
+
+  const {
+    write: mintNFT,
+    isLoading: isMinting,
+    isError: isMintError,
+  } = useContractWrite(mintNFTConfig);
 
   useEffect(() => {
     axios.get('/api/nft').then((resp) => {
@@ -80,9 +127,23 @@ export const AssetLibrary = () => {
             <AssetCard key={index} asset={asset} />
           ))}
         </HStack>
-
-        <Button
-          colorScheme={'green'} w={'full'} isDisabled={!address} isLoading={loading}
+        <hr />
+        <Text>Current Allowance: {formatUnits(allowance??'0', )}</Text>
+        {/*@ts-ignore*/}
+        {balance?.value && allowance && allowance < balance?.value && <Button
+          colorScheme={'red'}
+          onClick={() => {
+            approve?.();
+          }}
+          isLoading={contractWriteLoading}
+        >
+          Allow Spending {formatUnits(balance?.value ?? 0, 18)} {balance?.symbol} to get NFT
+        </Button>}
+        {/*@ts-ignore*/}
+        {balance?.value && allowance && allowance >= balance?.value && <Button
+          colorScheme={'green'} w={'full'}
+          isDisabled={!address || contractConfigError}
+          isLoading={loading}
           onClick={(event) => {
             setLoading(true);
             axios.post('/api/nft', {
@@ -102,13 +163,13 @@ export const AssetLibrary = () => {
             }).finally(() => {
               setLoading(false);
             });
-          }}>{t('CLAIM_REWARDS')}</Button>
+          }}>Render Generated Graphics</Button>}
       </VStack>
       <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            Congratulations !! You&apos;ve successfully earned an NFT
+            Congratulations !! You&apos;ve successfully rendered the NFT Graphics
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -126,10 +187,14 @@ export const AssetLibrary = () => {
                   {pinResp?.Timestamp && <Box>Created: {(new Date(pinResp.Timestamp)).toLocaleString()}</Box>}
                   <Spacer />
                   <Button
+                    isDisabled={isMintConfigError}
+                    isLoading={isMinting}
                     colorScheme={'orange'}
-                    as={Link} target={'_blank'} href={`https://gateway.pinata.cloud/ipfs/${pinResp?.IpfsHash}`}
+                    onClick={() => {
+                      mintNFT?.();
+                    }}
                   >
-                    Preview Full Size Image
+                    Claim This NFT
                   </Button>
                 </Stack>
               </WrapItem>
