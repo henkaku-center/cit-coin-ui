@@ -21,9 +21,8 @@ import {
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
-import { useAccount, useBalance, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
+import { useAccount, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { PinataPinnedResponse } from '@/types/pinata.types';
-import { getContractAddress } from '@/utils/contract';
 import { UseContractConfig } from '@/hooks';
 import { useTokenBalance } from '@/hooks/useTokenBalance';
 import { formatUnits, parseUnits } from 'ethers/lib/utils';
@@ -81,6 +80,13 @@ export const AssetLibrary = () => {
     args: [address, citNFTAddress],
   });
 
+  const { data: isNftLocked } = useContractRead({
+    abi: citNFTAbi,
+    chainId: chain?.id,
+    functionName: 'locked',
+    address: citNFTAddress,
+  });
+
   const { config: ApproveConfig, isError: contractConfigError } = usePrepareContractWrite({
     ...citCoinConfig,
     functionName: 'approve',
@@ -127,44 +133,49 @@ export const AssetLibrary = () => {
             <AssetCard key={index} asset={asset} />
           ))}
         </HStack>
-        <hr />
-        {/*@ts-ignore*/}
-        <Text>Current Allowance: {formatUnits(allowance??'0', )}</Text>
-        {/*@ts-ignore*/}
-        {balance?.value && allowance && allowance < balance?.value && <Button
-          colorScheme={'red'}
-          onClick={() => {
-            approve?.();
-          }}
-          isLoading={contractWriteLoading}
-        >
-          Allow Spending {formatUnits(balance?.value ?? 0, 18)} {balance?.symbol} to get NFT
-        </Button>}
-        {/*@ts-ignore*/}
-        {balance?.value && allowance && allowance >= balance?.value && <Button
-          colorScheme={'green'} w={'full'}
-          isDisabled={!address || contractConfigError}
-          isLoading={loading}
-          onClick={(event) => {
-            setLoading(true);
-            axios.post('/api/nft', {
-              address: address,
-            }).then((resp) => {
-              setPinResp(resp.data);
-              onOpen();
-            }).catch((err) => {
-              console.log(err);
-              toast({
-                status: 'error',
-                position: 'top',
-                isClosable: true,
-                title: err.response.data.code ?? 'Error completing request',
-                description: err.response.data.message ?? 'We\'re unable to process your request, please try again later.',
+        {isNftLocked && <Alert variant={'subtle'} status={'error'}>
+          The NFT is currently Locked, please try again later to claim yours!!
+        </Alert>}
+        {!isNftLocked && <>
+          {/*@ts-ignore*/}
+          <Text>Current Allowance: {formatUnits(allowance ?? '0')}</Text>
+          {/*@ts-ignore*/}
+          {balance?.value && allowance && allowance < balance?.value && <Button
+            colorScheme={'red'}
+            onClick={() => {
+              approve?.();
+            }}
+            isLoading={contractWriteLoading}
+          >
+            Allow Spending {formatUnits(balance?.value ?? 0, 18)} {balance?.symbol} to get NFT
+          </Button>}
+          {/*@ts-ignore*/}
+          {balance?.value && allowance && allowance >= balance?.value && <Button
+            colorScheme={'green'} w={'full'}
+            isDisabled={!address || contractConfigError}
+            isLoading={loading}
+            onClick={(event) => {
+              setLoading(true);
+              axios.post('/api/nft', {
+                address: address,
+              }).then((resp) => {
+                setPinResp(resp.data);
+                onOpen();
+              }).catch((err) => {
+                console.log(err);
+                toast({
+                  status: 'error',
+                  position: 'top',
+                  isClosable: true,
+                  title: err.response.data.code ?? 'Error completing request',
+                  description: err.response.data.message ?? 'We\'re unable to process your request, please try again later.',
+                });
+              }).finally(() => {
+                setLoading(false);
               });
-            }).finally(() => {
-              setLoading(false);
-            });
-          }}>Render Generated Graphics</Button>}
+            }}>Render Generated Graphics</Button>}
+        </>}
+
       </VStack>
       <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
         <ModalOverlay />
