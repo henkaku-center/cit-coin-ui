@@ -38,7 +38,7 @@ export const IpfsUtils = {
   },
 
   getImageUrl: function(response: PinataPinnedResponse) {
-    return `${IPFS_BASE_URL}/${response.ipfsHash}`
+    return `${IPFS_BASE_URL}/${response.IpfsHash}`;
   },
 
   // getStoragePath: function(address: `0x${string}`) {

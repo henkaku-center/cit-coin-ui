@@ -128,6 +128,7 @@ export const AssetLibrary = () => {
           ))}
         </HStack>
         <hr />
+        {/*@ts-ignore*/}
         <Text>Current Allowance: {formatUnits(allowance??'0', )}</Text>
         {/*@ts-ignore*/}
         {balance?.value && allowance && allowance < balance?.value && <Button
