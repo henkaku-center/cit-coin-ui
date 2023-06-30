@@ -2,7 +2,18 @@ export interface PinataPinnedResponse {
   IpfsHash: string;
   PinSize: number;
   Timestamp: string;
-  isDuplicate?: boolean
+  isDuplicate?: boolean;
+}
+
+export interface HenkakuPinataPinnedResponse {
+  name: string,
+  description: string,
+  image: string,
+  attributes: object[]
+}
+export interface NftPinResponse {
+  tokenUri: string,
+  nft: HenkakuPinataPinnedResponse
 }
 
 export interface FilePinned {

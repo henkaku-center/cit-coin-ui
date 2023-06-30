@@ -10,7 +10,9 @@ const nftAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS as `0x{string}`;
 const cjpyAddress = process.env.NEXT_PUBLIC_CIT_COIN_ADDRESS as `0x{string}`;
 
 const cjpy = new ethers.Contract(cjpyAddress, cjpyAbi, citSigner);
-const nft = new ethers.Contract(nftAddress, nftAbi, citSigner);
+// const nft = new ethers.Contract(nftAddress, nftAbi, citSigner);
+import axios from 'axios';
+import { HenkakuPinataPinnedResponse } from '@/types/pinata.types';
 
 export default async function NFTHandler(
   req: NextApiRequest,
@@ -29,10 +31,10 @@ export default async function NFTHandler(
 
     // check if address exists or is valid
     if (!address) {
-      resp.status(400).json({ address: 'This field is required' });
+      return resp.status(400).json({ address: 'This field is required' });
     }
     if (!(isAddress(address))) {
-      resp.status(400).json({ address: 'Invalid address is supplied' });
+      return resp.status(400).json({ address: 'Invalid address is supplied' });
     }
 
     // Check if user has already earned an NFT
@@ -48,11 +50,24 @@ export default async function NFTHandler(
       });
     }
 
-    IpfsUtils.pin({ address: address, points: balance }).then((data) => {
-      return resp.status(200).json(data);
-    }).catch((err) => {
-      return resp.status(500).json(err);
+    axios.post(`${process.env.HENKAKU_API_BASE_URL}/ipfs/cit`, {
+      address: address, points: balance,
+    }).then((response) => {
+      axios.get(response.data.tokenUri).then(tokenResp => {
+        return resp.status(200).json({
+          tokenUri: response.data.tokenUri,
+          nft: tokenResp.data
+        });
+      });
+    }).catch((error) => {
+      return resp.status(500).json(error);
     });
+
+    // IpfsUtils.pin({ address: address, points: balance }).then((data) => {
+    //   return resp.status(200).json(data);
+    // }).catch((err) => {
+    //   return resp.status(500).json(err);
+    // });
 
   } else {
     return resp.status(405);

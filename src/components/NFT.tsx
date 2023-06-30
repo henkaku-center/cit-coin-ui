@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
 import { useAccount, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
-import { PinataPinnedResponse } from '@/types/pinata.types';
+import { NftPinResponse } from '@/types/pinata.types';
 import { UseContractConfig } from '@/hooks';
 import { useTokenBalance } from '@/hooks/useTokenBalance';
 import { formatUnits, parseUnits } from 'ethers/lib/utils';
@@ -62,7 +62,7 @@ export const AssetLibrary = () => {
   const { t } = useTranslation('default');
   const [loading, setLoading] = useState(false);
   const { address, connector, isConnected } = useAccount();
-  const [pinResp, setPinResp] = useState<PinataPinnedResponse | null>(null);
+  const [pinResp, setPinResp] = useState<NftPinResponse | undefined>(undefined);
   const toast = useToast();
   const { contractAddress: citCoinAddress, abi: citCoinAbi } = UseContractConfig('CitCoin');
   const { contractAddress: citNFTAddress, abi: citNFTAbi } = UseContractConfig('NFT');
@@ -90,7 +90,7 @@ export const AssetLibrary = () => {
   const { config: ApproveConfig, isError: contractConfigError } = usePrepareContractWrite({
     ...citCoinConfig,
     functionName: 'approve',
-    args: [citNFTAddress, balance?.value],
+    args: [citNFTAddress, balance?.value??'0'],
   });
   const {
     write: approve,
@@ -107,7 +107,7 @@ export const AssetLibrary = () => {
     abi: citNFTAbi,
     chainId: chain?.id,
     functionName: 'mint',
-    args: [`https://gateway.pinata.cloud/ipfs/${pinResp?.IpfsHash}`],
+    args: [pinResp?.tokenUri],
   });
 
   const {
@@ -115,6 +115,11 @@ export const AssetLibrary = () => {
     isLoading: isMinting,
     isError: isMintError,
   } = useContractWrite(mintNFTConfig);
+
+  //@ts-ignore
+  const formattedAllowance = parseFloat(formatUnits(allowance ?? '0', 18));
+  //@ts-ignore
+  const formattedBalance = parseFloat(formatUnits(balance?.value ?? '0', 18));
 
   useEffect(() => {
     axios.get('/api/nft').then((resp) => {
@@ -137,20 +142,19 @@ export const AssetLibrary = () => {
           The NFT is currently Locked, please try again later to claim yours!!
         </Alert>}
         {!isNftLocked && <>
-          {/*@ts-ignore*/}
-          <Text>Current Allowance: {formatUnits(allowance ?? '0')}</Text>
-          {/*@ts-ignore*/}
-          {balance?.value && allowance && allowance < balance?.value && <Button
+          <Text>Current Allowance: {formattedAllowance}</Text>
+          <Text>Current Balance: {formattedBalance}</Text>
+          {formattedBalance > 0 && (formattedAllowance < formattedBalance) && <Button
             colorScheme={'red'}
             onClick={() => {
               approve?.();
             }}
             isLoading={contractWriteLoading}
           >
-            Allow Spending {formatUnits(balance?.value ?? 0, 18)} {balance?.symbol} to get NFT
+            Allow Spending {formattedBalance} {balance?.symbol} to get NFT
           </Button>}
           {/*@ts-ignore*/}
-          {balance?.value && allowance && allowance >= balance?.value && <Button
+          {formattedBalance > 0 && formattedAllowance > 0 && formattedAllowance >= formattedBalance && <Button
             colorScheme={'green'} w={'full'}
             isDisabled={!address || contractConfigError}
             isLoading={loading}
@@ -162,7 +166,6 @@ export const AssetLibrary = () => {
                 setPinResp(resp.data);
                 onOpen();
               }).catch((err) => {
-                console.log(err);
                 toast({
                   status: 'error',
                   position: 'top',
@@ -191,12 +194,14 @@ export const AssetLibrary = () => {
                   <Box
                     as={Link}
                     target={'_blank'}
-                    href={`https://gateway.pinata.cloud/ipfs/${pinResp?.IpfsHash}`}
+                    href={pinResp?.nft.image}
+                    // href={`https://gateway.pinata.cloud/ipfs/${pinResp?.IpfsHash}`}
                     color={'orange'}>
-                    {pinResp?.IpfsHash}
+                    {pinResp?.nft.image}
+                    {/*{pinResp?.IpfsHash}*/}
                   </Box>
-                  <Box>Pin Size: {pinResp?.PinSize}</Box>
-                  {pinResp?.Timestamp && <Box>Created: {(new Date(pinResp.Timestamp)).toLocaleString()}</Box>}
+                  <Box>Name: {pinResp?.nft.name}</Box>
+                  {/*{pinResp?.Timestamp && <Box>Created: {(new Date(pinResp.Timestamp)).toLocaleString()}</Box>}*/}
                   <Spacer />
                   <Button
                     isDisabled={isMintConfigError}
@@ -212,12 +217,12 @@ export const AssetLibrary = () => {
               </WrapItem>
               <WrapItem
                 as={Link} width={{ base: 'full', lg: '48%' }}
-                href={`https://gateway.pinata.cloud/ipfs/${pinResp?.IpfsHash}`}
+                href={`https://gateway.pinata.cloud/ipfs/${pinResp?.nft.image}`}
                 target={'_blank'} justifyContent={{ base: 'center', lg: 'end' }}
               >
                 {pinResp && <Image
-                  src={`https://gateway.pinata.cloud/ipfs/${pinResp.IpfsHash}`}
-                  alt={pinResp.IpfsHash} minW={200} width={300} height={300}
+                  src={pinResp?.nft.image}
+                  alt={pinResp?.nft.name} minW={200} width={300} height={300}
                   objectFit={'contain'}
                 />}
               </WrapItem>
