@@ -1,18 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { IpfsUtils, NftLevels, svgUtils } from '@/utils';
+import { NftLevels } from '@/utils';
 import { formatEther, formatUnits, isAddress, parseEther } from 'ethers/lib/utils';
 import { ethers } from 'ethers';
-import nftAbi from '@/utils/abis/CitNFT.json';
+// import nftAbi from '@/utils/abis/CitNFT.json';
 import cjpyAbi from '@/utils/abis/CitCoin.json';
 import { citSigner } from '@/utils/contract/etherUtils';
 
-const nftAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS as `0x{string}`;
+// const nftAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS as `0x{string}`;
 const cjpyAddress = process.env.NEXT_PUBLIC_CIT_COIN_ADDRESS as `0x{string}`;
 
 const cjpy = new ethers.Contract(cjpyAddress, cjpyAbi, citSigner);
 // const nft = new ethers.Contract(nftAddress, nftAbi, citSigner);
 import axios from 'axios';
-import { HenkakuPinataPinnedResponse } from '@/types/pinata.types';
 
 export default async function NFTHandler(
   req: NextApiRequest,
@@ -63,6 +62,9 @@ export default async function NFTHandler(
       return resp.status(500).json(error);
     });
 
+    /**
+     * This part is commented out since we use Henkaku API to pin images to pinata
+     */
     // IpfsUtils.pin({ address: address, points: balance }).then((data) => {
     //   return resp.status(200).json(data);
     // }).catch((err) => {
