@@ -10,13 +10,13 @@ export const NftLevels = [
     title: 'Normal',
     description: 'This is a basic badge that unlocks at 10000cJPY.',
     earning: 10000,
-    url: '/nft/normal.png',
+    url: '/normal.png',
   },
   {
     title: 'Premium',
     description: 'This badge unlocks when you earn at least 20000cJPY.',
     earning: 20000,
-    url: '/nft/premium.png',
+    url: '/premium.png',
   },
 ];
 
