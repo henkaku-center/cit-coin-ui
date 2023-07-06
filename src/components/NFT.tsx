@@ -1,5 +1,5 @@
 import {
-  Alert,
+  Alert, Badge,
   Box,
   Button,
   Heading,
@@ -59,7 +59,7 @@ export const AssetLibrary = () => {
   const { chain } = useNetwork();
   const [assets, setAssets] = useState<Asset[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { t } = useTranslation('default');
+  const { t } = useTranslation('common');
   const [loading, setLoading] = useState(false);
   const { address, connector, isConnected } = useAccount();
   const [pinResp, setPinResp] = useState<NftPinResponse | undefined>(undefined);
@@ -90,7 +90,7 @@ export const AssetLibrary = () => {
   const { config: ApproveConfig, isError: contractConfigError } = usePrepareContractWrite({
     ...citCoinConfig,
     functionName: 'approve',
-    args: [citNFTAddress, balance?.value??'0'],
+    args: [citNFTAddress, balance?.value ?? '0'],
   });
   const {
     write: approve,
@@ -131,7 +131,10 @@ export const AssetLibrary = () => {
     <>
       <VStack width={'full'}>
         <Alert variant={'subtle'} status={'info'}>
-          <Heading>Available NFTs</Heading>
+          <Heading>{t('nft.AVAILABLE')}</Heading>
+        </Alert>
+        <Alert status={'warning'} variant={'left-accent'}>
+          {t('nft.ALLOWANCE_WARNING')}
         </Alert>
         <HStack>
           {assets.map((asset, index) => (
@@ -141,18 +144,25 @@ export const AssetLibrary = () => {
         {isNftLocked && <Alert variant={'subtle'} status={'error'}>
           The NFT is currently Locked, please try again later to claim yours!!
         </Alert>}
-        {!isNftLocked && <>
-          <Text>Current Allowance: {formattedAllowance}</Text>
-          <Text>Current Balance: {formattedBalance}</Text>
-          {formattedBalance > 0 && (formattedAllowance < formattedBalance) && <Button
-            colorScheme={'red'}
-            onClick={() => {
-              approve?.();
-            }}
-            isLoading={contractWriteLoading}
-          >
-            Allow Spending {formattedBalance} {balance?.symbol} to get NFT
-          </Button>}
+        {!isNftLocked && <Box py={5} px={3} textAlign={'center'}>
+          <Text>{t('nft.CURRENT_ALLOWANCE')}: <Badge colorScheme={'green'} px={2}
+                                          borderRadius={'full'}>{formattedAllowance} cJPY</Badge></Text>
+          <Text>{t('nft.CURRENT_BALANCE')}: <Badge colorScheme={'green'} px={2}
+                                        borderRadius={'full'}>{formattedBalance} cJPY</Badge></Text>
+          {formattedBalance > 0 && (formattedAllowance < formattedBalance) && <>
+            <Button
+              colorScheme={'red'}
+              onClick={() => {
+                approve?.();
+              }}
+              isLoading={contractWriteLoading}
+              m={3}
+              w={'full'}
+            >
+              Allow Spending {formattedBalance} {balance?.symbol} to get NFT
+            </Button>
+          </>
+          }
           {/*@ts-ignore*/}
           {formattedBalance > 0 && formattedAllowance > 0 && formattedAllowance >= formattedBalance && <Button
             colorScheme={'green'} w={'full'}
@@ -177,7 +187,7 @@ export const AssetLibrary = () => {
                 setLoading(false);
               });
             }}>Render Generated Graphics</Button>}
-        </>}
+        </Box>}
 
       </VStack>
       <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>

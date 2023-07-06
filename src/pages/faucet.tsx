@@ -77,7 +77,7 @@ const FaucetPage = () => {
         <Card variant={'filled'} mb={10}>
           <CardBody>
             {address && isConnected && <Stack mb={5}>
-              <Text>Send me Matic coin at </Text>
+              <Text>{t('faucet.SEND_MATIC_AT')}</Text>
               <Badge
                 mb={5} fontSize={'lg'}
                 textAlign={'center'}

@@ -20,7 +20,8 @@
     "USE_ANOTHER_WALLET": "Use another Wallet Address",
     "LOCK_DURATION": "Lock Duration",
     "LOCKED": "The faucet is currently locked!!",
-    "OFFERING": "Offering"
+    "OFFERING": "Offering",
+    "SEND_MATIC_AT": "Send me Matic coin at"
   },
   "nav": {
     "ADMIN": "Admin",
@@ -50,5 +51,12 @@
     "NOT_CONNECTED": "Wallet Not Connected",
     "SETTINGS": "Wallet Settings",
     "SWITCH_NETWORK": "Switch Network"
+  },
+  "nft": {
+    "AVAILABLE": "Available NFTs",
+    "ALLOW_SPENDING": "Allow Spending",
+    "ALLOWANCE_WARNING": "Note: You must allow all of your cJPY to be spent by the contract to be able to earn an NFT",
+    "CURRENT_ALLOWANCE": "Current Allowance",
+    "CURRENT_BALANCE": "Current Balance"
   }
 }

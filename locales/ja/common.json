@@ -1,4 +1,5 @@
 {
+  "COPYRIGHT_LINE": "© 2023 Pitpa Inc. All rights reserved.",
   "ERROR_LOADING_CONTENT": "リソースの読み込みエラー",
   "ERROR_LOADING_CONTENT_DESCRIPTION": "チェーンからのリソースの読み込み中にエラーが発生しました。後でもう一度お試しください。",
   "MULTI_SELECT": "すべての正解を選択",
@@ -19,7 +20,8 @@
     "USE_ANOTHER_WALLET": "別のウォレット アドレスを使用する",
     "LOCK_DURATION": "ロック期間",
     "LOCKED": "ファセットは現在ロックされています!!",
-    "OFFERING": "献金"
+    "OFFERING": "献金",
+    "SEND_MATIC_AT": "次のアドレスに Matic コインを送"
   },
   "nav": {
     "ADMIN": "管理者",
@@ -49,5 +51,12 @@
     "NOT_CONNECTED": "ウォレットが接続されていません",
     "SETTINGS": "ウォレット セッティング",
     "SWITCH_NETWORK": "ネットワークを切り替える"
+  },
+  "nft": {
+    "AVAILABLE": "利用可能なNFT",
+    "ALLOW_SPENDING": "支出を許可",
+    "ALLOWANCE_WARNING": "注: NFT を獲得できるようにするには、契約によって cJPY のすべてが使用されることを許可する必要があります",
+    "CURRENT_ALLOWANCE": "現在の許容量",
+    "CURRENT_BALANCE": "現在の残高"
   }
 }
