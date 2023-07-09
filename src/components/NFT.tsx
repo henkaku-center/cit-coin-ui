@@ -78,6 +78,7 @@ export const AssetLibrary = () => {
     ...citCoinConfig,
     functionName: 'allowance',
     args: [address, citNFTAddress],
+    watch: true
   });
 
   const { data: isNftLocked } = useContractRead({
