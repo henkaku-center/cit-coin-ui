@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 import { theme } from '@/layouts/theme';
 import Layout from '@/layouts/Layout';
 import { publicProvider } from '@wagmi/core/providers/public';
+import { alchemyProvider } from '@wagmi/core/providers/alchemy';
 import { defaultChain } from '@/utils/contract';
 import '@rainbow-me/rainbowkit/styles.css';
 import {
@@ -16,7 +17,9 @@ import {
 const { chains, provider } = configureChains(
   [defaultChain],
   [
-    publicProvider(),
+    process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+      ? publicProvider()
+      : alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || '' }),
   ],
 );
 
@@ -47,7 +50,6 @@ const RainbowWrapper = (props: { children: any }) => {
 };
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
-
   return (
     <WagmiConfig client={wagmiClient}>
       <ChakraProvider theme={theme}>
