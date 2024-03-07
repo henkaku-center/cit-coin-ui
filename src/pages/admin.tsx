@@ -11,7 +11,7 @@ import {
   Tabs,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useAccount, useReadContract, useReadContracts } from 'wagmi';
+import { useAccount, useReadContract } from 'wagmi';
 import { QuestionManager, Settings } from '@/components/admin';
 import { defaultChain, getContractAddress } from '@/utils/contract';
 import { FaFile, FaUsers, FaChartBar } from 'react-icons/fa';
