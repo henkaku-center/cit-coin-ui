@@ -11,7 +11,7 @@ import {
   Tabs,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useAccount, useContractReads, useNetwork } from 'wagmi';
+import { useAccount, useReadContract, useReadContracts } from 'wagmi';
 import { QuestionManager, Settings } from '@/components/admin';
 import { defaultChain, getContractAddress } from '@/utils/contract';
 import { FaFile, FaUsers, FaChartBar } from 'react-icons/fa';
@@ -22,8 +22,7 @@ import { FaucetSettings } from '@/components/admin/Faucet';
 
 const Admin = () => {
   const { t } = useTranslation('admin');
-  const { address, connector, isConnected } = useAccount();
-  const { chain } = useNetwork();
+  const { chain, isConnected, address } = useAccount();
 
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
 
@@ -33,25 +32,22 @@ const Admin = () => {
     chainId: chain?.id,
   };
 
-  const {
-    data: adminAddresses,
-    isError: contractReadError,
-    isLoading,
-  } = useContractReads({
-    contracts: Object.entries({
-      owner: [],
-      isAdmin: [address],
-    }).map(([k, v], index) => {
-      // let args = v.length ? { args: v } : {};
-      return {
-        ...LearnContract,
-        functionName: k,
-        args: v,
-      };
-    }),
+  const { data: ownerAddress, isLoading: ownerLoading } = useReadContract({
+    abi: LearnContract.abi,
+    address: LearnContract.address,
+    functionName: 'owner',
+    account: address,
   });
-  const hasPermissions = adminAddresses?.includes(address) || adminAddresses?.includes(true);
-  // console.log('adminAddresses: ', adminAddresses);
+
+  const { data: isAdmin, isLoading: AdminLoading } = useReadContract({
+    abi: LearnContract.abi,
+    address: LearnContract.address,
+    functionName: 'isAdmin',
+    args: [address],
+    account: address,
+  });
+
+  const hasPermissions = isAdmin || ownerAddress == address;
 
   const adminComponents = [
     {
@@ -83,7 +79,7 @@ const Admin = () => {
 
   return (
     <>
-      {isLoading && (
+      {(ownerLoading || AdminLoading) && (
         <Flex alignItems={'center'} justifyContent={'center'}>
           <Spinner />
         </Flex>

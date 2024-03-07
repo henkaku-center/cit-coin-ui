@@ -1,65 +1,39 @@
-import { WagmiConfig, createClient, configureChains } from 'wagmi';
-import { ChakraProvider, useColorMode } from '@chakra-ui/react';
+import { WagmiProvider, http } from 'wagmi';
+import { ChakraProvider } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
 import { theme } from '@/layouts/theme';
 import Layout from '@/layouts/Layout';
-import { publicProvider } from '@wagmi/core/providers/public';
-import { alchemyProvider } from '@wagmi/core/providers/alchemy';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { defaultChain } from '@/utils/contract';
 import '@rainbow-me/rainbowkit/styles.css';
-import {
-  getDefaultWallets,
-  RainbowKitProvider,
-  lightTheme,
-  darkTheme,
-} from '@rainbow-me/rainbowkit';
+import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 
-const { chains, provider } = configureChains(
-  [defaultChain],
-  [
-    process.env.NEXT_PUBLIC_NODE_ENV === 'production'
-      ? publicProvider()
-      : alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || '' }),
-  ],
-);
-
-const { connectors } = getDefaultWallets({
-  appName: process.env['NEXT_PUBLIC_WALLET_CONNECT_PROJECT_NAME '] || '',
-  projectId: process.env['NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID '] || '',
-  chains,
+const config = getDefaultConfig({
+  appName: 'cit-web3-class',
+  projectId: '1b5b1d5c351c838062b62002e37bee3c',
+  chains: [defaultChain],
+  transports: {
+    [defaultChain.id]: http(),
+  },
+  ssr: true,
 });
 
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors: connectors,
-  provider,
-});
-
-const RainbowWrapper = (props: { children: any }) => {
-  const { colorMode } = useColorMode();
-
-  return (
-    <RainbowKitProvider
-      chains={chains}
-      modalSize={'wide'}
-      theme={colorMode == 'dark' ? darkTheme() : lightTheme()}
-    >
-      {props.children}
-    </RainbowKitProvider>
-  );
-};
+const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
-    <WagmiConfig client={wagmiClient}>
-      <ChakraProvider theme={theme}>
-        <RainbowWrapper>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </RainbowWrapper>
-      </ChakraProvider>
-    </WagmiConfig>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <ChakraProvider theme={theme}>
+          <RainbowKitProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </RainbowKitProvider>
+        </ChakraProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }
 

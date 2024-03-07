@@ -8,13 +8,6 @@ import {
   useColorMode,
   AlertIcon,
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   Drawer,
   DrawerOverlay,
   DrawerContent,
@@ -23,19 +16,18 @@ import {
   DrawerBody,
   DrawerFooter,
   IconButton,
-  HStack, Flex,
+  HStack,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { default as NextLink } from 'next/link';
 import { MoonIcon, SunIcon, HamburgerIcon } from '@chakra-ui/icons';
 import setLanguage from 'next-translate/setLanguage';
 import Head from 'next/head';
-import { useAccount, useContractReads, useNetwork } from 'wagmi';
+import { useAccount, useReadContract, useReadContracts } from 'wagmi';
 import { NavLink } from '@/components';
 import { defaultChain, getContractAddress } from '@/utils/contract';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -48,20 +40,19 @@ interface navItemInterface {
   public: boolean;
 }
 
-
 const MobileNav = (props: { children: React.ReactNode }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { t, lang } = useTranslation('common');
   return (
     <>
       <IconButton
-        aria-label='Open menu'
+        aria-label="Open menu"
         icon={<HamburgerIcon />}
         onClick={onOpen}
-        variant='ghost'
+        variant="ghost"
         size={'lg'}
       />
-      <Drawer isOpen={isOpen} onClose={onClose} placement='left'>
+      <Drawer isOpen={isOpen} onClose={onClose} placement="left">
         <DrawerOverlay>
           <DrawerContent>
             <DrawerCloseButton />
@@ -71,9 +62,7 @@ const MobileNav = (props: { children: React.ReactNode }) => {
                 {props.children}
               </VStack>
             </DrawerBody>
-            <DrawerFooter pt={10}>
-              {t('COPYRIGHT_LINE')}
-            </DrawerFooter>
+            <DrawerFooter pt={10}>{t('COPYRIGHT_LINE')}</DrawerFooter>
           </DrawerContent>
         </DrawerOverlay>
       </Drawer>
@@ -82,9 +71,7 @@ const MobileNav = (props: { children: React.ReactNode }) => {
 };
 
 const Layout = ({ children }: LayoutProps) => {
-  // const { isOpen, onOpen, onClose } = useDisclosure();
-  const { address, connector, isConnected } = useAccount();
-  const { chain } = useNetwork();
+  const { address, isConnected, chain } = useAccount();
   const { t, lang } = useTranslation('common');
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -94,78 +81,57 @@ const Layout = ({ children }: LayoutProps) => {
     chainId: chain?.id,
   };
 
-  const {
-    data: adminAddresses,
-    isError: contractReadError,
-    isLoading,
-  } = useContractReads({
-    contracts: Object.entries(
-      {
-        'owner': [],
-        'isAdmin': [address],
-      }).map(
-      ([k, v], index) => {
-        // let args = v.length ? { args: v } : {};
-        return {
-          ...
-            LearnContract,
-          functionName: k,
-          args: v,
-        };
-      }),
+  const { data: ownerAddress } = useReadContract({
+    abi: LearnContract.abi,
+    address: LearnContract.address,
+    functionName: 'owner',
+    account: address,
   });
-  const NavItems = (<>
-    <NavLink as={NextLink} href='/' mr={16}>
-      <Heading size='md'>
-        <pre>{t('nav.HEADING')}</pre>
-      </Heading>
-    </NavLink>
-    {isConnected && chain?.id === defaultChain.id && <NavLink href={'/quests'}>
-      {t('nav.QUESTS')}
-    </NavLink>}
-    <NavLink href='/faucet'>
-      {t('nav.FAUCET')}
-    </NavLink>
-    <Spacer />
-    <ConnectButton
-      label={t('wallet.CONNECT')}
-      // mounted={true}
-      chainStatus={'icon'}
-    />
-    {/*<Button*/}
-    {/*  onClick={onOpen}*/}
-    {/*  variant={'outline'}*/}
-    {/*  colorScheme={*/}
-    {/*    isConnected && chain?.id == defaultChain.id*/}
-    {/*      ? 'green'*/}
-    {/*      : isConnected*/}
-    {/*        ? 'orange'*/}
-    {/*        : 'red'*/}
-    {/*  }*/}
-    {/*  leftIcon={isConnected && chain?.id === defaultChain.id ? <LockIcon /> : isConnected ? <WarningIcon /> :*/}
-    {/*    <UnlockIcon />}*/}
-    {/*>*/}
-    {/*  {isConnected ? `${t('wallet.CONNECTED')} - ${chain?.name}` : t('wallet.NOT_CONNECTED')}*/}
-    {/*</Button>*/}
-    {isConnected && chain?.id === defaultChain.id && (adminAddresses?.includes(address) || adminAddresses?.includes(true)) &&
-      <NavLink href='/admin'>
-        {t('nav.ADMIN')}
-      </NavLink>}
-    <Button size='md' onClick={toggleColorMode} p={4}>
-      {colorMode == 'dark' ? <SunIcon /> : <MoonIcon />}
-    </Button>
-    <Button size='md' onClick={async () => await setLanguage(lang == 'en' ? 'ja' : 'en')}>
-      {lang == 'en' ? '日本' : 'En'}
-    </Button>
-  </>);
+
+  const { data: isAdmin } = useReadContract({
+    abi: LearnContract.abi,
+    address: LearnContract.address,
+    functionName: 'isAdmin',
+    args: [address],
+    account: address,
+  });
+
+  const hasAdminPermissions = isAdmin || ownerAddress == address;
+
+  const icon = colorMode == 'dark' ? <SunIcon /> : <MoonIcon />;
+
+  const NavItems = (
+    <>
+      <NavLink as={NextLink} href="/" mr={16}>
+        <Heading size="md">
+          <pre>{t('nav.HEADING')}</pre>
+        </Heading>
+      </NavLink>
+      {isConnected && chain?.id === defaultChain.id && (
+        <NavLink href={'/quests'}>{t('nav.QUESTS')}</NavLink>
+      )}
+      <NavLink href="/faucet">{t('nav.FAUCET')}</NavLink>
+      <Spacer />
+      <ConnectButton label={t('wallet.CONNECT')} chainStatus={'icon'} />
+      {isConnected && chain?.id === defaultChain.id && hasAdminPermissions && (
+        <NavLink href="/admin">{t('nav.ADMIN')}</NavLink>
+      )}
+      <Button size="md" onClick={toggleColorMode} p={4}>
+        {icon}
+      </Button>
+      <Button size="md" onClick={async () => await setLanguage(lang == 'en' ? 'ja' : 'en')}>
+        {lang == 'en' ? '日本' : 'En'}
+      </Button>
+    </>
+  );
 
   return (
     <>
       <Head>
         <title>{t('nav.HEADING')}</title>
-        <meta name='description' content='Generated by create next app' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <link rel='icon' href='/favicon.ico' />
+        <meta name="description" content="Generated by create next app" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Box px={8} position={'fixed'} top={0} left={0} right={0}>
         <HStack display={{ base: 'flex', lg: 'none' }} width={'full'}>
@@ -173,16 +139,13 @@ const Layout = ({ children }: LayoutProps) => {
             {NavItems}
             <hr style={{ marginTop: '3em' }} />
           </MobileNav>
-          <NavLink as={NextLink} href='/' mr={16}>
-            <Heading size='sm'>
+          <NavLink as={NextLink} href="/" mr={16}>
+            <Heading size="sm">
               <pre>{t('nav.HEADING')}</pre>
             </Heading>
           </NavLink>
           <Spacer />
-          <ConnectButton
-            label={t('wallet.CONNECT')}
-            chainStatus={'icon'}
-          />
+          <ConnectButton label={t('wallet.CONNECT')} chainStatus={'icon'} />
         </HStack>
         <HStack spacing={1} width={'full'} display={{ base: 'none', lg: 'flex' }}>
           {NavItems}
@@ -204,14 +167,18 @@ const Layout = ({ children }: LayoutProps) => {
       {/*  </ModalContent>*/}
       {/*</Modal>*/}
       <Box overflowY={'auto'} position={'fixed'} top={'60px'} left={0} right={0} bottom={0}>
-        {!isConnected && <Alert status={'error'}>
-          <AlertIcon />
-          {t('wallet.CONNECT_TO_CONTINUE')}
-        </Alert>}
-        {isConnected && chain?.id !== defaultChain.id && <Alert status={'warning'}>
-          <AlertIcon />
-          {t('wallet.CONNECTED_TO_DIFFERENT_CHAIN')}
-        </Alert>}
+        {!isConnected && (
+          <Alert status={'error'}>
+            <AlertIcon />
+            {t('wallet.CONNECT_TO_CONTINUE')}
+          </Alert>
+        )}
+        {isConnected && chain?.id !== defaultChain.id && (
+          <Alert status={'warning'}>
+            <AlertIcon />
+            {t('wallet.CONNECTED_TO_DIFFERENT_CHAIN')}
+          </Alert>
+        )}
         {children}
       </Box>
     </>
