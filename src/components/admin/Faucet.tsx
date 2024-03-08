@@ -1,6 +1,5 @@
 import useTranslation from 'next-translate/useTranslation';
 import {
-  Box,
   Button,
   Container,
   FormControl,
@@ -17,13 +16,7 @@ import {
 } from '@chakra-ui/react';
 import FaucetABI from '@/utils/abis/Faucet.json';
 import { BigNumber, BigNumberish } from 'ethers';
-import {
-  useAccount,
-  useReadContract,
-  useReadContracts,
-  useWriteContract,
-  useSimulateContract,
-} from 'wagmi';
+import { useAccount, useReadContracts, useWriteContract, useSimulateContract } from 'wagmi';
 import { formatUnits, parseUnits } from 'ethers/lib/utils';
 import { useState } from 'react';
 

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
 import { AnswerSheet } from '@/components/Answersheet';
-import { useAccount, useWriteContract, useSimulateContract } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { defaultChain } from '@/utils/contract';
 import { TQuestStorage } from '@/types';
 

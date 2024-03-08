@@ -45,14 +45,13 @@ const FaucetPage = () => {
     chainId: chain?.id,
   };
 
-  const { data, isLoading } = useReadContracts({
+  const { data } = useReadContracts({
     contracts: [
       { ...baseContract, functionName: 'lockDuration' },
       { ...baseContract, functionName: 'locked' },
       { ...baseContract, functionName: 'offering' },
     ],
   });
-  console.log('🚀 ~ FaucetPage ~ data:', data);
 
   const [lockDuration, locked, offering] = data
     ? data.map((d) => d.result)
