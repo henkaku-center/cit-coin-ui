@@ -52,7 +52,11 @@ const FaucetPage = () => {
       { ...baseContract, functionName: 'offering' },
     ],
   });
-  const [lockDuration, locked, offering] = data ?? [0, true, BigNumber.from(0)];
+  console.log('🚀 ~ FaucetPage ~ data:', data);
+
+  const [lockDuration, locked, offering] = data
+    ? data.map((d) => d.result)
+    : [0, true, BigNumber.from(0)];
 
   const faqs = [
     {
@@ -68,7 +72,7 @@ const FaucetPage = () => {
       question: 'How does it work?',
       answer: `You can request ${formatUnits((offering as BigNumberish) ?? '0', 18)}
       MATIC if the faucet is unlocked. The current unlock duration is
-      ${formatDuration(lockDuration as number)} after your successful request.`,
+      ${formatDuration(lockDuration as bigint)} after your successful request.`,
     },
   ];
 

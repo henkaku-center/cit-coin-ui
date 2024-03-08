@@ -24,7 +24,7 @@ import {
   useWriteContract,
   useSimulateContract,
 } from 'wagmi';
-import { formatUnits, parseEther, parseUnits } from 'ethers/lib/utils';
+import { formatUnits, parseUnits } from 'ethers/lib/utils';
 import { useState } from 'react';
 
 const faucetAddress = process.env.NEXT_PUBLIC_FAUCET_ADDRESS as `0x${string}`;
