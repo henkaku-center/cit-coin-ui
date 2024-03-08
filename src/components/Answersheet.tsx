@@ -6,7 +6,6 @@ import {
   Heading,
   HStack,
   Progress,
-  Spacer,
   Stack,
   Tab,
   TabList,
@@ -18,11 +17,11 @@ import {
 } from '@chakra-ui/react';
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, QuestionIcon } from '@chakra-ui/icons';
 import { MultipleChoiceMultipleSelect, MultipleChoiceSingleSelect } from '@/components/RadioCard';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { Quest, QuestWithAnswer } from '@/types';
 import { getContractAddress } from '@/utils/contract';
-import { useWriteContract, useSimulateContract } from 'wagmi';
+import { useWriteContract, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import { sheetActions } from '@/actions';
 import { useRouter } from 'next/router';
@@ -42,7 +41,6 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
   const toast = useToast();
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
   const router = useRouter();
-  const [txnLoading, setTxnLoading] = useState(false);
 
   const updateSheet = () => {
     sheetActions
@@ -69,50 +67,24 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
       });
   };
 
-  const {
-    config,
-    error: configError,
-    isIdle: isConfigIdle,
-  } = useSimulateContract({
+  const config = {
     address: LearnToEarnAddress,
     functionName: props.target == 'student' ? 'answerQuest' : 'setQuest',
     args: props.target == 'student' ? [answer] : [ans.length, answer],
     abi: LearnToEarnABI,
-    enabled: answered === 0 || answered === ans.length,
-  });
-  const { write: ContractWrite, isLoading: contractWriteLoading } = useWriteContract({
-    ...config,
-    onSuccess: (transaction) => {
-      setTxnLoading(true);
-      transaction
-        .wait()
-        .then((receipt) => {
-          if (props.target == 'admin') {
-            updateSheet();
-          } else {
-            toast({
-              status: 'success',
-              title: 'Answer successfully submitted',
-              position: 'top',
-              duration: 5000,
-              description: 'Your answer has been successfully submitted',
-            });
-            router.push('/');
-          }
-        })
-        .catch((err) => {
-          toast({
-            status: 'error',
-            title: 'Error Submitting Answer',
-            position: 'top',
-            duration: 5000,
-            description: 'Your answer has been successfully submitted',
-          });
-        })
-        .finally(() => {
-          setTxnLoading(false);
-        });
-    },
+  };
+
+  const { isError, error: configError } = useSimulateContract(config);
+  const {
+    data: hash,
+    writeContract,
+    isPending: contractWriteLoading,
+    isSuccess,
+    status,
+  } = useWriteContract();
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
   });
 
   const handleTabsChange = (index: number) => {
@@ -126,19 +98,36 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
       ...ans.slice(tabIndex + 1),
     ]);
   };
+
+  useEffect(() => {
+    if (isConfirmed) {
+      if (props.target == 'admin') {
+        updateSheet();
+      } else {
+        toast({
+          status: 'success',
+          title: 'Answer successfully submitted',
+          position: 'top',
+          duration: 5000,
+          description: 'Your answer has been successfully submitted',
+        });
+        router.push('/');
+      }
+    }
+  }, [isConfirmed]);
   return (
     <Box py={5}>
-      {configError && (
+      {isError && (
         <Alert status={'error'} my={5}>
           <AlertIcon />
-          {configError?.message?.includes('ERROR: ALREADY ANSWERED')
+          {configError?.message.includes('ERROR: ALREADY ANSWERED')
             ? t('quest.ALREADY_ANSWERED')
             : configError?.message?.includes('INVALID: YOU MUST BE A STUDENT TO CONTINUE')
-            ? t('quest.NO_PERMISSION')
-            : t('quest.UNKNOWN_ERROR')}
+              ? t('quest.NO_PERMISSION')
+              : t('quest.UNKNOWN_ERROR')}
         </Alert>
       )}
-      {txnLoading && (
+      {isConfirming && (
         <Alert status={'warning'} mb={5}>
           <AlertIcon />
           Please Wait, your transaction is being confirmed.
@@ -158,7 +147,7 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
             borderLeftRadius={'full'}
             width={{ base: '35%' }}
             colorScheme={'blue'}
-            isDisabled={tabIndex == 0 || !!configError || txnLoading}
+            isDisabled={tabIndex == 0 || isError || isConfirming}
             onClick={() => {
               setTabIndex(tabIndex - 1);
             }}
@@ -173,7 +162,7 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
             borderRightRadius={'full'}
             width={'35%'}
             colorScheme={'blue'}
-            isDisabled={tabIndex === ans.length - 1 || !!configError || txnLoading}
+            isDisabled={tabIndex === ans.length - 1 || !!isError || isConfirming}
             onClick={() => {
               setTabIndex(tabIndex + 1);
             }}
@@ -183,12 +172,12 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
         </HStack>
         {/*<Spacer />*/}
         <Button
-          isLoading={txnLoading || contractWriteLoading}
-          isDisabled={!ContractWrite || answered < props.quests.length || !!configError}
+          isLoading={isConfirming || contractWriteLoading}
+          isDisabled={answered < props.quests.length || !!isError}
           colorScheme={'red'}
           width={'10em'}
           onClick={() => {
-            ContractWrite?.();
+            writeContract?.(config);
           }}
         >
           {t('SUBMIT')}
@@ -203,11 +192,11 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
         value={answered}
         mb={5}
       />
-      {!configError && (
+      {!isError && (
         <Tabs orientation={'vertical'} index={tabIndex} onChange={handleTabsChange}>
           <TabList width={200} minWidth={200} display={{ base: 'none', md: 'block' }}>
             {ans.map((_, idx) => (
-              <Tab key={`q_tab_${idx}`} justifyContent={'flex-start'} isDisabled={txnLoading}>
+              <Tab key={`q_tab_${idx}`} justifyContent={'flex-start'} isDisabled={isConfirming}>
                 {(ans[idx].answer ?? 0) > 0 ? (
                   <CheckCircleIcon mx={4} color={'blue.500'} />
                 ) : (
