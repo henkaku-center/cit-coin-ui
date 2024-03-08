@@ -72,7 +72,7 @@ const FaucetPage = () => {
       question: 'How does it work?',
       answer: `You can request ${formatUnits((offering as BigNumberish) ?? '0', 18)}
       MATIC if the faucet is unlocked. The current unlock duration is
-      ${formatDuration(lockDuration as bigint)} after your successful request.`,
+      ${formatDuration(Number(lockDuration))} after your successful request.`,
     },
   ];
 
@@ -195,7 +195,7 @@ const FaucetPage = () => {
         <HStack my={5}>
           <Text minWidth={'120px'}>{t('faucet.LOCK_DURATION')}:</Text>
           <Badge colorScheme={'red'} borderRadius={'full'} px={5} py={1}>
-            {formatDuration(lockDuration as number, 'en')}
+            {formatDuration(Number(lockDuration), 'en')}
           </Badge>
         </HStack>
         <HStack my={5}>

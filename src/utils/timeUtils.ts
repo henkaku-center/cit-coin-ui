@@ -1,11 +1,11 @@
-export const formatDuration = (seconds: bigint, lang = 'en') => {
+export const formatDuration = (seconds: number, lang = 'en') => {
   const units = {
     en: ['second', 'minute', 'hour', 'day'],
     ja: ['秒', '分', '時間', '日'],
   };
-  let days = Math.floor(Number(seconds) / 86400);
-  let hours = Math.floor((Number(seconds) / 3600) % 24);
-  let minutes = Math.floor((Number(seconds) / 60) % 60);
+  let days = Math.floor(seconds / 86400);
+  let hours = Math.floor((seconds / 3600) % 24);
+  let minutes = Math.floor((seconds / 60) % 60);
 
   let parts = [];
   if (days > 0) {
