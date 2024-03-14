@@ -13,11 +13,7 @@ const cjpy = new ethers.Contract(cjpyAddress, cjpyAbi, citSigner);
 // const nft = new ethers.Contract(nftAddress, nftAbi, citSigner);
 import axios from 'axios';
 
-export default async function NFTHandler(
-  req: NextApiRequest,
-  resp: NextApiResponse) {
-
-
+export default async function NFTHandler(req: NextApiRequest, resp: NextApiResponse) {
   if (req.method == 'GET') {
     return resp.status(200).json({
       results: NftLevels,
@@ -32,15 +28,13 @@ export default async function NFTHandler(
     if (!address) {
       return resp.status(400).json({ address: 'This field is required' });
     }
-    if (!(isAddress(address))) {
+    if (!isAddress(address)) {
       return resp.status(400).json({ address: 'Invalid address is supplied' });
     }
 
     // Check if user has already earned an NFT
 
-
     const balance = parseInt(formatEther(await cjpy.balanceOf(address)));
-
 
     if (balance < 10000) {
       return resp.status(400).json({
@@ -49,18 +43,22 @@ export default async function NFTHandler(
       });
     }
 
-    axios.post(`${process.env.HENKAKU_API_BASE_URL}/ipfs/cit`, {
-      address: address, points: balance,
-    }).then((response) => {
-      axios.get(response.data.tokenUri).then(tokenResp => {
-        return resp.status(200).json({
-          tokenUri: response.data.tokenUri,
-          nft: tokenResp.data
+    axios
+      .post(`${process.env.HENKAKU_API_BASE_URL}/ipfs/cit`, {
+        address: address,
+        points: balance,
+      })
+      .then((response) => {
+        axios.get(response.data.tokenUri).then((tokenResp) => {
+          return resp.status(200).json({
+            tokenUri: response.data.tokenUri,
+            nft: tokenResp.data,
+          });
         });
+      })
+      .catch((error) => {
+        return resp.status(500).json(error);
       });
-    }).catch((error) => {
-      return resp.status(500).json(error);
-    });
 
     /**
      * This part is commented out since we use Henkaku API to pin images to pinata
@@ -70,7 +68,6 @@ export default async function NFTHandler(
     // }).catch((err) => {
     //   return resp.status(500).json(err);
     // });
-
   } else {
     return resp.status(405);
   }

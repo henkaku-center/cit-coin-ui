@@ -67,7 +67,7 @@ export const AssetLibrary = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { t } = useTranslation('common');
   const [loading, setLoading] = useState(false);
-  const { address, connector, isConnected, chain } = useAccount();
+  const { address, chain } = useAccount();
   const [pinResp, setPinResp] = useState<NftPinResponse | undefined>(undefined);
   const toast = useToast();
   const { contractAddress: citCoinAddress, abi: citCoinAbi } = UseContractConfig('CitCoin');
@@ -83,8 +83,7 @@ export const AssetLibrary = () => {
   const { data: allowance } = useReadContract({
     ...citCoinConfig,
     functionName: 'allowance',
-    args: [address, citNFTAddress],
-    watch: true,
+    args: [address || '0x00', citNFTAddress],
   });
 
   const { data: isNftLocked } = useReadContract({
@@ -94,30 +93,27 @@ export const AssetLibrary = () => {
     address: citNFTAddress,
   });
 
-  const { config: ApproveConfig, isError: contractConfigError } = useSimulateContract({
+  const { isError: approveConfigError } = useSimulateContract({
     ...citCoinConfig,
     functionName: 'approve',
     args: [citNFTAddress, balance?.value ?? '0'],
   });
-  const {
-    write: approve,
-    isLoading: contractWriteLoading,
-    isError: contractWriteError,
-  } = useWriteContract(ApproveConfig);
 
-  const { config: mintNFTConfig, isError: isMintConfigError } = useSimulateContract({
+  const {
+    writeContract: approve,
+    isError: contractWriteError,
+    isPending: contractWriteLoading,
+  } = useWriteContract();
+
+  const { isError: isMintConfigError } = useSimulateContract({
     address: citNFTAddress,
     abi: citNFTAbi,
     chainId: chain?.id,
     functionName: 'mint',
-    args: [pinResp?.tokenUri],
+    args: [pinResp?.tokenUri ?? ''],
   });
 
-  const {
-    write: mintNFT,
-    isLoading: isMinting,
-    isError: isMintError,
-  } = useWriteContract(mintNFTConfig);
+  const { writeContract: mintNFT, isPending: isMinting } = useWriteContract();
 
   //@ts-ignore
   const formattedAllowance = parseFloat(formatUnits(allowance ?? '0', 18));
@@ -144,7 +140,7 @@ export const AssetLibrary = () => {
             <AssetCard key={index} asset={asset} />
           ))}
         </HStack>
-        {isNftLocked && (
+        {(isNftLocked as boolean) && (
           <Alert variant={'subtle'} status={'error'}>
             The NFT is currently Locked, please try again later to claim yours!!
           </Alert>
@@ -164,19 +160,21 @@ export const AssetLibrary = () => {
               </Badge>
             </Text>
             {formattedBalance > 0 && formattedAllowance < formattedBalance && (
-              <>
-                <Button
-                  colorScheme={'red'}
-                  onClick={() => {
-                    approve?.();
-                  }}
-                  isLoading={contractWriteLoading}
-                  m={3}
-                  w={'full'}
-                >
-                  Allow Spending {formattedBalance} {balance?.symbol} to get NFT
-                </Button>
-              </>
+              <Button
+                colorScheme={'red'}
+                onClick={() => {
+                  approve?.({
+                    ...citCoinConfig,
+                    functionName: 'approve',
+                    args: [citNFTAddress, balance?.value ?? '0'],
+                  });
+                }}
+                isLoading={contractWriteLoading}
+                m={3}
+                w={'full'}
+              >
+                Allow Spending {formattedBalance} {balance?.symbol} to get NFT
+              </Button>
             )}
             {/*@ts-ignore*/}
             {formattedBalance > 0 &&
@@ -185,7 +183,7 @@ export const AssetLibrary = () => {
                 <Button
                   colorScheme={'green'}
                   w={'full'}
-                  isDisabled={!address || contractConfigError}
+                  isDisabled={!address || approveConfigError}
                   isLoading={loading}
                   onClick={(event) => {
                     setLoading(true);
@@ -248,7 +246,13 @@ export const AssetLibrary = () => {
                     isLoading={isMinting}
                     colorScheme={'orange'}
                     onClick={() => {
-                      mintNFT?.();
+                      mintNFT?.({
+                        address: citNFTAddress,
+                        abi: citNFTAbi,
+                        chainId: chain?.id,
+                        functionName: 'mint',
+                        args: [pinResp?.tokenUri ?? ''],
+                      });
                     }}
                   >
                     Claim This NFT

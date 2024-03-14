@@ -11,7 +11,6 @@ import {
   StatLabel,
   StatNumber,
   Text,
-  useToast,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useAccount } from 'wagmi';
@@ -20,9 +19,7 @@ import { useTokenBalance } from '@/hooks/useTokenBalance';
 
 export const ContractDetail = () => {
   const { t } = useTranslation('common');
-  const { address, connector, isConnected } = useAccount();
-
-  const { chain } = useAccount();
+  const { address, isConnected, chain } = useAccount();
 
   const citCoinAddress = getContractAddress('CitCoin');
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
