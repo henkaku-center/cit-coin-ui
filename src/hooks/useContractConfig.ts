@@ -1,4 +1,3 @@
-import { useNetwork } from 'wagmi';
 import { getContractAddress } from '@/utils/contract';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import CitNFTABI from '@/utils/abis/CitNFT.json';
