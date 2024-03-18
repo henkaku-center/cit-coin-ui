@@ -37,7 +37,7 @@ next-env.d.ts
 
 # IDE files
 .idea
-.vscode
+# .vscode
 .fleet
 
 .env
