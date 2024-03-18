@@ -1,13 +1,17 @@
 import {
-  Alert, Flex,
-  Heading, Icon, Spinner,
+  Alert,
+  Flex,
+  Heading,
+  Icon,
+  Spinner,
   Tab,
-  TabList, TabPanel,
+  TabList,
+  TabPanel,
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useAccount, useContractReads, useNetwork } from 'wagmi';
+import { useAccount, useReadContract } from 'wagmi';
 import { QuestionManager, Settings } from '@/components/admin';
 import { defaultChain, getContractAddress } from '@/utils/contract';
 import { FaFile, FaUsers, FaChartBar } from 'react-icons/fa';
@@ -18,8 +22,7 @@ import { FaucetSettings } from '@/components/admin/Faucet';
 
 const Admin = () => {
   const { t } = useTranslation('admin');
-  const { address, connector, isConnected } = useAccount();
-  const { chain } = useNetwork();
+  const { chain, isConnected, address } = useAccount();
 
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
 
@@ -29,28 +32,22 @@ const Admin = () => {
     chainId: chain?.id,
   };
 
-  const {
-    data: adminAddresses,
-    isError: contractReadError,
-    isLoading,
-  } = useContractReads({
-    contracts: Object.entries(
-      {
-        'owner': [],
-        'isAdmin': [address],
-      }).map(
-      ([k, v], index) => {
-        // let args = v.length ? { args: v } : {};
-        return {
-          ...
-            LearnContract,
-          functionName: k,
-          args: v,
-        };
-      }),
+  const { data: ownerAddress, isLoading: ownerLoading } = useReadContract({
+    abi: LearnContract.abi,
+    address: LearnContract.address,
+    functionName: 'owner',
+    account: address,
   });
-  const hasPermissions = adminAddresses?.includes(address) || adminAddresses?.includes(true);
-  // console.log('adminAddresses: ', adminAddresses);
+
+  const { data: isAdmin, isLoading: AdminLoading } = useReadContract({
+    abi: LearnContract.abi,
+    address: LearnContract.address,
+    functionName: 'isAdmin',
+    args: [address],
+    account: address,
+  });
+
+  const hasPermissions = isAdmin || ownerAddress == address;
 
   const adminComponents = [
     {
@@ -80,33 +77,47 @@ const Admin = () => {
     },
   ];
 
-
   return (
     <>
-      {isLoading && <Flex alignItems={'center'} justifyContent={'center'}>
-        <Spinner />
-      </Flex>}
-      {!hasPermissions && (<Alert variant={'subtle'} status={'error'}>
-        {t('NO_PERMISSION')}
-      </Alert>)}
-      {isConnected && chain?.id === defaultChain.id && hasPermissions &&
+      {(ownerLoading || AdminLoading) && (
+        <Flex alignItems={'center'} justifyContent={'center'}>
+          <Spinner />
+        </Flex>
+      )}
+      {!hasPermissions && (
+        <Alert variant={'subtle'} status={'error'}>
+          {t('NO_PERMISSION')}
+        </Alert>
+      )}
+      {isConnected && chain?.id === defaultChain.id && hasPermissions && (
         <Tabs
-          isLazy={true} orientation={'vertical'} variant={'unstyled'} colorScheme={'blue'} height={'100%'}
+          isLazy={true}
+          orientation={'vertical'}
+          variant={'unstyled'}
+          colorScheme={'blue'}
+          height={'100%'}
         >
           <TabList width={250} minWidth={250} bg={'#abf2'}>
             {adminComponents.map(({ title, icon }, idx) => (
-              <Tab fontSize={'md'} key={idx} justifyContent={'flex-start'}
-                   _selected={{ color: 'blue.500', fontWeight: 'bold' }}>
+              <Tab
+                fontSize={'md'}
+                key={idx}
+                justifyContent={'flex-start'}
+                _selected={{ color: 'blue.500', fontWeight: 'bold' }}
+              >
                 <Icon as={icon} mr={3} boxSize={5} />
                 {title}
-              </Tab>))}
+              </Tab>
+            ))}
           </TabList>
           <TabPanels overflowY={'auto'}>
-            {adminComponents.map(({ component }, idx) => <TabPanel key={idx}>{component}</TabPanel>)}
+            {adminComponents.map(({ component }, idx) => (
+              <TabPanel key={idx}>{component}</TabPanel>
+            ))}
           </TabPanels>
-        </Tabs>}
+        </Tabs>
+      )}
     </>
-
   );
 };
 export default Admin;

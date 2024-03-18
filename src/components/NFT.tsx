@@ -1,5 +1,6 @@
 import {
-  Alert, Badge,
+  Alert,
+  Badge,
   Box,
   Button,
   Heading,
@@ -14,14 +15,18 @@ import {
   ModalHeader,
   ModalOverlay,
   Spacer,
-  Stack, Text,
-  useDisclosure, useToast,
-  VStack, Wrap, WrapItem,
+  Stack,
+  Text,
+  useDisclosure,
+  useToast,
+  VStack,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
-import { useAccount, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
+import { useAccount, useReadContract, useWriteContract, useSimulateContract } from 'wagmi';
 import { NftPinResponse } from '@/types/pinata.types';
 import { UseContractConfig } from '@/hooks';
 import { useTokenBalance } from '@/hooks/useTokenBalance';
@@ -39,9 +44,12 @@ const AssetCard = (props: { asset: Asset }) => {
   return (
     <Box position={'relative'}>
       <Box
-        bg={'orange.400'} color={'white'}
+        bg={'orange.400'}
+        color={'white'}
         position={'absolute'}
-        top={5} right={0} px={1}
+        top={5}
+        right={0}
+        px={1}
         borderLeftRadius={'full'}
         textAlign={'right'}
         fontSize={'xs'}
@@ -54,14 +62,12 @@ const AssetCard = (props: { asset: Asset }) => {
   );
 };
 
-
 export const AssetLibrary = () => {
-  const { chain } = useNetwork();
   const [assets, setAssets] = useState<Asset[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { t } = useTranslation('common');
   const [loading, setLoading] = useState(false);
-  const { address, connector, isConnected } = useAccount();
+  const { address, chain } = useAccount();
   const [pinResp, setPinResp] = useState<NftPinResponse | undefined>(undefined);
   const toast = useToast();
   const { contractAddress: citCoinAddress, abi: citCoinAbi } = UseContractConfig('CitCoin');
@@ -74,48 +80,40 @@ export const AssetLibrary = () => {
     chainId: chain?.id,
   };
 
-  const { data: allowance } = useContractRead({
+  const { data: allowance } = useReadContract({
     ...citCoinConfig,
     functionName: 'allowance',
-    args: [address, citNFTAddress],
-    watch: true
+    args: [address || '0x00', citNFTAddress],
   });
 
-  const { data: isNftLocked } = useContractRead({
+  const { data: isNftLocked } = useReadContract({
     abi: citNFTAbi,
     chainId: chain?.id,
     functionName: 'locked',
     address: citNFTAddress,
   });
 
-  const { config: ApproveConfig, isError: contractConfigError } = usePrepareContractWrite({
+  const { isError: approveConfigError } = useSimulateContract({
     ...citCoinConfig,
     functionName: 'approve',
     args: [citNFTAddress, balance?.value ?? '0'],
   });
+
   const {
-    write: approve,
-    isLoading: contractWriteLoading,
+    writeContract: approve,
     isError: contractWriteError,
-  } = useContractWrite(ApproveConfig);
+    isPending: contractWriteLoading,
+  } = useWriteContract();
 
-
-  const {
-    config: mintNFTConfig,
-    isError: isMintConfigError,
-  } = usePrepareContractWrite({
+  const { isError: isMintConfigError } = useSimulateContract({
     address: citNFTAddress,
     abi: citNFTAbi,
     chainId: chain?.id,
     functionName: 'mint',
-    args: [pinResp?.tokenUri],
+    args: [pinResp?.tokenUri ?? ''],
   });
 
-  const {
-    write: mintNFT,
-    isLoading: isMinting,
-    isError: isMintError,
-  } = useContractWrite(mintNFTConfig);
+  const { writeContract: mintNFT, isPending: isMinting } = useWriteContract();
 
   //@ts-ignore
   const formattedAllowance = parseFloat(formatUnits(allowance ?? '0', 18));
@@ -142,54 +140,82 @@ export const AssetLibrary = () => {
             <AssetCard key={index} asset={asset} />
           ))}
         </HStack>
-        {isNftLocked && <Alert variant={'subtle'} status={'error'}>
-          The NFT is currently Locked, please try again later to claim yours!!
-        </Alert>}
-        {!isNftLocked && <Box py={5} px={3} textAlign={'center'}>
-          <Text>{t('nft.CURRENT_ALLOWANCE')}: <Badge colorScheme={'green'} px={2}
-                                          borderRadius={'full'}>{formattedAllowance} cJPY</Badge></Text>
-          <Text>{t('nft.CURRENT_BALANCE')}: <Badge colorScheme={'green'} px={2}
-                                        borderRadius={'full'}>{formattedBalance} cJPY</Badge></Text>
-          {formattedBalance > 0 && (formattedAllowance < formattedBalance) && <>
-            <Button
-              colorScheme={'red'}
-              onClick={() => {
-                approve?.();
-              }}
-              isLoading={contractWriteLoading}
-              m={3}
-              w={'full'}
-            >
-              Allow Spending {formattedBalance} {balance?.symbol} to get NFT
-            </Button>
-          </>
-          }
-          {/*@ts-ignore*/}
-          {formattedBalance > 0 && formattedAllowance > 0 && formattedAllowance >= formattedBalance && <Button
-            colorScheme={'green'} w={'full'}
-            isDisabled={!address || contractConfigError}
-            isLoading={loading}
-            onClick={(event) => {
-              setLoading(true);
-              axios.post('/api/nft', {
-                address: address,
-              }).then((resp) => {
-                setPinResp(resp.data);
-                onOpen();
-              }).catch((err) => {
-                toast({
-                  status: 'error',
-                  position: 'top',
-                  isClosable: true,
-                  title: err.response.data.code ?? 'Error completing request',
-                  description: err.response.data.message ?? 'We\'re unable to process your request, please try again later.',
-                });
-              }).finally(() => {
-                setLoading(false);
-              });
-            }}>Render Generated Graphics</Button>}
-        </Box>}
-
+        {(isNftLocked as boolean) && (
+          <Alert variant={'subtle'} status={'error'}>
+            The NFT is currently Locked, please try again later to claim yours!!
+          </Alert>
+        )}
+        {!isNftLocked && (
+          <Box py={5} px={3} textAlign={'center'}>
+            <Text>
+              {t('nft.CURRENT_ALLOWANCE')}:{' '}
+              <Badge colorScheme={'green'} px={2} borderRadius={'full'}>
+                {formattedAllowance} cJPY
+              </Badge>
+            </Text>
+            <Text>
+              {t('nft.CURRENT_BALANCE')}:{' '}
+              <Badge colorScheme={'green'} px={2} borderRadius={'full'}>
+                {formattedBalance} cJPY
+              </Badge>
+            </Text>
+            {formattedBalance > 0 && formattedAllowance < formattedBalance && (
+              <Button
+                colorScheme={'red'}
+                onClick={() => {
+                  approve?.({
+                    ...citCoinConfig,
+                    functionName: 'approve',
+                    args: [citNFTAddress, balance?.value ?? '0'],
+                  });
+                }}
+                isLoading={contractWriteLoading}
+                m={3}
+                w={'full'}
+              >
+                Allow Spending {formattedBalance} {balance?.symbol} to get NFT
+              </Button>
+            )}
+            {/*@ts-ignore*/}
+            {formattedBalance > 0 &&
+              formattedAllowance > 0 &&
+              formattedAllowance >= formattedBalance && (
+                <Button
+                  colorScheme={'green'}
+                  w={'full'}
+                  isDisabled={!address || approveConfigError}
+                  isLoading={loading}
+                  onClick={(event) => {
+                    setLoading(true);
+                    axios
+                      .post('/api/nft', {
+                        address: address,
+                      })
+                      .then((resp) => {
+                        setPinResp(resp.data);
+                        onOpen();
+                      })
+                      .catch((err) => {
+                        toast({
+                          status: 'error',
+                          position: 'top',
+                          isClosable: true,
+                          title: err.response.data.code ?? 'Error completing request',
+                          description:
+                            err.response.data.message ??
+                            "We're unable to process your request, please try again later.",
+                        });
+                      })
+                      .finally(() => {
+                        setLoading(false);
+                      });
+                  }}
+                >
+                  Render Generated Graphics
+                </Button>
+              )}
+          </Box>
+        )}
       </VStack>
       <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
         <ModalOverlay />
@@ -207,7 +233,8 @@ export const AssetLibrary = () => {
                     target={'_blank'}
                     href={pinResp?.nft.image}
                     // href={`https://gateway.pinata.cloud/ipfs/${pinResp?.IpfsHash}`}
-                    color={'orange'}>
+                    color={'orange'}
+                  >
                     {pinResp?.nft.image}
                     {/*{pinResp?.IpfsHash}*/}
                   </Box>
@@ -219,7 +246,13 @@ export const AssetLibrary = () => {
                     isLoading={isMinting}
                     colorScheme={'orange'}
                     onClick={() => {
-                      mintNFT?.();
+                      mintNFT?.({
+                        address: citNFTAddress,
+                        abi: citNFTAbi,
+                        chainId: chain?.id,
+                        functionName: 'mint',
+                        args: [pinResp?.tokenUri ?? ''],
+                      });
                     }}
                   >
                     Claim This NFT
@@ -227,15 +260,22 @@ export const AssetLibrary = () => {
                 </Stack>
               </WrapItem>
               <WrapItem
-                as={Link} width={{ base: 'full', lg: '48%' }}
+                as={Link}
+                width={{ base: 'full', lg: '48%' }}
                 href={`https://gateway.pinata.cloud/ipfs/${pinResp?.nft.image}`}
-                target={'_blank'} justifyContent={{ base: 'center', lg: 'end' }}
+                target={'_blank'}
+                justifyContent={{ base: 'center', lg: 'end' }}
               >
-                {pinResp && <Image
-                  src={pinResp?.nft.image}
-                  alt={pinResp?.nft.name} minW={200} width={300} height={300}
-                  objectFit={'contain'}
-                />}
+                {pinResp && (
+                  <Image
+                    src={pinResp?.nft.image}
+                    alt={pinResp?.nft.name}
+                    minW={200}
+                    width={300}
+                    height={300}
+                    objectFit={'contain'}
+                  />
+                )}
               </WrapItem>
             </Wrap>
           </ModalBody>

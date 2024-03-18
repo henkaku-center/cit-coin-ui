@@ -5,11 +5,7 @@ interface Data {
   sheets: string[];
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>,
-) {
-
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   /**
    * {
    *   "sheets": [

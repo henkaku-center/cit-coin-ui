@@ -1,9 +1,8 @@
-import { useAccount, useBalance, useNetwork } from 'wagmi';
+import { useBalance } from 'wagmi';
 
-import { UseContractConfig } from '@/hooks/useContractConfig';
 import { useToast } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { getContractAddress } from '@/utils/contract';
+import { useEffect } from 'react';
 
 interface useTokenBalanceData {
   address?: `0x${string}`;
@@ -15,17 +14,20 @@ export const useTokenBalance = (data: useTokenBalanceData) => {
   const toast = useToast();
   const { t } = useTranslation('default');
 
-  const { data: balanceData } = useBalance({
+  const { data: balanceData, status } = useBalance({
     address: data.address,
     token: data.tokenAddress,
-    watch: data.watch ?? false,
-    onError: () => {
+  });
+
+  useEffect(() => {
+    if (status == 'error') {
       toast({
         title: t('wallet.COULD_NOT_GET_BALANCE'),
         position: 'top',
         status: 'error',
       });
-    },
-  });
+    }
+  }, [status, t, toast]);
+
   return balanceData;
 };

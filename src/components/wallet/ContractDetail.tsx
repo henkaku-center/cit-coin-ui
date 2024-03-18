@@ -1,25 +1,25 @@
 import {
   Card,
   CardBody,
-  CardHeader, Code, Flex, Link,
+  CardHeader,
+  Code,
+  Flex,
+  Link,
   Stack,
   Stat,
   StatHelpText,
   StatLabel,
   StatNumber,
   Text,
-  useToast,
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { defaultChain, getContractAddress } from '@/utils/contract';
 import { useTokenBalance } from '@/hooks/useTokenBalance';
 
 export const ContractDetail = () => {
   const { t } = useTranslation('common');
-  const { address, connector, isConnected } = useAccount();
-
-  const { chain } = useNetwork();
+  const { address, isConnected, chain } = useAccount();
 
   const citCoinAddress = getContractAddress('CitCoin');
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
@@ -37,7 +37,9 @@ export const ContractDetail = () => {
         <CardBody>
           <Stack>
             <Stat p={2} borderRadius={'1em'} border={'solid 2px'} mb={4}>
-              <StatLabel>{t('wallet.BALANCE')} - {citCoinBalance?.symbol}</StatLabel>
+              <StatLabel>
+                {t('wallet.BALANCE')} - {citCoinBalance?.symbol}
+              </StatLabel>
               <StatNumber fontSize={'lg'}>
                 <Text as={'span'} color={'orange'} mr={2}>
                   {citCoinBalance?.formatted}
@@ -54,10 +56,19 @@ export const ContractDetail = () => {
                 { label: 'NFT', value: NFTAddress, color: 'blue' },
               ].map(({ label, value, color }, index) => (
                 <Flex flexWrap={'wrap'} key={index}>
-                  <Text fontSize={'sm'} minW={'180px'}>{label}</Text>
+                  <Text fontSize={'sm'} minW={'180px'}>
+                    {label}
+                  </Text>
                   <Code
-                    as={Link} px={3} py={1} variant={'outline'} colorScheme={color} borderRadius={'lg'}
-                    href={`https://${process.env.NODE_ENV ?? 'dev' === 'dev' ? 'mumbai.' : ''}polygonscan.com/address/${value}`}
+                    as={Link}
+                    px={3}
+                    py={1}
+                    variant={'outline'}
+                    colorScheme={color}
+                    borderRadius={'lg'}
+                    href={`https://${
+                      process.env.NODE_ENV ?? 'dev' === 'dev' ? 'mumbai.' : ''
+                    }polygonscan.com/address/${value}`}
                     target={'_blank'}
                   >
                     {value}

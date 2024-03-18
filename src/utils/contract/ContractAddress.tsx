@@ -4,7 +4,8 @@ interface ContractAddress {
   [name: string]: `0x${string}`;
 }
 
-export const defaultChain = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? polygon : polygonMumbai;
+export const defaultChain =
+  process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? polygon : polygonMumbai;
 
 // export const defaultChainID = polygonMumbai;
 

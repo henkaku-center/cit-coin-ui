@@ -1,7 +1,4 @@
-import {
-  Box, Center, HStack,
-  Stack, Wrap, WrapItem,
-} from '@chakra-ui/react';
+import { Wrap, WrapItem } from '@chakra-ui/react';
 import { ContractDetail } from '@/components/wallet';
 import Footer from '@/components/Footer';
 import { AssetLibrary } from '@/components/NFT';
