@@ -66,9 +66,10 @@ export const ContractDetail = () => {
                     variant={'outline'}
                     colorScheme={color}
                     borderRadius={'lg'}
-                    href={`https://${
-                      process.env.NODE_ENV ?? 'dev' === 'dev' ? 'mumbai.' : ''
-                    }polygonscan.com/address/${value}`}
+                    // href={`https://${
+                    //   process.env.NODE_ENV ?? 'dev' === 'dev' ? 'mumbai.' : ''
+                    // }polygonscan.com/address/${value}`}
+                    href={`https://polygonscan.com/address/${value}`}
                     target={'_blank'}
                   >
                     {value}
