@@ -30,7 +30,7 @@ export function sendMatic(recipient: string) {
         resolve(tx);
       })
       .catch((error: any) => {
-        console.log(error);
+        console.log(JSON.stringify({ error }));
         reject(error);
       });
   });
