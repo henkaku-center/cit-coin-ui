@@ -147,7 +147,12 @@ const FaucetPage = () => {
                       setTxn(resp.data.data.transaction.hash);
                     })
                     .catch((err: ApiError) => {
-                      console.error(err);
+                      const errorInfo = {
+                        errorCode: err.code,
+                        message: err.message,
+                        data: err.data
+                      };
+                      console.error(JSON.stringify(errorInfo));
                       toast({
                         position: 'top',
                         status: 'error',
