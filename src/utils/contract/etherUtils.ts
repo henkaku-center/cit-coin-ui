@@ -5,10 +5,14 @@ import faucetAbi from '@/utils/abis/Faucet.json';
 import { parseEther } from 'ethers/lib/utils';
 
 const faucetAddress = process.env.NEXT_PUBLIC_FAUCET_ADDRESS as `0x{string}`;
+/**
+ * Currently running RPC URLS:
+ * - https://polygon.llamarpc.com
+ * - https://polygon.drpc.org
+ * - https://polygon-mainnet.infura.io
+ */
 const rpcUrl =
-  defaultChain === polygon
-    ? 'https://rpc-mainnet.maticvigil.com'
-    : 'https://rpc-mumbai.maticvigil.com';
+  defaultChain === polygon ? 'https://polygon.drpc.org' : ' https://rpc-amoy.polygon.technology';
 
 const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
 export const citSigner = new ethers.Wallet(

@@ -150,7 +150,7 @@ const FaucetPage = () => {
                       const errorInfo = {
                         errorCode: err.code,
                         message: err.message,
-                        data: err.data
+                        data: err.data,
                       };
                       console.error(JSON.stringify(errorInfo));
                       toast({
@@ -182,7 +182,7 @@ const FaucetPage = () => {
                 </Text>
                 <Link
                   href={`https://${
-                    process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? '' : 'mumbai.'
+                    process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? '' : 'amoy.'
                   }polygonscan.com/tx/${txn}`}
                   isExternal={true}
                   textDecoration={'underline 1px'}
