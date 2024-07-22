@@ -1,13 +1,11 @@
-import { polygon, polygonMumbai } from 'wagmi/chains';
+import { polygon, polygonAmoy } from 'wagmi/chains';
 
 interface ContractAddress {
   [name: string]: `0x${string}`;
 }
 
 export const defaultChain =
-  process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? polygon : polygonMumbai;
-
-// export const defaultChainID = polygonMumbai;
+  process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? polygon : polygonAmoy;
 
 interface getContractAddressArg {
   name: keyof ContractAddress;
