@@ -196,6 +196,12 @@ export const AssetLibrary = () => {
                         onOpen();
                       })
                       .catch((err) => {
+                        const errorInfo = {
+                          errorCode: err.code,
+                          message: err.message,
+                          data: err.data,
+                        };
+                        console.error(JSON.stringify(errorInfo));
                         toast({
                           status: 'error',
                           position: 'top',
