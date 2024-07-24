@@ -105,7 +105,7 @@ export const AssetLibrary = () => {
     isPending: contractWriteLoading,
   } = useWriteContract();
 
-  const { isError: isMintConfigError } = useSimulateContract({
+  const { isError: isMintConfigError, error: mintConfigError } = useSimulateContract({
     address: citNFTAddress,
     abi: citNFTAbi,
     chainId: chain?.id,
@@ -125,6 +125,11 @@ export const AssetLibrary = () => {
       setAssets(resp.data.results);
     });
   }, []);
+
+  if(mintConfigError) {
+    console.log('mintが失敗する原因の調査')
+    console.log(`name: ${mintConfigError.name}. message: ${mintConfigError.message}`)
+  }
 
   return (
     <>
