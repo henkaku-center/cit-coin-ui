@@ -75,13 +75,21 @@ export const AnswerSheet = (props: AnswerSheetInterface) => {
   };
 
   const { isError, error: configError } = useSimulateContract(config);
+  if(isError) {
+    console.log(`シミュレーションでエラーになりました。: ${configError.message}`)
+  }
   const {
     data: hash,
     writeContract,
     isPending: contractWriteLoading,
     isSuccess,
     status,
+    isError: isContractWriteError,
+    error: contractWriteError
   } = useWriteContract();
+  if (isContractWriteError) {
+    console.log(`クイズ回答や設定時にエラーになりました。: ${contractWriteError?.message}`)
+  }
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
