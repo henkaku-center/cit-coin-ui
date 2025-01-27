@@ -21,10 +21,10 @@ export const ContractDetail = () => {
   const { t } = useTranslation('common');
   const { address, isConnected, chain } = useAccount();
 
-  const citCoinAddress = getContractAddress('CitCoin');
+  const cJPYAddress = getContractAddress('cJPY');
   const LearnToEarnAddress = getContractAddress('LearnToEarn');
   const NFTAddress = getContractAddress('NFT');
-  const citCoinBalance = useTokenBalance({ address, tokenAddress: citCoinAddress, watch: true });
+  const cJPYBalance = useTokenBalance({ address, tokenAddress: cJPYAddress, watch: true });
   return (
     <Card variant={'filled'} width={'full'}>
       <CardHeader>
@@ -38,19 +38,19 @@ export const ContractDetail = () => {
           <Stack>
             <Stat p={2} borderRadius={'1em'} border={'solid 2px'} mb={4}>
               <StatLabel>
-                {t('wallet.BALANCE')} - {citCoinBalance?.symbol}
+                {t('wallet.BALANCE')} - {cJPYBalance?.symbol}
               </StatLabel>
               <StatNumber fontSize={'lg'}>
                 <Text as={'span'} color={'orange'} mr={2}>
-                  {citCoinBalance?.formatted}
+                  {cJPYBalance?.formatted}
                 </Text>
-                {citCoinBalance?.symbol}
+                {cJPYBalance?.symbol}
               </StatNumber>
               <StatHelpText>as of {new Date().toLocaleString()}</StatHelpText>
             </Stat>
             <Stack spacing={3} py={5}>
               {[
-                { label: 'cJPY', value: citCoinAddress, color: 'red' },
+                { label: 'cJPY', value: cJPYAddress, color: 'red' },
                 { label: t('wallet.CONTRACT_ADDRESS'), value: LearnToEarnAddress, color: 'green' },
                 { label: t('wallet.ADDRESS'), value: address, color: 'blue' },
                 { label: 'NFT', value: NFTAddress, color: 'blue' },

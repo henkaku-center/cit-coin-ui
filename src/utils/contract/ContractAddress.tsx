@@ -13,7 +13,7 @@ interface getContractAddressArg {
 }
 
 const contractAddress: ContractAddress = {
-  CitCoin: process.env.NEXT_PUBLIC_CIT_COIN_ADDRESS as `0x${string}`,
+  CJPY: process.env.NEXT_PUBLIC_CJPY_ADDRESS as `0x${string}`,
   LearnToEarn: process.env.NEXT_PUBLIC_LEARN_TO_EARN_ADDRESS as `0x${string}`,
   NFT: process.env.NEXT_PUBLIC_NFT_ADDRESS as `0x${string}`,
 };
