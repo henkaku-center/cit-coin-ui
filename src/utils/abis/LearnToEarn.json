@@ -2,8 +2,13 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_citCoin",
+        "internalType": "contract IRegistry",
+        "name": "registry",
+        "type": "address"
+      },
+      {
+        "internalType": "contract CJPY",
+        "name": "_cJpy",
         "type": "address"
       },
       {
@@ -19,7 +24,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "_by",
         "type": "address"
@@ -32,25 +37,6 @@
       }
     ],
     "name": "CheckedAnswer",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_by",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "ClaimedToken",
     "type": "event"
   },
   {
@@ -70,6 +56,19 @@
       }
     ],
     "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "contract IRegistry",
+        "name": "registry",
+        "type": "address"
+      }
+    ],
+    "name": "RegistryUpdated",
     "type": "event"
   },
   {
@@ -96,19 +95,6 @@
     "name": "addStudents",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "admin",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -151,23 +137,10 @@
   },
   {
     "inputs": [],
-    "name": "citCoin",
+    "name": "cJpy",
     "outputs": [
       {
-        "internalType": "contract CitCoin",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "dev",
-    "outputs": [
-      {
-        "internalType": "address",
+        "internalType": "contract CJPY",
         "name": "",
         "type": "address"
       }
@@ -232,6 +205,19 @@
     "outputs": [
       {
         "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "registry",
+    "outputs": [
+      {
+        "internalType": "contract IRegistry",
         "name": "",
         "type": "address"
       }
@@ -315,19 +301,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_newDev",
-        "type": "address"
-      }
-    ],
-    "name": "setDev",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "_fundAddress",
         "type": "address"
       }
@@ -377,6 +350,19 @@
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IRegistry",
+        "name": "_registry",
+        "type": "address"
+      }
+    ],
+    "name": "updateRegistry",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
