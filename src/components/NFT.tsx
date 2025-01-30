@@ -70,18 +70,18 @@ export const AssetLibrary = () => {
   const { address, chain } = useAccount();
   const [pinResp, setPinResp] = useState<NftPinResponse | undefined>(undefined);
   const toast = useToast();
-  const { contractAddress: cjpyAddress, abi: cjpyAbi } = UseContractConfig('cJPY');
+  const { contractAddress: cJpyAddress, abi: cJpyAbi } = UseContractConfig('cJPY');
   const { contractAddress: citNFTAddress, abi: citNFTAbi } = UseContractConfig('NFT');
-  const balance = useTokenBalance({ address, tokenAddress: cjpyAddress });
+  const balance = useTokenBalance({ address, tokenAddress: cJpyAddress });
 
-  const cjpyConfig = {
-    address: cjpyAddress,
-    abi: cjpyAbi,
+  const cJpyConfig = {
+    address: cJpyAddress,
+    abi: cJpyAbi,
     chainId: chain?.id,
   };
 
   const { data: allowance } = useReadContract({
-    ...cjpyConfig,
+    ...cJpyConfig,
     functionName: 'allowance',
     args: [address || '0x00', citNFTAddress],
   });
@@ -94,7 +94,7 @@ export const AssetLibrary = () => {
   });
 
   const { isError: approveConfigError } = useSimulateContract({
-    ...cjpyConfig,
+    ...cJpyConfig,
     functionName: 'approve',
     args: [citNFTAddress, balance?.value ?? '0'],
   });
@@ -164,7 +164,7 @@ export const AssetLibrary = () => {
                 colorScheme={'red'}
                 onClick={() => {
                   approve?.({
-                    ...cjpyConfig,
+                    ...cJpyConfig,
                     functionName: 'approve',
                     args: [citNFTAddress, balance?.value ?? '0'],
                   });

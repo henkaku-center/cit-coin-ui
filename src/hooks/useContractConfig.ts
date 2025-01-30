@@ -1,7 +1,7 @@
 import { getContractAddress } from '@/utils/contract';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import CitNFTABI from '@/utils/abis/CitNFT.json';
-import cjpyABI from '@/utils/abis/CJPY.json';
+import cJpyABI from '@/utils/abis/CJPY.json';
 import faucetABI from '@/utils/abis/Faucet.json';
 
 export const UseContractConfig = (name: 'cJPY' | 'LearnToEarn' | 'NFT' | 'Faucet') => {
@@ -12,7 +12,7 @@ export const UseContractConfig = (name: 'cJPY' | 'LearnToEarn' | 'NFT' | 'Faucet
       abi = LearnToEarnABI;
       break;
     case 'cJPY':
-      abi = cjpyABI;
+      abi = cJpyABI;
       break;
     case 'NFT':
       abi = CitNFTABI;

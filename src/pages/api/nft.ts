@@ -2,12 +2,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { NftLevels } from '@/utils';
 import { formatEther, isAddress } from 'ethers/lib/utils';
 import { ethers } from 'ethers';
-import cjpyAbi from '@/utils/abis/CJPY.json';
+import cJpyAbi from '@/utils/abis/CJPY.json';
 import { citSigner } from '@/utils/contract/etherUtils';
 
 const cJpyAddress = process.env.NEXT_PUBLIC_CJPY_ADDRESS as `0x${string}`;
 
-const cjpy = new ethers.Contract(cJpyAddress, cjpyAbi, citSigner);
+const cJpy = new ethers.Contract(cJpyAddress, cJpyAbi, citSigner);
 import axios from 'axios';
 
 export default async function NFTHandler(req: NextApiRequest, resp: NextApiResponse) {
