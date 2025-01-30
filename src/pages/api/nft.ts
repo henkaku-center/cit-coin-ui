@@ -32,7 +32,7 @@ export default async function NFTHandler(req: NextApiRequest, resp: NextApiRespo
 
       // Check if user has already earned an NFT
 
-      const balance = parseInt(formatEther(await cjpy.balanceOf(address)));
+      const balance = parseInt(formatEther(await cJpy.balanceOf(address)));
 
       if (balance < 10000) {
         return resp.status(400).json({
