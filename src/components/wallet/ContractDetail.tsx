@@ -54,7 +54,7 @@ export const ContractDetail = () => {
                 { label: 'cJPY', value: cJPYAddress, color: 'red' },
                 { label: t('wallet.CONTRACT_ADDRESS'), value: LearnToEarnAddress, color: 'green' },
                 { label: t('wallet.ADDRESS'), value: address, color: 'blue' },
-                { label: 'NFT', value: NFTAddress, color: 'blue' },
+                { label: 'NFT', value: NFTAddress, color: 'orange' },
               ].map(({ label, value, color }, index) => (
                 <Flex flexWrap={'wrap'} key={index}>
                   <Text fontSize={'sm'} minW={'180px'}>

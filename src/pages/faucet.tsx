@@ -28,6 +28,7 @@ import { ApiError } from '@/types';
 import { BigNumber, BigNumberish } from 'ethers';
 import FaucetABI from '@/utils/abis/Faucet.json';
 import { formatDuration } from '@/utils/timeUtils';
+import { CryptoLink } from '@/components/CryptoLink';
 
 const FaucetPage = () => {
   const { t } = useTranslation('common');
@@ -36,7 +37,7 @@ const FaucetPage = () => {
   const [checked, setChecked] = useState<boolean>(false);
   const [newAddress, setNewAddress] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [txn, setTxn] = useState<string>('');
+  const [txn, setTxn] = useState<`0x${string}` | null>(null);
   const toast = useToast();
   const faucetAddress = (process.env.NEXT_PUBLIC_FAUCET_ADDRESS || '') as `0x${string}`;
   const baseContract = {
@@ -180,18 +181,9 @@ const FaucetPage = () => {
                 <Text mr={2} fontWeight={'bold'}>
                   Transaction Hash:
                 </Text>
-                <Link
-                  href={`https://${
-                    process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? '' : 'amoy.'
-                  }polygonscan.com/tx/${txn}`}
-                  isExternal={true}
-                  textDecoration={'underline 1px'}
-                  textDecorationColor={'blue.500'}
-                  color={'blue.500'}
-                >
+                <CryptoLink type="tx" value={txn} colorScheme="blue">
                   {txn}
-                  <ExternalLinkIcon mx={2} />
-                </Link>
+                </CryptoLink>
               </Box>
             )}
           </CardFooter>
