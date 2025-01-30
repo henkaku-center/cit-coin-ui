@@ -16,6 +16,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useAccount } from 'wagmi';
 import { defaultChain, getContractAddress } from '@/utils/contract';
 import { useTokenBalance } from '@/hooks/useTokenBalance';
+import { CryptoLink } from '../CryptoLink';
 
 export const ContractDetail = () => {
   const { t } = useTranslation('common');
@@ -59,19 +60,9 @@ export const ContractDetail = () => {
                   <Text fontSize={'sm'} minW={'180px'}>
                     {label}
                   </Text>
-                  <Code
-                    as={Link}
-                    px={3}
-                    py={1}
-                    variant={'outline'}
-                    colorScheme={color}
-                    borderRadius={'lg'}
-                    href={`https://${
-                      process.env.NODE_ENV ?? 'dev' === 'dev' ? 'amoy.' : ''
-                    }polygonscan.com/address/${value}`}
-                  >
+                  <CryptoLink type="address" value={value as `0x${string}`} colorScheme={color}>
                     {value}
-                  </Code>
+                  </CryptoLink>
                 </Flex>
               ))}
             </Stack>
