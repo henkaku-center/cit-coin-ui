@@ -21,7 +21,7 @@ export const citSigner = new ethers.Wallet(
 );
 const faucet = new ethers.Contract(faucetAddress, faucetAbi, citSigner);
 
-export function sendMatic(recipient: string) {
+export function sendCrypto(recipient: string) {
   return new Promise((resolve, reject) => {
     faucet
       .requestTokens(recipient, {

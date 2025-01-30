@@ -60,7 +60,7 @@ const FaucetPage = () => {
   const faqs = [
     {
       question: 'What is Faucet?',
-      answer: `To request funds, simply enter your wallet address and hit “Send Me MATIC”. We
+      answer: `To request funds, simply enter your wallet address and hit “Send Me OP. We
         support wallets as received addresses but not smart contracts.`,
     },
     {
@@ -70,7 +70,7 @@ const FaucetPage = () => {
     {
       question: 'How does it work?',
       answer: `You can request ${formatUnits((offering as BigNumberish) ?? '0', 18)}
-      MATIC if the faucet is unlocked. The current unlock duration is
+      OP if the faucet is unlocked. The current unlock duration is
       ${formatDuration(Number(lockDuration))} after your successful request.`,
     },
   ];
@@ -88,7 +88,7 @@ const FaucetPage = () => {
           <CardBody>
             {address && isConnected && (
               <Stack mb={5}>
-                <Text>{t('faucet.SEND_MATIC_AT')}</Text>
+                <Text>{t('faucet.SEND_CRYPTO_AT')}</Text>
                 <Badge
                   mb={5}
                   fontSize={'lg'}
@@ -170,7 +170,7 @@ const FaucetPage = () => {
                     });
                 }}
               >
-                {t(locked ? 'faucet.LOCKED' : 'faucet.GET_MATIC_COINS')}
+                {t(locked ? 'faucet.LOCKED' : 'faucet.GET_CRYPTO_COINS')}
               </Button>
             </FormControl>
           </CardBody>
@@ -205,7 +205,7 @@ const FaucetPage = () => {
         <HStack my={5}>
           <Text minWidth={'120px'}>{t('faucet.OFFERING')}:</Text>
           <Badge colorScheme={'red'} borderRadius={'full'} px={5} py={1}>
-            {formatUnits((offering as BigNumberish) ?? '0', 18)} MATIC
+            {formatUnits((offering as BigNumberish) ?? '0', 18)} OP
           </Badge>
         </HStack>
         <Box>
