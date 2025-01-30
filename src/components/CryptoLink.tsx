@@ -21,7 +21,7 @@ export const CryptoLink = (
       target="_blank"
       href={`https://${
         process.env.NODE_ENV ?? 'dev' === 'dev' ? 'sepolia-optimistic' : 'optimistic'
-      }.etherscan.io/address/${value}`}
+      }.etherscan.io/${type}/${value}`}
     >
       {children}
       <ExternalLinkIcon mx={2} />
