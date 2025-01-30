@@ -37,4 +37,4 @@ yarn build
 ## External Links:
 
 1. Spreadsheets API: https://developers.google.com/sheets/api/quickstart/js
-2. 
+2.
