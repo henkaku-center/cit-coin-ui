@@ -12,7 +12,7 @@
     "HEADING": "CIT ファセット",
     "ADDRESS_LABEL": "ウォレットアドレスを入力してください",
     "ADDRESS_HELP_TEXT": "資金を得るには、ウォレット アドレスがホワイトリストに登録されている必要があります。",
-    "GET_MATIC_COINS": "マティックコインを入手",
+    "GET_CRYPTO_COINS": "OPコインを入手",
     "TOKEN_CLAIM_ERROR": "トークンの要求に失敗しました",
     "TOKEN_CLAIM_ERROR_DESCRIPTION": "トークンの請求中にエラーが発生しました。後でもう一度お試しください",
     "TOKEN_CLAIM_SUCCESS": "トークンが正常に請求されました",
@@ -21,7 +21,7 @@
     "LOCK_DURATION": "ロック期間",
     "LOCKED": "ファセットは現在ロックされています!!",
     "OFFERING": "献金",
-    "SEND_MATIC_AT": "次のアドレスに Matic コインを送"
+    "SEND_CRYPTO_AT": "次のアドレスに OP コインを送"
   },
   "nav": {
     "ADMIN": "管理者",

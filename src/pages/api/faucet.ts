@@ -1,12 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ApiError, ApiResponseCodes, ApiSuccess } from '@/types';
 import { isAddress } from 'ethers/lib/utils';
-import { sendMatic } from '@/utils/contract/etherUtils';
-
+import { sendCrypto } from '@/utils/contract/etherUtils';
 
 async function handlePost(req: NextApiRequest, resp: NextApiResponse<ApiSuccess | ApiError>) {
   /**
-   * @dev This method handles POST requests to the faucet API where user can request some matic coins as rewards
+   * @dev This method handles POST requests to the faucet API where user can request some crypto coins as rewards
    */
   const { address } = req.body;
   // add validation here
@@ -25,21 +24,23 @@ async function handlePost(req: NextApiRequest, resp: NextApiResponse<ApiSuccess 
     });
   }
 
-  sendMatic(address).then((txn) => {
-    return resp.status(200).json({
-      code: ApiResponseCodes.SUCCESS,
-      message: 'SUCCESSFULLY_SENT_TOKENS',
-      data: {
-        transaction: txn,
-      },
+  sendCrypto(address)
+    .then((txn) => {
+      return resp.status(200).json({
+        code: ApiResponseCodes.SUCCESS,
+        message: 'SUCCESSFULLY_SENT_TOKENS',
+        data: {
+          transaction: txn,
+        },
+      });
+    })
+    .catch((err) => {
+      return resp.status(500).json({
+        code: ApiResponseCodes.CONTRACT_ERROR,
+        message: 'ERROR_WHILE_SENDING_TOKENS',
+        details: err,
+      });
     });
-  }).catch((err) => {
-    return resp.status(500).json({
-      code: ApiResponseCodes.CONTRACT_ERROR,
-      message: 'ERROR_WHILE_SENDING_TOKENS',
-      details: err,
-    });
-  });
 }
 
 async function handleGet(req: NextApiRequest, resp: NextApiResponse) {
@@ -72,13 +73,9 @@ async function handleGet(req: NextApiRequest, resp: NextApiResponse) {
     message: 'SUCCESSFULLY_SENT_TOKENS',
     data: address,
   });
-
 }
 
-export default async function FaucetApi(
-  req: NextApiRequest,
-  resp: NextApiResponse,
-) {
+export default async function FaucetApi(req: NextApiRequest, resp: NextApiResponse) {
   switch (req.method) {
     case 'POST':
       return handlePost(req, resp);

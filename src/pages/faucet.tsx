@@ -28,6 +28,7 @@ import { ApiError } from '@/types';
 import { BigNumber, BigNumberish } from 'ethers';
 import FaucetABI from '@/utils/abis/Faucet.json';
 import { formatDuration } from '@/utils/timeUtils';
+import { CryptoLink } from '@/components/CryptoLink';
 
 const FaucetPage = () => {
   const { t } = useTranslation('common');
@@ -36,7 +37,7 @@ const FaucetPage = () => {
   const [checked, setChecked] = useState<boolean>(false);
   const [newAddress, setNewAddress] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [txn, setTxn] = useState<string>('');
+  const [txn, setTxn] = useState<`0x${string}` | null>(null);
   const toast = useToast();
   const faucetAddress = (process.env.NEXT_PUBLIC_FAUCET_ADDRESS || '') as `0x${string}`;
   const baseContract = {
@@ -60,7 +61,7 @@ const FaucetPage = () => {
   const faqs = [
     {
       question: 'What is Faucet?',
-      answer: `To request funds, simply enter your wallet address and hit “Send Me MATIC”. We
+      answer: `To request funds, simply enter your wallet address and hit “Send Me OP. We
         support wallets as received addresses but not smart contracts.`,
     },
     {
@@ -70,7 +71,7 @@ const FaucetPage = () => {
     {
       question: 'How does it work?',
       answer: `You can request ${formatUnits((offering as BigNumberish) ?? '0', 18)}
-      MATIC if the faucet is unlocked. The current unlock duration is
+      OP if the faucet is unlocked. The current unlock duration is
       ${formatDuration(Number(lockDuration))} after your successful request.`,
     },
   ];
@@ -88,7 +89,7 @@ const FaucetPage = () => {
           <CardBody>
             {address && isConnected && (
               <Stack mb={5}>
-                <Text>{t('faucet.SEND_MATIC_AT')}</Text>
+                <Text>{t('faucet.SEND_CRYPTO_AT')}</Text>
                 <Badge
                   mb={5}
                   fontSize={'lg'}
@@ -170,7 +171,7 @@ const FaucetPage = () => {
                     });
                 }}
               >
-                {t(locked ? 'faucet.LOCKED' : 'faucet.GET_MATIC_COINS')}
+                {t(locked ? 'faucet.LOCKED' : 'faucet.GET_CRYPTO_COINS')}
               </Button>
             </FormControl>
           </CardBody>
@@ -180,18 +181,9 @@ const FaucetPage = () => {
                 <Text mr={2} fontWeight={'bold'}>
                   Transaction Hash:
                 </Text>
-                <Link
-                  href={`https://${
-                    process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? '' : 'amoy.'
-                  }polygonscan.com/tx/${txn}`}
-                  isExternal={true}
-                  textDecoration={'underline 1px'}
-                  textDecorationColor={'blue.500'}
-                  color={'blue.500'}
-                >
+                <CryptoLink type="tx" value={txn} colorScheme="blue">
                   {txn}
-                  <ExternalLinkIcon mx={2} />
-                </Link>
+                </CryptoLink>
               </Box>
             )}
           </CardFooter>
@@ -205,7 +197,7 @@ const FaucetPage = () => {
         <HStack my={5}>
           <Text minWidth={'120px'}>{t('faucet.OFFERING')}:</Text>
           <Badge colorScheme={'red'} borderRadius={'full'} px={5} py={1}>
-            {formatUnits((offering as BigNumberish) ?? '0', 18)} MATIC
+            {formatUnits((offering as BigNumberish) ?? '0', 18)} OP
           </Badge>
         </HStack>
         <Box>
