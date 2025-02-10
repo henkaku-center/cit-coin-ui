@@ -2,12 +2,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { NftLevels } from '@/utils';
 import { formatEther, isAddress } from 'ethers/lib/utils';
 import { ethers } from 'ethers';
-import cjpyAbi from '@/utils/abis/CitCoin.json';
+import cJpyAbi from '@/utils/abis/CJPY.json';
 import { citSigner } from '@/utils/contract/etherUtils';
 
-const cjpyAddress = process.env.NEXT_PUBLIC_CIT_COIN_ADDRESS as `0x{string}`;
+const cJpyAddress = process.env.NEXT_PUBLIC_CJPY_ADDRESS as `0x${string}`;
 
-const cjpy = new ethers.Contract(cjpyAddress, cjpyAbi, citSigner);
+const cJpy = new ethers.Contract(cJpyAddress, cJpyAbi, citSigner);
 import axios from 'axios';
 
 export default async function NFTHandler(req: NextApiRequest, resp: NextApiResponse) {
@@ -32,7 +32,7 @@ export default async function NFTHandler(req: NextApiRequest, resp: NextApiRespo
 
       // Check if user has already earned an NFT
 
-      const balance = parseInt(formatEther(await cjpy.balanceOf(address)));
+      const balance = parseInt(formatEther(await cJpy.balanceOf(address)));
 
       if (balance < 10000) {
         return resp.status(400).json({

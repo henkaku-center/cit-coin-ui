@@ -1,18 +1,13 @@
 import { ethers } from 'ethers';
-import { polygon } from 'wagmi/chains';
+import { optimism } from 'wagmi/chains';
 import { defaultChain } from '@/utils/contract/ContractAddress';
 import faucetAbi from '@/utils/abis/Faucet.json';
 import { parseEther } from 'ethers/lib/utils';
 
 const faucetAddress = process.env.NEXT_PUBLIC_FAUCET_ADDRESS as `0x{string}`;
-/**
- * Currently running RPC URLS:
- * - https://polygon.llamarpc.com
- * - https://polygon.drpc.org
- * - https://polygon-mainnet.infura.io
- */
+
 const rpcUrl =
-  defaultChain === polygon ? 'https://polygon.drpc.org' : ' https://rpc-amoy.polygon.technology';
+  defaultChain === optimism ? 'https://mainnet.optimism.io' : 'https://sepolia.optimism.io';
 
 const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
 export const citSigner = new ethers.Wallet(
@@ -21,7 +16,7 @@ export const citSigner = new ethers.Wallet(
 );
 const faucet = new ethers.Contract(faucetAddress, faucetAbi, citSigner);
 
-export function sendMatic(recipient: string) {
+export function sendCrypto(recipient: string) {
   return new Promise((resolve, reject) => {
     faucet
       .requestTokens(recipient, {

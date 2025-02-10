@@ -12,7 +12,7 @@
     "HEADING": "CIT Faucet",
     "ADDRESS_LABEL": "Enter your wallet address",
     "ADDRESS_HELP_TEXT": "Your wallet address must be whitelisted to get funds.",
-    "GET_MATIC_COINS": "Get Matic Coins",
+    "GET_CRYPTO_COINS": "Get OP Coins",
     "TOKEN_CLAIM_ERROR": "Tokens Claimed Failed",
     "TOKEN_CLAIM_ERROR_DESCRIPTION": "There was an error claiming tokens, please try again later",
     "TOKEN_CLAIM_SUCCESS": "Tokens Claimed Successfully",
@@ -21,7 +21,7 @@
     "LOCK_DURATION": "Lock Duration",
     "LOCKED": "The faucet is currently locked!!",
     "OFFERING": "Offering",
-    "SEND_MATIC_AT": "Send me Matic coin at"
+    "SEND_CRYPTO_AT": "Send me OP at"
   },
   "nav": {
     "ADMIN": "Admin",
