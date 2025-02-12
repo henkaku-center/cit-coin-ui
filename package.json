@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "gcp-build": "cp .env.$APP_ENV .env && next build",
+    "gcp-build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "cypress open --e2e --browser electron",
