@@ -3,6 +3,5 @@ node_modules/
 .git/
 .env.*
 !.env.production
-!.env.staging
 !keys/
 .vscode/
