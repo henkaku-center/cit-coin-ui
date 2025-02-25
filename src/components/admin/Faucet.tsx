@@ -70,16 +70,16 @@ export const FaucetSettings = () => {
           </Text>
           <FormLabel>Please enter new offering:</FormLabel>
           <NumberInput
-            min={0.0001}
+            min={0.00001}
             max={10}
-            precision={4}
-            step={0.01}
+            precision={5}
+            step={0.00001}
             value={formatUnits(newOffering)}
             onChange={(valueAsString) => {
               setNewOffering(parseUnits(valueAsString, 18));
             }}
           >
-            <NumberInputField />
+          <NumberInputField />
             <NumberInputStepper>
               <NumberIncrementStepper />
               <NumberDecrementStepper />
