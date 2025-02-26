@@ -21,9 +21,9 @@ export function sendCrypto(recipient: string) {
     faucet
       .requestTokens(recipient, {
         value: parseEther('0.0'),
-        gasLimit: ethers.utils.hexlify(25000),
-        maxFeePerGas: ethers.utils.parseUnits('0.0001', 'gwei'),
-        maxPriorityFeePerGas: ethers.utils.parseUnits('0.0001', 'gwei'),
+        gasLimit: ethers.utils.hexlify(100000),
+        maxFeePerGas: ethers.utils.parseUnits('3', 'gwei'),
+        maxPriorityFeePerGas: ethers.utils.parseUnits('3', 'gwei'),
       })
       .then((tx: ethers.ContractTransaction) => {
         resolve(tx);
