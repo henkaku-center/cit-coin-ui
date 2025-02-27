@@ -2,6 +2,17 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Code, Link } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react';
 
+const contractUrl = ({
+  type,
+  value
+}: {
+  type: 'address' | 'tx';
+  value: `0x${string}`;
+}) => {
+  const network = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 'optimistic' : 'sepolia-optimistic';
+  return `https://${network}.etherscan.io/${type}/${value}`
+}
+
 export const CryptoLink = (
   props: {
     type: 'address' | 'tx';
@@ -19,9 +30,7 @@ export const CryptoLink = (
       colorScheme={color}
       borderRadius={'lg'}
       target="_blank"
-      href={`https://${
-        process.env.NODE_ENV ?? 'dev' === 'dev' ? 'sepolia-optimistic' : 'optimistic'
-      }.etherscan.io/${type}/${value}`}
+      href={contractUrl({ type, value })}
     >
       {children}
       <ExternalLinkIcon mx={2} />
