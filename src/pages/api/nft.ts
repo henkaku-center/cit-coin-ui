@@ -34,7 +34,7 @@ export default async function NFTHandler(req: NextApiRequest, resp: NextApiRespo
 
       const balance = parseInt(formatEther(await cJpy.balanceOf(address)));
 
-      if (balance < 10000) {
+      if (balance < 8000) {
         return resp.status(400).json({
           code: 'INSUFFICIENT_FUNDS',
           message: 'Insufficient balance to claim NFT',

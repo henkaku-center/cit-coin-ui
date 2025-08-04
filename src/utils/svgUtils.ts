@@ -8,8 +8,8 @@ import { normalNftTemplate, PremiumNftTemplate } from '@/utils/svgRes';
 export const NftLevels = [
   {
     title: 'Normal',
-    description: 'This is a basic badge that unlocks at 10000cJPY.',
-    earning: 10000,
+    description: 'This is a basic badge that unlocks at 8000cJPY.',
+    earning: 8000,
     url: '/normal.png',
   },
   {
@@ -24,7 +24,7 @@ export const NftLevels = [
 function getRewardGraphics(point: number) {
   if (point >= 20000) {
     return PremiumNftTemplate;
-  } else if (point >= 10000) {
+  } else if (point >= 8000) {
     return normalNftTemplate;
   } else return null;
 }
