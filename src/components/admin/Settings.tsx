@@ -84,10 +84,10 @@ const RewardPointSetting = () => {
       }}
     >
       <FormControl>
-        <FormLabel>{t('settings.SET_REWARD_POINTS_LABEL')} (1 - 10000 cJPY)</FormLabel>
+        <FormLabel>{t('settings.SET_REWARD_POINTS_LABEL')} (1 - 8000 cJPY)</FormLabel>
         <NumberInput
           min={10}
-          max={10000}
+          max={8000}
           step={10}
           value={parseInt(reward)}
           onChange={(valueAsString) => {
