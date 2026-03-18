@@ -107,9 +107,11 @@ const Layout = ({ children }: LayoutProps) => {
           <pre>{t('nav.HEADING')}</pre>
         </Heading>
       </NavLink>
+      {/* LearnToEarn: temporarily hidden
       {isConnected && chain?.id === defaultChain.id && (
         <NavLink href={'/quests'}>{t('nav.QUESTS')}</NavLink>
       )}
+      */}
       <NavLink href="/faucet">{t('nav.FAUCET')}</NavLink>
       <Spacer />
       <ConnectButton label={t('wallet.CONNECT')} chainStatus={'icon'} />

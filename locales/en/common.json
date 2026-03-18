@@ -55,7 +55,7 @@
   "nft": {
     "AVAILABLE": "Available NFTs",
     "ALLOW_SPENDING": "Allow Spending",
-    "ALLOWANCE_WARNING": "Note: You must allow all of your cJPY to be spent by the contract to be able to earn an NFT",
+    "ALLOWANCE_WARNING": "Note: You must allow all of your JOIN to be spent by the contract to be able to earn an NFT",
     "CURRENT_ALLOWANCE": "Current Allowance",
     "CURRENT_BALANCE": "Current Balance"
   }

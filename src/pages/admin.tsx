@@ -50,6 +50,7 @@ const Admin = () => {
   const hasPermissions = isAdmin || ownerAddress == address;
 
   const adminComponents = [
+    /* LearnToEarn: temporarily hidden
     {
       title: t('tab.SET_QUESTIONS'),
       icon: FaFile,
@@ -60,6 +61,7 @@ const Admin = () => {
       icon: FaUsers,
       component: <StudentManager />,
     },
+    */
     {
       title: t('tab.STATISTICS'),
       icon: FaChartBar,
@@ -70,11 +72,13 @@ const Admin = () => {
       icon: SettingsIcon,
       component: <FaucetSettings />,
     },
+    /* LearnToEarn: temporarily hidden
     {
       title: t('tab.SETTINGS'),
       icon: SettingsIcon,
       component: <Settings />,
     },
+    */
   ];
 
   return (
