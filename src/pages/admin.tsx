@@ -12,9 +12,9 @@ import {
 } from '@chakra-ui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useAccount, useReadContract } from 'wagmi';
-import { QuestionManager, Settings } from '@/components/admin';
+// import { Settings } from '@/components/admin';
 import { defaultChain, getContractAddress } from '@/utils/contract';
-import { FaFile, FaUsers, FaChartBar } from 'react-icons/fa';
+import { FaUsers, FaChartBar } from 'react-icons/fa';
 import { SettingsIcon } from '@chakra-ui/icons';
 import LearnToEarnABI from '@/utils/abis/LearnToEarn.json';
 import { StudentManager } from '@/components/admin/StudentManager';
@@ -56,12 +56,12 @@ const Admin = () => {
       icon: FaFile,
       component: <QuestionManager />,
     },
+    */
     {
       title: t('tab.MANAGE_STUDENTS'),
       icon: FaUsers,
       component: <StudentManager />,
     },
-    */
     {
       title: t('tab.STATISTICS'),
       icon: FaChartBar,
