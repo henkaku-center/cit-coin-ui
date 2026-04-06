@@ -55,7 +55,7 @@ const AssetCard = (props: { asset: Asset }) => {
         fontSize={'xs'}
         shadow={'dark-lg'}
       >
-        {asset.earning} cJPY
+        {asset.earning} JOIN
       </Box>
       <Image minW={150} minH={150} width={100} src={asset.url} alt={asset.title} />
     </Box>
@@ -70,18 +70,18 @@ export const AssetLibrary = () => {
   const { address, chain } = useAccount();
   const [pinResp, setPinResp] = useState<NftPinResponse | undefined>(undefined);
   const toast = useToast();
-  const { contractAddress: cJpyAddress, abi: cJpyAbi } = UseContractConfig('cJPY');
+  const { contractAddress: joinAddress, abi: joinAbi } = UseContractConfig('JOIN');
   const { contractAddress: citNFTAddress, abi: citNFTAbi } = UseContractConfig('NFT');
-  const balance = useTokenBalance({ address, tokenAddress: cJpyAddress });
+  const balance = useTokenBalance({ address, tokenAddress: joinAddress });
 
-  const cJpyConfig = {
-    address: cJpyAddress,
-    abi: cJpyAbi,
+  const joinConfig = {
+    address: joinAddress,
+    abi: joinAbi,
     chainId: chain?.id,
   };
 
   const { data: allowance } = useReadContract({
-    ...cJpyConfig,
+    ...joinConfig,
     functionName: 'allowance',
     args: [address || '0x00', citNFTAddress],
   });
@@ -94,7 +94,7 @@ export const AssetLibrary = () => {
   });
 
   const { isError: approveConfigError } = useSimulateContract({
-    ...cJpyConfig,
+    ...joinConfig,
     functionName: 'approve',
     args: [citNFTAddress, balance?.value ?? '0'],
   });
@@ -150,13 +150,13 @@ export const AssetLibrary = () => {
             <Text>
               {t('nft.CURRENT_ALLOWANCE')}:{' '}
               <Badge colorScheme={'green'} px={2} borderRadius={'full'}>
-                {formattedAllowance} cJPY
+                {formattedAllowance} JOIN
               </Badge>
             </Text>
             <Text>
               {t('nft.CURRENT_BALANCE')}:{' '}
               <Badge colorScheme={'green'} px={2} borderRadius={'full'}>
-                {formattedBalance} cJPY
+                {formattedBalance} JOIN
               </Badge>
             </Text>
             {formattedBalance > 0 && formattedAllowance < formattedBalance && (
@@ -164,7 +164,7 @@ export const AssetLibrary = () => {
                 colorScheme={'red'}
                 onClick={() => {
                   approve?.({
-                    ...cJpyConfig,
+                    ...joinConfig,
                     functionName: 'approve',
                     args: [citNFTAddress, balance?.value ?? '0'],
                   });

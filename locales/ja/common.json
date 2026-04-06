@@ -55,7 +55,7 @@
   "nft": {
     "AVAILABLE": "利用可能なNFT",
     "ALLOW_SPENDING": "支出を許可",
-    "ALLOWANCE_WARNING": "注: NFT を獲得できるようにするには、契約によって cJPY のすべてが使用されることを許可する必要があります",
+    "ALLOWANCE_WARNING": "注: NFT を獲得できるようにするには、契約によって JOIN のすべてが使用されることを許可する必要があります",
     "CURRENT_ALLOWANCE": "現在の許容量",
     "CURRENT_BALANCE": "現在の残高"
   }

@@ -4,14 +4,15 @@ import CitNFTABI from '@/utils/abis/CitNFT.json';
 import cJpyABI from '@/utils/abis/CJPY.json';
 import faucetABI from '@/utils/abis/Faucet.json';
 
-export const UseContractConfig = (name: 'cJPY' | 'LearnToEarn' | 'NFT' | 'Faucet') => {
+export const UseContractConfig = (name: 'JOIN' | 'ICHIGO' | 'LearnToEarn' | 'NFT' | 'Faucet') => {
   const contractAddress = getContractAddress(name);
   let abi: any;
   switch (name) {
     case 'LearnToEarn':
       abi = LearnToEarnABI;
       break;
-    case 'cJPY':
+    case 'JOIN':
+    case 'ICHIGO':
       abi = cJpyABI;
       break;
     case 'NFT':

@@ -49,3 +49,7 @@ cypress/videos
 keys/**
 !keys/README.md
 **/tmp*
+
+# lock files (using yarn)
+package-lock.json
+pnpm-lock.yaml

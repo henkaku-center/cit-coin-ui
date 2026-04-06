@@ -22,10 +22,11 @@ export const ContractDetail = () => {
   const { t } = useTranslation('common');
   const { address, isConnected, chain } = useAccount();
 
-  const cJPYAddress = getContractAddress('cJPY');
-  const LearnToEarnAddress = getContractAddress('LearnToEarn');
+  const joinAddress = getContractAddress('JOIN');
+  const ichigoAddress = getContractAddress('ICHIGO');
   const NFTAddress = getContractAddress('NFT');
-  const cJPYBalance = useTokenBalance({ address, tokenAddress: cJPYAddress, watch: true });
+  const joinBalance = useTokenBalance({ address, tokenAddress: joinAddress, watch: true });
+  const ichigoBalance = useTokenBalance({ address, tokenAddress: ichigoAddress, watch: true });
   return (
     <Card variant={'filled'} width={'full'}>
       <CardHeader>
@@ -39,20 +40,32 @@ export const ContractDetail = () => {
           <Stack>
             <Stat p={2} borderRadius={'1em'} border={'solid 2px'} mb={4}>
               <StatLabel>
-                {t('wallet.BALANCE')} - {cJPYBalance?.symbol}
+                {t('wallet.BALANCE')} - {joinBalance?.symbol}
               </StatLabel>
               <StatNumber fontSize={'lg'}>
                 <Text as={'span'} color={'orange'} mr={2}>
-                  {cJPYBalance?.formatted}
+                  {joinBalance?.formatted}
                 </Text>
-                {cJPYBalance?.symbol}
+                {joinBalance?.symbol}
+              </StatNumber>
+              <StatHelpText>as of {new Date().toLocaleString()}</StatHelpText>
+            </Stat>
+            <Stat p={2} borderRadius={'1em'} border={'solid 2px'} mb={4}>
+              <StatLabel>
+                {t('wallet.BALANCE')} - {ichigoBalance?.symbol}
+              </StatLabel>
+              <StatNumber fontSize={'lg'}>
+                <Text as={'span'} color={'purple'} mr={2}>
+                  {ichigoBalance?.formatted}
+                </Text>
+                {ichigoBalance?.symbol}
               </StatNumber>
               <StatHelpText>as of {new Date().toLocaleString()}</StatHelpText>
             </Stat>
             <Stack spacing={3} py={5}>
               {[
-                { label: 'cJPY', value: cJPYAddress, color: 'red' },
-                { label: t('wallet.CONTRACT_ADDRESS'), value: LearnToEarnAddress, color: 'green' },
+                { label: 'JOIN', value: joinAddress, color: 'red' },
+                { label: 'ICHIGO', value: ichigoAddress, color: 'purple' },
                 { label: t('wallet.ADDRESS'), value: address, color: 'blue' },
                 { label: 'NFT', value: NFTAddress, color: 'orange' },
               ].map(({ label, value, color }, index) => (
