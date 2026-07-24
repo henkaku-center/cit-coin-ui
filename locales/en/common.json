@@ -1,5 +1,7 @@
 {
   "COPYRIGHT_LINE": "© 2023 Pitpa Inc. All rights reserved.",
+  "META_TITLE": "Earn Your Certificate NFT",
+  "META_DESCRIPTION": "Complete the course to earn your certificate NFT.",
   "ERROR_LOADING_CONTENT": "Error Loading Resources",
   "ERROR_LOADING_CONTENT_DESCRIPTION": "There was an error loading resources from the chain, please try again later",
   "MULTI_SELECT": "Select all correct answers",
