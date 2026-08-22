@@ -84,7 +84,7 @@ const RewardPointSetting = () => {
       }}
     >
       <FormControl>
-        <FormLabel>{t('settings.SET_REWARD_POINTS_LABEL')} (1 - 8000 cJPY)</FormLabel>
+        <FormLabel>{t('settings.SET_REWARD_POINTS_LABEL')} (1 - 8000 JOIN)</FormLabel>
         <NumberInput
           min={10}
           max={8000}

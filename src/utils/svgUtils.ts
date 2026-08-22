@@ -8,23 +8,23 @@ import { normalNftTemplate, PremiumNftTemplate } from '@/utils/svgRes';
 export const NftLevels = [
   {
     title: 'Normal',
-    description: 'This is a basic badge that unlocks at 8000 JOIN.',
-    earning: 8000,
+    description: 'This is a basic badge that unlocks at 70000 JOIN.',
+    earning: 70000,
     url: '/normal.png',
   },
   {
     title: 'Premium',
-    description: 'This badge unlocks when you earn at least 20000 JOIN.',
-    earning: 20000,
+    description: 'This badge unlocks when you earn at least 200000 JOIN.',
+    earning: 200000,
     url: '/premium.png',
   },
 ];
 
 
 function getRewardGraphics(point: number) {
-  if (point >= 20000) {
+  if (point >= 200000) {
     return PremiumNftTemplate;
-  } else if (point >= 8000) {
+  } else if (point >= 70000) {
     return normalNftTemplate;
   } else return null;
 }
